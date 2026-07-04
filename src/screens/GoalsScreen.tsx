@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
@@ -60,9 +61,9 @@ export function GoalsScreen() {
           onChange={(v) => setMoodMin(v as MoodScore)}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <PressableScale style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>{saved ? "Obiettivi salvati ✓" : "Salva obiettivi"}</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </ScrollView>
     </View>
   );

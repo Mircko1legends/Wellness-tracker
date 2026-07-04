@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { MISSIONS } from "../data/missions";
 import { syncDailyReminder } from "../notifications";
 import {
   clearAllData,
@@ -18,11 +19,20 @@ import {
 import {
   DEFAULT_GOALS,
   DEFAULT_REMINDER_SETTINGS,
+  Mission,
   ReminderSettings,
   WellnessEntry,
   WellnessGoals,
 } from "../types";
+import { computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
 import { computeStreak } from "../utils/streak";
+
+export interface LogEntryResult {
+  xpEarned: number;
+  leveledUp: boolean;
+  newLevel: number;
+  newlyUnlocked: Mission[];
+}
 
 interface WellnessContextValue {
   loading: boolean;
@@ -30,7 +40,12 @@ interface WellnessContextValue {
   goals: WellnessGoals;
   reminderSettings: ReminderSettings;
   streak: number;
-  logEntry: (entry: WellnessEntry) => Promise<void>;
+  totalXp: number;
+  level: LevelInfo;
+  unlockedMissions: Mission[];
+  lockedMissions: Mission[];
+  nextMission: Mission | undefined;
+  logEntry: (entry: WellnessEntry) => Promise<LogEntryResult>;
   updateGoals: (goals: WellnessGoals) => Promise<void>;
   updateReminderSettings: (settings: ReminderSettings) => Promise<void>;
   resetAllData: () => Promise<void>;
@@ -62,9 +77,23 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
-  const logEntry = async (entry: WellnessEntry) => {
+  const logEntry = async (entry: WellnessEntry): Promise<LogEntryResult> => {
+    const prevLevel = levelInfo(computeTotalXp(entries, goals)).level;
     const updated = await upsertEntry(entry);
     setEntries(updated);
+
+    const newLevelValue = levelInfo(computeTotalXp(updated, goals)).level;
+    const leveledUp = newLevelValue > prevLevel;
+    const newlyUnlocked = leveledUp
+      ? MISSIONS.filter((m) => m.unlockLevel > prevLevel && m.unlockLevel <= newLevelValue)
+      : [];
+
+    return {
+      xpEarned: xpForEntry(entry, goals),
+      leveledUp,
+      newLevel: newLevelValue,
+      newlyUnlocked,
+    };
   };
 
   const updateGoals = async (newGoals: WellnessGoals) => {
@@ -89,6 +118,20 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const getEntryForDate = (date: string) => entries.find((e) => e.date === date);
 
   const streak = useMemo(() => computeStreak(entries, goals), [entries, goals]);
+  const totalXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
+  const level = useMemo(() => levelInfo(totalXp), [totalXp]);
+  const unlockedMissions = useMemo(
+    () => MISSIONS.filter((m) => m.unlockLevel <= level.level),
+    [level.level]
+  );
+  const lockedMissions = useMemo(
+    () =>
+      MISSIONS.filter((m) => m.unlockLevel > level.level).sort(
+        (a, b) => a.unlockLevel - b.unlockLevel
+      ),
+    [level.level]
+  );
+  const nextMission = lockedMissions[0];
 
   const value: WellnessContextValue = {
     loading,
@@ -96,6 +139,11 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     goals,
     reminderSettings,
     streak,
+    totalXp,
+    level,
+    unlockedMissions,
+    lockedMissions,
+    nextMission,
     logEntry,
     updateGoals,
     updateReminderSettings,

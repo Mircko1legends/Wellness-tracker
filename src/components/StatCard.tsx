@@ -11,20 +11,31 @@ interface Props {
   goalLabel: string;
   progress: number;
   met: boolean;
+  accentColor?: string;
+  accentBg?: string;
 }
 
-export function StatCard({ icon, label, value, goalLabel, progress, met }: Props) {
+export function StatCard({
+  icon,
+  label,
+  value,
+  goalLabel,
+  progress,
+  met,
+  accentColor = colors.primary,
+  accentBg = "#E7F4F1",
+}: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <View style={[styles.iconWrap, met && styles.iconWrapMet]}>
-          <Ionicons name={icon} size={18} color={met ? colors.success : colors.primary} />
+        <View style={[styles.iconWrap, { backgroundColor: met ? "#E4F6EA" : accentBg }]}>
+          <Ionicons name={icon} size={18} color={met ? colors.success : accentColor} />
         </View>
         <Text style={styles.label}>{label}</Text>
         {met && <Ionicons name="checkmark-circle" size={16} color={colors.success} />}
       </View>
       <Text style={styles.value}>{value}</Text>
-      <ProgressBar progress={progress} color={met ? colors.success : colors.primary} />
+      <ProgressBar progress={progress} color={met ? colors.success : accentColor} />
       <Text style={styles.goalLabel}>{goalLabel}</Text>
     </View>
   );
@@ -53,12 +64,8 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: radii.pill,
-    backgroundColor: "#E7F4F1",
     alignItems: "center",
     justifyContent: "center",
-  },
-  iconWrapMet: {
-    backgroundColor: "#E4F6EA",
   },
   label: {
     flex: 1,

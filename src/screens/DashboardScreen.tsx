@@ -4,11 +4,11 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
-import { colors, radii, spacing } from "../theme";
+import { colors, metricColors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
 
 export function DashboardScreen() {
-  const { goals, streak, getEntryForDate } = useWellness();
+  const { goals, streak, level, getEntryForDate } = useWellness();
   const entry = getEntryForDate(todayKey());
 
   const today = new Date();
@@ -24,9 +24,25 @@ export function DashboardScreen() {
         eyebrow={dateLabel}
         title="Il tuo benessere"
         right={
-          <View style={styles.streakBadge}>
-            <Ionicons name="flame" size={16} color={colors.accent} />
-            <Text style={styles.streakBadgeText}>{streak}</Text>
+          <View style={styles.badgeRow}>
+            <View style={styles.streakBadge}>
+              <Ionicons name="flame" size={16} color={colors.accent} />
+              <Text style={styles.streakBadgeText}>{streak}</Text>
+            </View>
+            <View style={styles.streakBadge}>
+              <Ionicons name="star" size={14} color={colors.accent} />
+              <Text style={styles.streakBadgeText}>Lv.{level.level}</Text>
+            </View>
+          </View>
+        }
+        footer={
+          <View style={styles.xpBarWrap}>
+            <View style={styles.xpTrack}>
+              <View style={[styles.xpFill, { width: `${level.progress * 100}%` }]} />
+            </View>
+            <Text style={styles.xpLabel}>
+              {level.xpIntoLevel}/{level.xpForNextLevel} XP al livello {level.level + 1}
+            </Text>
           </View>
         }
       />
@@ -48,6 +64,8 @@ export function DashboardScreen() {
             goalLabel={`Obiettivo: ${goals.sleepHours}h`}
             progress={entry ? entry.sleepHours / goals.sleepHours : 0}
             met={!!entry && entry.sleepHours >= goals.sleepHours}
+            accentColor={metricColors.sleep.fg}
+            accentBg={metricColors.sleep.bg}
           />
           <StatCard
             icon="water-outline"
@@ -56,6 +74,8 @@ export function DashboardScreen() {
             goalLabel={`Obiettivo: ${goals.waterGlasses} bicchieri`}
             progress={entry ? entry.waterGlasses / goals.waterGlasses : 0}
             met={!!entry && entry.waterGlasses >= goals.waterGlasses}
+            accentColor={metricColors.water.fg}
+            accentBg={metricColors.water.bg}
           />
           <StatCard
             icon="walk-outline"
@@ -64,6 +84,8 @@ export function DashboardScreen() {
             goalLabel={`Obiettivo: ${goals.activityMinutes}min`}
             progress={entry ? entry.activityMinutes / goals.activityMinutes : 0}
             met={!!entry && entry.activityMinutes >= goals.activityMinutes}
+            accentColor={metricColors.activity.fg}
+            accentBg={metricColors.activity.bg}
           />
           <StatCard
             icon="happy-outline"
@@ -72,6 +94,8 @@ export function DashboardScreen() {
             goalLabel={`Minimo: ${goals.moodMin}/5`}
             progress={entry ? entry.mood / 5 : 0}
             met={!!entry && entry.mood >= goals.moodMin}
+            accentColor={metricColors.mood.fg}
+            accentBg={metricColors.mood.bg}
           />
         </View>
       </ScrollView>
@@ -91,6 +115,10 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     paddingBottom: spacing.xl,
   },
+  badgeRow: {
+    flexDirection: "row",
+    gap: spacing.xs,
+  },
   streakBadge: {
     flexDirection: "row",
     alignItems: "center",
@@ -103,7 +131,27 @@ const styles = StyleSheet.create({
   streakBadgeText: {
     color: "#fff",
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: 13,
+  },
+  xpBarWrap: {
+    marginTop: spacing.md,
+  },
+  xpTrack: {
+    height: 6,
+    borderRadius: radii.pill,
+    backgroundColor: "rgba(255,255,255,0.25)",
+    overflow: "hidden",
+  },
+  xpFill: {
+    height: "100%",
+    borderRadius: radii.pill,
+    backgroundColor: colors.accent,
+  },
+  xpLabel: {
+    fontSize: 11,
+    color: "rgba(255,255,255,0.85)",
+    marginTop: 4,
+    fontWeight: "600",
   },
   reminderCard: {
     flexDirection: "row",

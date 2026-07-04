@@ -9,9 +9,10 @@ interface Props {
   title: string;
   subtitle?: string;
   right?: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
-export function ScreenHeader({ eyebrow, title, subtitle, right }: Props) {
+export function ScreenHeader({ eyebrow, title, subtitle, right, footer }: Props) {
   const insets = useSafeAreaInsets();
   return (
     <LinearGradient
@@ -28,6 +29,7 @@ export function ScreenHeader({ eyebrow, title, subtitle, right }: Props) {
         </View>
         {right}
       </View>
+      {footer}
     </LinearGradient>
   );
 }

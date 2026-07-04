@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
@@ -116,7 +117,7 @@ export function SettingsScreen() {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.exportButton} onPress={handleExport}>
+        <PressableScale style={styles.exportButton} onPress={handleExport}>
           <Ionicons name="download-outline" size={18} color="#fff" />
           <Text style={styles.exportButtonText}>
             {exportState === "done"
@@ -127,12 +128,12 @@ export function SettingsScreen() {
               ? "Errore durante l'esportazione"
               : "Esporta dati (CSV)"}
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
 
-      <TouchableOpacity style={styles.dangerButton} onPress={handleReset}>
+      <PressableScale style={styles.dangerButton} onPress={handleReset}>
         <Text style={styles.dangerButtonText}>Cancella tutti i dati</Text>
-      </TouchableOpacity>
+      </PressableScale>
       </ScrollView>
     </View>
   );

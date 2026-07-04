@@ -7,6 +7,20 @@ export interface WellnessEntry {
   waterGlasses: number;
   activityMinutes: number;
   notes?: string;
+  bonusMissions?: string[]; // ids of unlocked bonus missions completed this day
+}
+
+export type MissionDifficulty = 1 | 2 | 3;
+
+export interface Mission {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  difficulty: MissionDifficulty;
+  xpReward: number;
+  unlockLevel: number;
+  core: boolean; // core missions map to the 4 base tracked metrics, always unlocked
 }
 
 export interface WellnessGoals {

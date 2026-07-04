@@ -6,7 +6,15 @@ function escapeCsvField(value: string): string {
 }
 
 export function entriesToCsv(entries: WellnessEntry[]): string {
-  const header = ["date", "mood", "sleepHours", "waterGlasses", "activityMinutes", "notes"];
+  const header = [
+    "date",
+    "mood",
+    "sleepHours",
+    "waterGlasses",
+    "activityMinutes",
+    "bonusMissions",
+    "notes",
+  ];
   const rows = entries.map((e) =>
     [
       e.date,
@@ -14,6 +22,7 @@ export function entriesToCsv(entries: WellnessEntry[]): string {
       String(e.sleepHours),
       String(e.waterGlasses),
       String(e.activityMinutes),
+      escapeCsvField((e.bonusMissions ?? []).join(";")),
       escapeCsvField(e.notes ?? ""),
     ].join(",")
   );

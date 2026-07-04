@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -6,10 +7,11 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
+import { MissionChip } from "../components/MissionChip";
 import { MoodPicker } from "../components/MoodPicker";
+import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
@@ -23,12 +25,14 @@ const EMPTY_ENTRY: Omit<WellnessEntry, "date"> = {
   waterGlasses: 4,
   activityMinutes: 0,
   notes: "",
+  bonusMissions: [],
 };
 
 export function LogEntryScreen() {
-  const { logEntry, getEntryForDate } = useWellness();
+  const { logEntry, getEntryForDate, unlockedMissions } = useWellness();
   const date = todayKey();
   const existing = getEntryForDate(date);
+  const bonusMissionOptions = unlockedMissions.filter((m) => !m.core);
 
   const [mood, setMood] = useState<MoodScore>(existing?.mood ?? EMPTY_ENTRY.mood);
   const [sleepHours, setSleepHours] = useState(existing?.sleepHours ?? EMPTY_ENTRY.sleepHours);
@@ -39,15 +43,32 @@ export function LogEntryScreen() {
     existing?.activityMinutes ?? EMPTY_ENTRY.activityMinutes
   );
   const [notes, setNotes] = useState(existing?.notes ?? EMPTY_ENTRY.notes ?? "");
-  const [saved, setSaved] = useState(false);
+  const [bonusMissions, setBonusMissions] = useState<string[]>(existing?.bonusMissions ?? []);
+  const [feedback, setFeedback] = useState<{ xp: number; leveledUp: boolean; newLevel: number } | null>(
+    null
+  );
 
   useEffect(() => {
-    setSaved(false);
-  }, [mood, sleepHours, waterGlasses, activityMinutes, notes]);
+    setFeedback(null);
+  }, [mood, sleepHours, waterGlasses, activityMinutes, notes, bonusMissions]);
+
+  const toggleBonusMission = (id: string) => {
+    setBonusMissions((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+  };
 
   const handleSave = async () => {
-    await logEntry({ date, mood, sleepHours, waterGlasses, activityMinutes, notes });
-    setSaved(true);
+    const result = await logEntry({
+      date,
+      mood,
+      sleepHours,
+      waterGlasses,
+      activityMinutes,
+      notes,
+      bonusMissions,
+    });
+    setFeedback({ xp: result.xpEarned, leveledUp: result.leveledUp, newLevel: result.newLevel });
   };
 
   return (
@@ -88,6 +109,20 @@ export function LogEntryScreen() {
           onChange={setActivityMinutes}
         />
 
+        {bonusMissionOptions.length > 0 && (
+          <>
+            <Text style={styles.sectionLabel}>Missioni bonus</Text>
+            {bonusMissionOptions.map((mission) => (
+              <MissionChip
+                key={mission.id}
+                mission={mission}
+                selected={bonusMissions.includes(mission.id)}
+                onToggle={() => toggleBonusMission(mission.id)}
+              />
+            ))}
+          </>
+        )}
+
         <Text style={styles.sectionLabel}>Note (opzionale)</Text>
         <TextInput
           style={styles.notes}
@@ -98,9 +133,20 @@ export function LogEntryScreen() {
           onChangeText={setNotes}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>{saved ? "Salvato ✓" : "Salva"}</Text>
-        </TouchableOpacity>
+        {feedback && (
+          <View style={styles.feedbackCard}>
+            <Ionicons name="sparkles" size={18} color={colors.accent} />
+            <Text style={styles.feedbackText}>
+              {feedback.leveledUp
+                ? `Livello raggiunto! Ora sei livello ${feedback.newLevel} (+${feedback.xp} XP)`
+                : `+${feedback.xp} XP guadagnati`}
+            </Text>
+          </View>
+        )}
+
+        <PressableScale style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>{feedback ? "Salvato ✓" : "Salva"}</Text>
+        </PressableScale>
       </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -135,6 +181,21 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     color: colors.text,
     marginBottom: spacing.lg,
+  },
+  feedbackCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: "#FFF6E9",
+    borderRadius: radii.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  feedbackText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.primaryDark,
   },
   saveButton: {
     backgroundColor: colors.primary,

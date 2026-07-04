@@ -11,6 +11,13 @@ export const colors = {
   success: "#3FAE71",
 };
 
+export const metricColors = {
+  sleep: { fg: "#6C63FF", bg: "#EEECFF" },
+  water: { fg: "#2E86DE", bg: "#E6F2FC" },
+  activity: { fg: "#F2994A", bg: "#FDF0E1" },
+  mood: { fg: "#E85D9C", bg: "#FCE8F1" },
+};
+
 export const spacing = {
   xs: 4,
   sm: 8,

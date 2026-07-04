@@ -6,12 +6,14 @@ import { DashboardScreen } from "../screens/DashboardScreen";
 import { GoalsScreen } from "../screens/GoalsScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { LogEntryScreen } from "../screens/LogEntryScreen";
+import { MissionsScreen } from "../screens/MissionsScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
 import { colors } from "../theme";
 
 export type TabParamList = {
   Dashboard: undefined;
   Log: undefined;
+  Missions: undefined;
   Goals: undefined;
   History: undefined;
   Settings: undefined;
@@ -22,6 +24,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const ICONS: Record<keyof TabParamList, React.ComponentProps<typeof Ionicons>["name"]> = {
   Dashboard: "home-outline",
   Log: "add-circle-outline",
+  Missions: "trophy-outline",
   Goals: "flag-outline",
   History: "stats-chart-outline",
   Settings: "settings-outline",
@@ -29,12 +32,13 @@ const ICONS: Record<keyof TabParamList, React.ComponentProps<typeof Ionicons>["n
 
 export function RootNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer documentTitle={{ enabled: false }}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.textMuted,
+          tabBarLabelStyle: { fontSize: 10 },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name={ICONS[route.name as keyof TabParamList]} size={size} color={color} />
           ),
@@ -42,6 +46,7 @@ export function RootNavigator() {
       >
         <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Oggi" }} />
         <Tab.Screen name="Log" component={LogEntryScreen} options={{ title: "Registra" }} />
+        <Tab.Screen name="Missions" component={MissionsScreen} options={{ title: "Missioni" }} />
         <Tab.Screen name="Goals" component={GoalsScreen} options={{ title: "Obiettivi" }} />
         <Tab.Screen name="History" component={HistoryScreen} options={{ title: "Storico" }} />
         <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: "Impostazioni" }} />
