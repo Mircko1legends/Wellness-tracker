@@ -1,9 +1,12 @@
 import React, { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ComparisonCard } from "../components/ComparisonCard";
+import { ScreenHeader } from "../components/ScreenHeader";
 import { WeekChart } from "../components/WeekChart";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
 import { WellnessEntry } from "../types";
+import { computeWeeklyComparison } from "../utils/comparison";
 import { formatShortLabel, lastNDateKeys } from "../utils/date";
 import { goalsMet } from "../utils/streak";
 
@@ -12,6 +15,7 @@ export function HistoryScreen() {
 
   const last7 = lastNDateKeys(7);
   const byDate = useMemo(() => new Map(entries.map((e) => [e.date, e])), [entries]);
+  const comparison = useMemo(() => computeWeeklyComparison(entries), [entries]);
 
   const sleepData = last7.map((d) => byDate.get(d)?.sleepHours ?? 0);
   const waterData = last7.map((d) => byDate.get(d)?.waterGlasses ?? 0);
@@ -37,25 +41,27 @@ export function HistoryScreen() {
   };
 
   return (
-    <FlatList
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      data={recent}
-      keyExtractor={(item) => item.date}
-      renderItem={renderItem}
-      ListHeaderComponent={
-        <>
-          <Text style={styles.title}>Storico</Text>
-          <WeekChart title="Sonno (ore) - ultimi 7 giorni" labels={labels} data={sleepData} suffix="h" />
-          <WeekChart title="Acqua (bicchieri) - ultimi 7 giorni" labels={labels} data={waterData} />
-          <WeekChart title="Attività (min) - ultimi 7 giorni" labels={labels} data={activityData} />
-          <Text style={styles.sectionLabel}>Tutte le registrazioni</Text>
-        </>
-      }
-      ListEmptyComponent={
-        <Text style={styles.emptyText}>Nessuna registrazione ancora. Vai su "Registra" per iniziare.</Text>
-      }
-    />
+    <View style={styles.container}>
+      <ScreenHeader title="Storico" subtitle="Confronti e andamento settimanale" />
+      <FlatList
+        contentContainerStyle={styles.content}
+        data={recent}
+        keyExtractor={(item) => item.date}
+        renderItem={renderItem}
+        ListHeaderComponent={
+          <>
+            <ComparisonCard comparison={comparison} />
+            <WeekChart title="Sonno (ore) - ultimi 7 giorni" labels={labels} data={sleepData} suffix="h" />
+            <WeekChart title="Acqua (bicchieri) - ultimi 7 giorni" labels={labels} data={waterData} />
+            <WeekChart title="Attività (min) - ultimi 7 giorni" labels={labels} data={activityData} />
+            <Text style={styles.sectionLabel}>Tutte le registrazioni</Text>
+          </>
+        }
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>Nessuna registrazione ancora. Vai su "Registra" per iniziare.</Text>
+        }
+      />
+    </View>
   );
 }
 
@@ -67,12 +73,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.md,
     paddingBottom: spacing.xl,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: colors.text,
-    marginBottom: spacing.md,
   },
   sectionLabel: {
     fontSize: 14,

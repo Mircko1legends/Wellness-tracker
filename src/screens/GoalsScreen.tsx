@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
@@ -21,48 +22,49 @@ export function GoalsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>I tuoi obiettivi</Text>
-      <Text style={styles.subtitle}>
-        Imposta i traguardi giornalieri usati per calcolare i tuoi progressi e la streak.
-      </Text>
+    <View style={styles.container}>
+      <ScreenHeader
+        title="I tuoi obiettivi"
+        subtitle="Traguardi giornalieri usati per calcolare progressi e streak"
+      />
+      <ScrollView contentContainerStyle={styles.content}>
+        <StepperInput
+          label="Ore di sonno"
+          value={sleepHours}
+          unit="h"
+          step={0.5}
+          max={16}
+          onChange={setSleepHours}
+        />
+        <StepperInput
+          label="Bicchieri d'acqua"
+          value={waterGlasses}
+          unit="bicchieri"
+          max={30}
+          onChange={setWaterGlasses}
+        />
+        <StepperInput
+          label="Attività fisica"
+          value={activityMinutes}
+          unit="min"
+          step={5}
+          max={600}
+          onChange={setActivityMinutes}
+        />
+        <StepperInput
+          label="Umore minimo"
+          value={moodMin}
+          unit="/5"
+          min={1}
+          max={5}
+          onChange={(v) => setMoodMin(v as MoodScore)}
+        />
 
-      <StepperInput
-        label="Ore di sonno"
-        value={sleepHours}
-        unit="h"
-        step={0.5}
-        max={16}
-        onChange={setSleepHours}
-      />
-      <StepperInput
-        label="Bicchieri d'acqua"
-        value={waterGlasses}
-        unit="bicchieri"
-        max={30}
-        onChange={setWaterGlasses}
-      />
-      <StepperInput
-        label="Attività fisica"
-        value={activityMinutes}
-        unit="min"
-        step={5}
-        max={600}
-        onChange={setActivityMinutes}
-      />
-      <StepperInput
-        label="Umore minimo"
-        value={moodMin}
-        unit="/5"
-        min={1}
-        max={5}
-        onChange={(v) => setMoodMin(v as MoodScore)}
-      />
-
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>{saved ? "Obiettivi salvati ✓" : "Salva obiettivi"}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>{saved ? "Obiettivi salvati ✓" : "Salva obiettivi"}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -74,16 +76,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.md,
     paddingBottom: spacing.xl,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginBottom: spacing.lg,
   },
   saveButton: {
     backgroundColor: colors.primary,

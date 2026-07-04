@@ -7,8 +7,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { MoodPicker } from "../components/MoodPicker";
+import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
@@ -49,14 +51,16 @@ export function LogEntryScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <View style={styles.container}>
+      <ScreenHeader
+        title="Registra la giornata"
+        subtitle={existing ? "Modifica la voce di oggi" : "Oggi"}
+      />
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Registra la giornata</Text>
-        <Text style={styles.subtitle}>{existing ? "Modifica la voce di oggi" : "Oggi"}</Text>
-
         <Text style={styles.sectionLabel}>Umore</Text>
         <MoodPicker value={mood} onChange={setMood} />
 
@@ -98,7 +102,8 @@ export function LogEntryScreen() {
           <Text style={styles.saveButtonText}>{saved ? "Salvato ✓" : "Salva"}</Text>
         </TouchableOpacity>
       </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -107,19 +112,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  flex: {
+    flex: 1,
+  },
   content: {
     padding: spacing.md,
     paddingBottom: spacing.xl,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginBottom: spacing.md,
   },
   sectionLabel: {
     fontSize: 14,
