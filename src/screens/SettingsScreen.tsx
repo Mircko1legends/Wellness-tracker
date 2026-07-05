@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Alert, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 import { PressableScale } from "../components/PressableScale";
@@ -10,6 +11,7 @@ import { colors, radii, spacing } from "../theme";
 import { exportEntries } from "../utils/csvExport";
 
 export function SettingsScreen() {
+  const navigation = useNavigation();
   const { entries, reminderSettings, updateReminderSettings, resetAllData } = useWellness();
   const [enabled, setEnabled] = useState(reminderSettings.enabled);
   const [hour, setHour] = useState(reminderSettings.hour);
@@ -65,7 +67,7 @@ export function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Impostazioni" />
+      <ScreenHeader title="Impostazioni" onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content}>
       <View style={styles.card}>
         <View style={styles.rowBetween}>

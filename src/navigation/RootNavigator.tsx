@@ -3,20 +3,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { DashboardScreen } from "../screens/DashboardScreen";
-import { GoalsScreen } from "../screens/GoalsScreen";
-import { HistoryScreen } from "../screens/HistoryScreen";
+import { DietScreen } from "../screens/DietScreen";
 import { LogEntryScreen } from "../screens/LogEntryScreen";
-import { MissionsScreen } from "../screens/MissionsScreen";
-import { SettingsScreen } from "../screens/SettingsScreen";
+import { WorkoutScreen } from "../screens/WorkoutScreen";
 import { colors } from "../theme";
+import { MoreStack } from "./MoreStack";
 
 export type TabParamList = {
   Dashboard: undefined;
   Log: undefined;
-  Missions: undefined;
-  Goals: undefined;
-  History: undefined;
-  Settings: undefined;
+  Workout: undefined;
+  Diet: undefined;
+  More: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -24,10 +22,9 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const ICONS: Record<keyof TabParamList, React.ComponentProps<typeof Ionicons>["name"]> = {
   Dashboard: "home-outline",
   Log: "add-circle-outline",
-  Missions: "trophy-outline",
-  Goals: "flag-outline",
-  History: "stats-chart-outline",
-  Settings: "settings-outline",
+  Workout: "barbell-outline",
+  Diet: "restaurant-outline",
+  More: "menu-outline",
 };
 
 export function RootNavigator() {
@@ -39,6 +36,7 @@ export function RootNavigator() {
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.textMuted,
           tabBarLabelStyle: { fontSize: 10 },
+          tabBarStyle: { backgroundColor: colors.backgroundElevated, borderTopColor: colors.border },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name={ICONS[route.name as keyof TabParamList]} size={size} color={color} />
           ),
@@ -46,10 +44,9 @@ export function RootNavigator() {
       >
         <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Oggi" }} />
         <Tab.Screen name="Log" component={LogEntryScreen} options={{ title: "Registra" }} />
-        <Tab.Screen name="Missions" component={MissionsScreen} options={{ title: "Missioni" }} />
-        <Tab.Screen name="Goals" component={GoalsScreen} options={{ title: "Obiettivi" }} />
-        <Tab.Screen name="History" component={HistoryScreen} options={{ title: "Storico" }} />
-        <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: "Impostazioni" }} />
+        <Tab.Screen name="Workout" component={WorkoutScreen} options={{ title: "Allenamento" }} />
+        <Tab.Screen name="Diet" component={DietScreen} options={{ title: "Dieta" }} />
+        <Tab.Screen name="More" component={MoreStack} options={{ title: "Altro" }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

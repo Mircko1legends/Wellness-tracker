@@ -1,6 +1,7 @@
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, radii, spacing } from "../theme";
 
@@ -10,9 +11,10 @@ interface Props {
   subtitle?: string;
   right?: React.ReactNode;
   footer?: React.ReactNode;
+  onBack?: () => void;
 }
 
-export function ScreenHeader({ eyebrow, title, subtitle, right, footer }: Props) {
+export function ScreenHeader({ eyebrow, title, subtitle, right, footer, onBack }: Props) {
   const insets = useSafeAreaInsets();
   return (
     <LinearGradient
@@ -22,6 +24,11 @@ export function ScreenHeader({ eyebrow, title, subtitle, right, footer }: Props)
       style={[styles.header, { paddingTop: insets.top + spacing.sm }]}
     >
       <View style={styles.row}>
+        {!!onBack && (
+          <TouchableOpacity onPress={onBack} style={styles.backButton} hitSlop={8}>
+            <Ionicons name="chevron-back" size={22} color={colors.text} />
+          </TouchableOpacity>
+        )}
         <View style={{ flex: 1 }}>
           {!!eyebrow && <Text style={styles.eyebrow}>{eyebrow}</Text>}
           <Text style={styles.title}>{title}</Text>
@@ -45,6 +52,15 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  backButton: {
+    marginRight: spacing.sm,
+    width: 32,
+    height: 32,
+    borderRadius: radii.pill,
+    backgroundColor: colors.cardAlt,
+    alignItems: "center",
+    justifyContent: "center",
   },
   eyebrow: {
     fontSize: 12,

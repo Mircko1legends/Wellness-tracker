@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { MissionRow } from "../components/MissionRow";
@@ -9,6 +10,7 @@ import { todayKey } from "../utils/date";
 import { goalsMet } from "../utils/streak";
 
 export function MissionsScreen() {
+  const navigation = useNavigation();
   const { level, unlockedMissions, lockedMissions, nextMission, getEntryForDate, goals } =
     useWellness();
 
@@ -26,6 +28,7 @@ export function MissionsScreen() {
       <ScreenHeader
         title="Missioni"
         subtitle={`${level.totalXp} XP totali guadagnati`}
+        onBack={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.levelCard}>

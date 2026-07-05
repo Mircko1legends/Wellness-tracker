@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { PressableScale } from "../components/PressableScale";
@@ -8,6 +9,7 @@ import { colors, radii, spacing } from "../theme";
 import { MoodScore } from "../types";
 
 export function GoalsScreen() {
+  const navigation = useNavigation();
   const { goals, updateGoals } = useWellness();
 
   const [sleepHours, setSleepHours] = useState(goals.sleepHours);
@@ -27,6 +29,7 @@ export function GoalsScreen() {
       <ScreenHeader
         title="I tuoi obiettivi"
         subtitle="Traguardi giornalieri usati per calcolare progressi e streak"
+        onBack={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.content}>
         <StepperInput

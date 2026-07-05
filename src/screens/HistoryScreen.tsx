@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { ComparisonCard } from "../components/ComparisonCard";
@@ -11,6 +12,7 @@ import { formatShortLabel, lastNDateKeys } from "../utils/date";
 import { goalsMet } from "../utils/streak";
 
 export function HistoryScreen() {
+  const navigation = useNavigation();
   const { entries, goals } = useWellness();
 
   const last7 = lastNDateKeys(7);
@@ -42,7 +44,11 @@ export function HistoryScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Storico" subtitle="Confronti e andamento settimanale" />
+      <ScreenHeader
+        title="Storico"
+        subtitle="Confronti e andamento settimanale"
+        onBack={() => navigation.goBack()}
+      />
       <FlatList
         contentContainerStyle={styles.content}
         data={recent}
