@@ -49,7 +49,7 @@ export function DashboardScreen() {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         {!entry && (
           <View style={styles.reminderCard}>
-            <Ionicons name="alert-circle-outline" size={18} color={colors.primaryDark} />
+            <Ionicons name="alert-circle-outline" size={18} color={colors.primary} />
             <Text style={styles.reminderText}>
               Non hai ancora registrato la giornata di oggi. Vai su "Registra" per aggiungerla.
             </Text>
@@ -123,13 +123,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "rgba(255,255,255,0.18)",
+    backgroundColor: colors.cardAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
     borderRadius: radii.pill,
     paddingHorizontal: spacing.sm,
     paddingVertical: 6,
   },
   streakBadgeText: {
-    color: "#fff",
+    color: colors.text,
     fontWeight: "700",
     fontSize: 13,
   },
@@ -139,17 +141,17 @@ const styles = StyleSheet.create({
   xpTrack: {
     height: 6,
     borderRadius: radii.pill,
-    backgroundColor: "rgba(255,255,255,0.25)",
+    backgroundColor: colors.border,
     overflow: "hidden",
   },
   xpFill: {
     height: "100%",
     borderRadius: radii.pill,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primary,
   },
   xpLabel: {
     fontSize: 11,
-    color: "rgba(255,255,255,0.85)",
+    color: colors.textMuted,
     marginTop: 4,
     fontWeight: "600",
   },
@@ -157,8 +159,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    backgroundColor: "#FDF3E7",
+    backgroundColor: colors.cardAlt,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.primary,
     padding: spacing.md,
     marginTop: spacing.md,
     marginBottom: spacing.md,
@@ -166,7 +170,7 @@ const styles = StyleSheet.create({
   reminderText: {
     flex: 1,
     fontSize: 12,
-    color: colors.primaryDark,
+    color: colors.text,
   },
   grid: {
     flexDirection: "row",

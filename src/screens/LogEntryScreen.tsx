@@ -186,8 +186,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    backgroundColor: "#FFF6E9",
+    backgroundColor: colors.cardAlt,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.primary,
     padding: spacing.md,
     marginBottom: spacing.md,
   },
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     fontWeight: "700",
-    color: colors.primaryDark,
+    color: colors.primary,
   },
   saveButton: {
     backgroundColor: colors.primary,
@@ -204,8 +206,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   saveButtonText: {
-    color: "#fff",
+    color: colors.onPrimary,
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "800",
   },
 });

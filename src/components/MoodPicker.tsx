@@ -50,7 +50,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   optionSelected: {
-    backgroundColor: "#E7F4F1",
+    backgroundColor: colors.cardAlt,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   emoji: {
     fontSize: 26,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   labelSelected: {
-    color: colors.primaryDark,
+    color: colors.primary,
     fontWeight: "700",
   },
 });

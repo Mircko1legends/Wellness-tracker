@@ -16,9 +16,9 @@ export function ScreenHeader({ eyebrow, title, subtitle, right, footer }: Props)
   const insets = useSafeAreaInsets();
   return (
     <LinearGradient
-      colors={[colors.primary, colors.primaryDark]}
+      colors={[colors.backgroundElevated, colors.background]}
       start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      end={{ x: 0, y: 1 }}
       style={[styles.header, { paddingTop: insets.top + spacing.sm }]}
     >
       <View style={styles.row}>
@@ -30,6 +30,7 @@ export function ScreenHeader({ eyebrow, title, subtitle, right, footer }: Props)
         {right}
       </View>
       {footer}
+      <View style={styles.accentBar} />
     </LinearGradient>
   );
 }
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.lg,
-    borderBottomLeftRadius: radii.lg,
-    borderBottomRightRadius: radii.lg,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   row: {
     flexDirection: "row",
@@ -47,18 +48,30 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     fontSize: 12,
-    color: "rgba(255,255,255,0.8)",
-    textTransform: "capitalize",
-    marginBottom: 2,
+    color: colors.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 4,
+    fontWeight: "700",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#fff",
+    fontSize: 26,
+    fontWeight: "800",
+    color: colors.text,
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 12,
-    color: "rgba(255,255,255,0.85)",
+    color: colors.textMuted,
     marginTop: 2,
+  },
+  accentBar: {
+    position: "absolute",
+    bottom: -1,
+    left: spacing.md,
+    right: spacing.md,
+    height: 3,
+    borderRadius: radii.pill,
+    backgroundColor: colors.primary,
   },
 });

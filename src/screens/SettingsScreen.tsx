@@ -118,7 +118,7 @@ export function SettingsScreen() {
           </View>
         </View>
         <PressableScale style={styles.exportButton} onPress={handleExport}>
-          <Ionicons name="download-outline" size={18} color="#fff" />
+          <Ionicons name="download-outline" size={18} color={colors.onPrimary} />
           <Text style={styles.exportButtonText}>
             {exportState === "done"
               ? "Esportato ✓"
@@ -151,6 +151,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.lg,
   },
@@ -183,8 +185,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   exportButtonText: {
-    color: "#fff",
-    fontWeight: "700",
+    color: colors.onPrimary,
+    fontWeight: "800",
     fontSize: 14,
   },
   dangerButton: {

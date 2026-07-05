@@ -28,8 +28,8 @@ export function WeekChart({ title, labels, data, suffix = "" }: Props) {
           backgroundGradientFrom: colors.card,
           backgroundGradientTo: colors.card,
           decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(47, 158, 143, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(107, 123, 120, ${opacity})`,
+          color: (opacity = 1) => `rgba(212, 255, 63, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(139, 148, 160, ${opacity})`,
           propsForDots: { r: "3" },
         }}
         bezier
@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.md,
   },

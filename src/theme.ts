@@ -1,21 +1,24 @@
 export const colors = {
-  background: "#F4F9F7",
-  card: "#FFFFFF",
-  primary: "#2F9E8F",
-  primaryDark: "#1F7A6E",
-  accent: "#F2A65A",
-  text: "#1E2A28",
-  textMuted: "#6B7B78",
-  border: "#E1ECE9",
-  danger: "#E0574C",
-  success: "#3FAE71",
+  background: "#0B0D10",
+  backgroundElevated: "#111418",
+  card: "#16191D",
+  cardAlt: "#1D2127",
+  border: "#262B31",
+  primary: "#D4FF3F",
+  primaryDark: "#A8CC2F",
+  onPrimary: "#0B0D10",
+  accent: "#FF3B30",
+  text: "#F5F7F8",
+  textMuted: "#8B94A0",
+  danger: "#FF453A",
+  success: "#3FD97F",
 };
 
 export const metricColors = {
-  sleep: { fg: "#6C63FF", bg: "#EEECFF" },
-  water: { fg: "#2E86DE", bg: "#E6F2FC" },
-  activity: { fg: "#F2994A", bg: "#FDF0E1" },
-  mood: { fg: "#E85D9C", bg: "#FCE8F1" },
+  sleep: { fg: "#9B8CFF", bg: "#211F35" },
+  water: { fg: "#3DB8FF", bg: "#141E2B" },
+  activity: { fg: "#FF9F43", bg: "#2B2013" },
+  mood: { fg: "#FF5C9E", bg: "#2B1620" },
 };
 
 export const spacing = {
@@ -27,8 +30,8 @@ export const spacing = {
 };
 
 export const radii = {
-  sm: 8,
-  md: 14,
-  lg: 20,
+  sm: 6,
+  md: 12,
+  lg: 18,
   pill: 999,
 };

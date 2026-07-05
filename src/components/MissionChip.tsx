@@ -22,7 +22,7 @@ export function MissionChip({ mission, selected, onToggle }: Props) {
         <Ionicons
           name={(mission.icon as any) ?? "checkmark-outline"}
           size={16}
-          color={selected ? "#fff" : colors.primary}
+          color={selected ? colors.onPrimary : colors.primary}
         />
       </View>
       <View style={{ flex: 1 }}>
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
   },
   chipSelected: {
     borderColor: colors.primary,
-    backgroundColor: "#E7F4F1",
+    backgroundColor: colors.cardAlt,
   },
   iconWrap: {
     width: 30,
     height: 30,
     borderRadius: radii.pill,
-    backgroundColor: "#E7F4F1",
+    backgroundColor: colors.cardAlt,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   xpSelected: {
-    color: colors.primaryDark,
+    color: colors.primary,
   },
 });

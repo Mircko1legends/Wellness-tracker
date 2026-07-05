@@ -29,7 +29,7 @@ export function MissionsScreen() {
       />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.levelCard}>
-          <ProgressRing size={92} strokeWidth={8} progress={level.progress} color={colors.accent} trackColor={colors.border}>
+          <ProgressRing size={92} strokeWidth={8} progress={level.progress} color={colors.primary} trackColor={colors.border}>
             <Text style={styles.levelNumber}>{level.level}</Text>
             <Text style={styles.levelLabel}>LIVELLO</Text>
           </ProgressRing>
@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     backgroundColor: colors.card,
     borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.lg,
   },
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
   },
   nextUnlockName: {
     fontWeight: "700",
-    color: colors.primaryDark,
+    color: colors.primary,
   },
   sectionLabel: {
     fontSize: 14,

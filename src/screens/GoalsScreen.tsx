@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   saveButtonText: {
-    color: "#fff",
+    color: colors.onPrimary,
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "800",
   },
 });

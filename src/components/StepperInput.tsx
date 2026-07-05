@@ -32,7 +32,7 @@ export function StepperInput({
           onPress={() => onChange(clamp(value - step))}
           accessibilityLabel={`Diminuisci ${label}`}
         >
-          <Ionicons name="remove" size={20} color={colors.primaryDark} />
+          <Ionicons name="remove" size={20} color={colors.primary} />
         </TouchableOpacity>
         <Text style={styles.value}>
           {value} <Text style={styles.unit}>{unit}</Text>
@@ -42,7 +42,7 @@ export function StepperInput({
           onPress={() => onChange(clamp(value + step))}
           accessibilityLabel={`Aumenta ${label}`}
         >
-          <Ionicons name="add" size={20} color={colors.primaryDark} />
+          <Ionicons name="add" size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
     </View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: radii.pill,
-    backgroundColor: "#E7F4F1",
+    backgroundColor: colors.cardAlt,
     alignItems: "center",
     justifyContent: "center",
   },

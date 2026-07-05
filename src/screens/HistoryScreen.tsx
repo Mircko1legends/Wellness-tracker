@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
   row: {
     backgroundColor: colors.card,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.sm,
   },

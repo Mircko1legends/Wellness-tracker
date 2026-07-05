@@ -23,12 +23,12 @@ export function StatCard({
   progress,
   met,
   accentColor = colors.primary,
-  accentBg = "#E7F4F1",
+  accentBg = colors.cardAlt,
 }: Props) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, met && styles.cardMet]}>
       <View style={styles.header}>
-        <View style={[styles.iconWrap, { backgroundColor: met ? "#E4F6EA" : accentBg }]}>
+        <View style={[styles.iconWrap, { backgroundColor: met ? "#173324" : accentBg }]}>
           <Ionicons name={icon} size={18} color={met ? colors.success : accentColor} />
         </View>
         <Text style={styles.label}>{label}</Text>
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
     flexBasis: "48%",
     backgroundColor: colors.card,
     borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.md,
     gap: spacing.xs,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
+  },
+  cardMet: {
+    borderColor: colors.success,
   },
   header: {
     flexDirection: "row",
@@ -74,9 +74,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   value: {
-    fontSize: 20,
-    fontWeight: "700",
+    fontSize: 22,
+    fontWeight: "800",
     color: colors.text,
+    letterSpacing: -0.5,
   },
   goalLabel: {
     fontSize: 11,
