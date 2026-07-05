@@ -86,4 +86,13 @@ describe("levelInfo", () => {
     expect(xpToReachLevel(2)).toBeGreaterThan(xpToReachLevel(1));
     expect(xpToReachLevel(5)).toBeGreaterThan(xpToReachLevel(4));
   });
+
+  it("takes several consecutive days of full compliance to level up, not one or two", () => {
+    // Max realistic daily xp at level 1: all 4 core goals (50) + the one
+    // unlocked bonus habit, dailyShower (10).
+    const maxDailyXpAtLevel1 = 60;
+    expect(levelInfo(maxDailyXpAtLevel1 * 2).level).toBe(1);
+    expect(levelInfo(maxDailyXpAtLevel1 * 5).level).toBe(1);
+    expect(levelInfo(maxDailyXpAtLevel1 * 6).level).toBeGreaterThanOrEqual(2);
+  });
 });

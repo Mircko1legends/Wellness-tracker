@@ -11,9 +11,14 @@ export interface LevelInfo {
   progress: number; // 0..1 toward next level
 }
 
-/** XP required to go from `level` to `level + 1`. Grows linearly so early levels come quickly. */
+/**
+ * XP required to go from `level` to `level + 1`.
+ * Deliberately steep (~6-7 days of consistent habits per level, even doing
+ * everything unlocked) so habits get consolidated before new ones unlock,
+ * instead of leveling up in a day or two.
+ */
 export function xpToReachLevel(level: number): number {
-  return 100 + (level - 1) * 20;
+  return 350 + (level - 1) * 150;
 }
 
 export function levelInfo(totalXp: number): LevelInfo {
