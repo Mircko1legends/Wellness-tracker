@@ -17,7 +17,10 @@ const KEYS = {
   workoutLogs: "@wellness/workoutLogs",
   medications: "@wellness/medications",
   medicationLogs: "@wellness/medicationLogs",
+  bodyweightKg: "@wellness/bodyweightKg",
 } as const;
+
+export const DEFAULT_BODYWEIGHT_KG = 70;
 
 export async function loadEntries(): Promise<WellnessEntry[]> {
   const raw = await AsyncStorage.getItem(KEYS.entries);
@@ -119,6 +122,16 @@ export async function saveMedicationLogs(logs: MedicationLogEntry[]): Promise<vo
   await AsyncStorage.setItem(KEYS.medicationLogs, JSON.stringify(logs));
 }
 
+export async function loadBodyweightKg(): Promise<number> {
+  const raw = await AsyncStorage.getItem(KEYS.bodyweightKg);
+  const parsed = raw ? Number(raw) : NaN;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_BODYWEIGHT_KG;
+}
+
+export async function saveBodyweightKg(weightKg: number): Promise<void> {
+  await AsyncStorage.setItem(KEYS.bodyweightKg, String(weightKg));
+}
+
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
     KEYS.entries,
@@ -127,5 +140,6 @@ export async function clearAllData(): Promise<void> {
     KEYS.workoutLogs,
     KEYS.medications,
     KEYS.medicationLogs,
+    KEYS.bodyweightKg,
   ]);
 }

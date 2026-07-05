@@ -10,10 +10,13 @@ import { syncDailyReminder } from "../notifications";
 import {
   addWorkoutLog,
   clearAllData,
+  DEFAULT_BODYWEIGHT_KG,
+  loadBodyweightKg,
   loadEntries,
   loadGoals,
   loadReminderSettings,
   loadWorkoutLogs,
+  saveBodyweightKg,
   saveGoals,
   saveReminderSettings,
   upsertEntry,
@@ -60,6 +63,8 @@ interface WellnessContextValue {
   workoutLogs: WorkoutLogEntry[];
   tierProgress: TierProgress;
   workoutLoggedToday: boolean;
+  bodyweightKg: number;
+  updateBodyweightKg: (weightKg: number) => Promise<void>;
   logEntry: (entry: WellnessEntry) => Promise<LogEntryResult>;
   logWorkout: (dayId: string) => Promise<LogWorkoutResult>;
   updateGoals: (goals: WellnessGoals) => Promise<void>;
@@ -78,19 +83,23 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     DEFAULT_REMINDER_SETTINGS
   );
   const [workoutLogs, setWorkoutLogs] = useState<WorkoutLogEntry[]>([]);
+  const [bodyweightKg, setBodyweightKg] = useState<number>(DEFAULT_BODYWEIGHT_KG);
 
   useEffect(() => {
     (async () => {
-      const [loadedEntries, loadedGoals, loadedReminders, loadedWorkoutLogs] = await Promise.all([
-        loadEntries(),
-        loadGoals(),
-        loadReminderSettings(),
-        loadWorkoutLogs(),
-      ]);
+      const [loadedEntries, loadedGoals, loadedReminders, loadedWorkoutLogs, loadedBodyweight] =
+        await Promise.all([
+          loadEntries(),
+          loadGoals(),
+          loadReminderSettings(),
+          loadWorkoutLogs(),
+          loadBodyweightKg(),
+        ]);
       setEntries(loadedEntries);
       setGoals(loadedGoals);
       setReminderSettings(loadedReminders);
       setWorkoutLogs(loadedWorkoutLogs);
+      setBodyweightKg(loadedBodyweight);
       setLoading(false);
       syncDailyReminder(loadedReminders).catch(() => {});
     })();
@@ -138,6 +147,11 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     };
   };
 
+  const updateBodyweightKg = async (weightKg: number) => {
+    await saveBodyweightKg(weightKg);
+    setBodyweightKg(weightKg);
+  };
+
   const updateGoals = async (newGoals: WellnessGoals) => {
     await saveGoals(newGoals);
     setGoals(newGoals);
@@ -155,6 +169,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     setGoals(DEFAULT_GOALS);
     setReminderSettings(DEFAULT_REMINDER_SETTINGS);
     setWorkoutLogs([]);
+    setBodyweightKg(DEFAULT_BODYWEIGHT_KG);
     await syncDailyReminder(DEFAULT_REMINDER_SETTINGS);
   };
 
@@ -197,6 +212,8 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     workoutLogs,
     tierProgress,
     workoutLoggedToday,
+    bodyweightKg,
+    updateBodyweightKg,
     logEntry,
     logWorkout,
     updateGoals,
