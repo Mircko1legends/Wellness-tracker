@@ -4,7 +4,7 @@ export const MISSIONS: Mission[] = [
   {
     id: "sleep",
     name: "Dormire bene",
-    description: "Raggiungi il tuo obiettivo di ore di sonno",
+    description: "7-9 ore per notte, con orari regolari",
     icon: "moon-outline",
     difficulty: 1,
     xpReward: 10,
@@ -44,7 +44,7 @@ export const MISSIONS: Mission[] = [
   {
     id: "dailyShower",
     name: "Doccia quotidiana",
-    description: "Fai la doccia ogni giorno per iniziare (o chiudere) la giornata al meglio",
+    description: "Doccia, deodorante e igiene di base per iniziare la giornata al meglio",
     icon: "sparkles-outline",
     difficulty: 1,
     xpReward: 10,
@@ -52,15 +52,37 @@ export const MISSIONS: Mission[] = [
     core: false,
   },
 
-  // --- Looksmaxxing: cura dell'aspetto ---
+  // --- Fondamenta quotidiane ---
+  {
+    id: "dietClean",
+    name: "Dieta pulita",
+    description: "Cibi integrali, proteine magre, verdura: niente ultra-processati oggi",
+    icon: "restaurant-outline",
+    difficulty: 2,
+    xpReward: 20,
+    unlockLevel: 2,
+    core: false,
+  },
+  {
+    id: "dailySteps",
+    name: "Camminata quotidiana",
+    description: "8.000-10.000 passi per bruciare grasso e migliorare la salute cardiovascolare",
+    icon: "footsteps-outline",
+    difficulty: 2,
+    xpReward: 20,
+    unlockLevel: 3,
+    core: false,
+  },
+
+  // --- Skincare (alta priorità) ---
   {
     id: "skincareAm",
     name: "Skincare mattutina",
-    description: "Detergente, idratante e protezione solare appena sveglio",
+    description: "Detergente delicato, idratante e SPF 30+, anche indoor",
     icon: "sunny-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 2,
+    unlockLevel: 4,
     core: false,
   },
   {
@@ -70,7 +92,7 @@ export const MISSIONS: Mission[] = [
     icon: "moon-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 3,
+    unlockLevel: 5,
     core: false,
   },
   {
@@ -80,9 +102,31 @@ export const MISSIONS: Mission[] = [
     icon: "partly-sunny-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 4,
+    unlockLevel: 6,
     core: false,
   },
+  {
+    id: "activeTreatment",
+    name: "Trattamento attivo",
+    description: "Vitamina C al mattino o retinolo la sera (introduzione graduale, 2-3 volte a settimana)",
+    icon: "flask-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 7,
+    core: false,
+  },
+  {
+    id: "exfoliation",
+    name: "Esfoliazione",
+    description: "Esfoliazione leggera, 2-3 volte a settimana",
+    icon: "refresh-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 8,
+    core: false,
+  },
+
+  // --- Grooming e igiene ---
   {
     id: "oralCare",
     name: "Igiene orale extra",
@@ -90,27 +134,91 @@ export const MISSIONS: Mission[] = [
     icon: "medical-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 5,
+    unlockLevel: 9,
     core: false,
   },
   {
     id: "hairCare",
     name: "Cura dei capelli",
-    description: "Routine per cuoio capelluto e styling curato",
+    description: "Cuoio capelluto curato e styling pulito; taglio di mantenimento ogni 3-4 settimane",
     icon: "cut-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 6,
+    unlockLevel: 10,
     core: false,
   },
   {
+    id: "grooming",
+    name: "Grooming",
+    description: "Sopracciglia, barba o rasatura sempre in ordine",
+    icon: "construct-outline",
+    difficulty: 2,
+    xpReward: 20,
+    unlockLevel: 11,
+    core: false,
+  },
+  {
+    id: "nailCare",
+    name: "Cura di mani e unghie",
+    description: "Mani e unghie pulite e curate",
+    icon: "hand-left-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 12,
+    core: false,
+  },
+
+  // --- Stile e presentazione ---
+  {
     id: "posture",
     name: "Postura",
-    description: "Esercizi di postura e mobilità del collo/mascella",
+    description: "Spalle indietro, testa alta: chin tuck per correggere la tech neck",
     icon: "body-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 7,
+    unlockLevel: 13,
+    core: false,
+  },
+  {
+    id: "outfitCare",
+    name: "Outfit curato",
+    description: "Vestiti puliti, stirati e della taglia giusta per la tua forma",
+    icon: "shirt-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 14,
+    core: false,
+  },
+
+  // --- Altri habits positivi ---
+  {
+    id: "stressManagement",
+    name: "Gestione dello stress",
+    description: "Respirazione, passeggiata o un hobby: il cortisolo alto rovina pelle e girovita",
+    icon: "leaf-outline",
+    difficulty: 2,
+    xpReward: 20,
+    unlockLevel: 15,
+    core: false,
+  },
+  {
+    id: "sunExposure",
+    name: "Sole con moderazione",
+    description: "Un po' di sole per la vitamina D, sempre con protezione",
+    icon: "sunny-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 16,
+    core: false,
+  },
+  {
+    id: "progressPhoto",
+    name: "Foto progressi",
+    description: "Scatta una foto per monitorare i cambiamenti nel tempo",
+    icon: "camera-outline",
+    difficulty: 1,
+    xpReward: 15,
+    unlockLevel: 17,
     core: false,
   },
 
@@ -122,7 +230,7 @@ export const MISSIONS: Mission[] = [
     icon: "school-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 8,
+    unlockLevel: 18,
     core: false,
   },
   {
@@ -132,7 +240,7 @@ export const MISSIONS: Mission[] = [
     icon: "clipboard-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 9,
+    unlockLevel: 19,
     core: false,
   },
   {
@@ -142,22 +250,9 @@ export const MISSIONS: Mission[] = [
     icon: "calendar-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 10,
+    unlockLevel: 20,
     core: false,
   },
-
-  // --- Looksmaxxing avanzato ---
-  {
-    id: "grooming",
-    name: "Grooming",
-    description: "Barba, sopracciglia e dettagli sempre in ordine",
-    icon: "construct-outline",
-    difficulty: 2,
-    xpReward: 20,
-    unlockLevel: 11,
-    core: false,
-  },
-
   {
     id: "noProcrastination",
     name: "Zero procrastinazione",
@@ -165,7 +260,7 @@ export const MISSIONS: Mission[] = [
     icon: "checkbox-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 12,
+    unlockLevel: 21,
     core: false,
   },
   {
@@ -175,7 +270,7 @@ export const MISSIONS: Mission[] = [
     icon: "flower-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 13,
+    unlockLevel: 22,
     core: false,
   },
   {
@@ -185,7 +280,7 @@ export const MISSIONS: Mission[] = [
     icon: "book-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 14,
+    unlockLevel: 23,
     core: false,
   },
   {
@@ -195,7 +290,7 @@ export const MISSIONS: Mission[] = [
     icon: "list-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 15,
+    unlockLevel: 24,
     core: false,
   },
   {
@@ -205,7 +300,7 @@ export const MISSIONS: Mission[] = [
     icon: "heart-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 16,
+    unlockLevel: 25,
     core: false,
   },
   {
@@ -215,7 +310,7 @@ export const MISSIONS: Mission[] = [
     icon: "chatbubbles-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 17,
+    unlockLevel: 26,
     core: false,
   },
   {
@@ -225,7 +320,7 @@ export const MISSIONS: Mission[] = [
     icon: "nutrition-outline",
     difficulty: 2,
     xpReward: 25,
-    unlockLevel: 18,
+    unlockLevel: 27,
     core: false,
   },
   {
@@ -235,7 +330,7 @@ export const MISSIONS: Mission[] = [
     icon: "alarm-outline",
     difficulty: 2,
     xpReward: 25,
-    unlockLevel: 19,
+    unlockLevel: 28,
     core: false,
   },
   {
@@ -245,7 +340,7 @@ export const MISSIONS: Mission[] = [
     icon: "snow-outline",
     difficulty: 3,
     xpReward: 30,
-    unlockLevel: 20,
+    unlockLevel: 29,
     core: false,
   },
   {
@@ -255,7 +350,7 @@ export const MISSIONS: Mission[] = [
     icon: "fitness-outline",
     difficulty: 2,
     xpReward: 20,
-    unlockLevel: 21,
+    unlockLevel: 30,
     core: false,
   },
   {
@@ -265,7 +360,7 @@ export const MISSIONS: Mission[] = [
     icon: "accessibility-outline",
     difficulty: 1,
     xpReward: 15,
-    unlockLevel: 22,
+    unlockLevel: 31,
     core: false,
   },
   {
@@ -275,7 +370,7 @@ export const MISSIONS: Mission[] = [
     icon: "phone-portrait-outline",
     difficulty: 3,
     xpReward: 35,
-    unlockLevel: 23,
+    unlockLevel: 32,
     core: false,
   },
   {
@@ -285,7 +380,7 @@ export const MISSIONS: Mission[] = [
     icon: "bulb-outline",
     difficulty: 3,
     xpReward: 35,
-    unlockLevel: 24,
+    unlockLevel: 33,
     core: false,
   },
 ];
