@@ -8,10 +8,12 @@ import React, {
 import { MISSIONS } from "../data/missions";
 import { syncDailyReminder } from "../notifications";
 import {
+  addWorkoutLog,
   clearAllData,
   loadEntries,
   loadGoals,
   loadReminderSettings,
+  loadWorkoutLogs,
   saveGoals,
   saveReminderSettings,
   upsertEntry,
@@ -23,11 +25,21 @@ import {
   ReminderSettings,
   WellnessEntry,
   WellnessGoals,
+  WorkoutLogEntry,
 } from "../types";
 import { computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
 import { computeStreak } from "../utils/streak";
+import { computeTierProgress, computeWorkoutXp, hasLoggedWorkoutToday, TierProgress, xpForWorkout } from "../utils/workout";
+import { todayKey } from "../utils/date";
 
 export interface LogEntryResult {
+  xpEarned: number;
+  leveledUp: boolean;
+  newLevel: number;
+  newlyUnlocked: Mission[];
+}
+
+export interface LogWorkoutResult {
   xpEarned: number;
   leveledUp: boolean;
   newLevel: number;
@@ -45,7 +57,11 @@ interface WellnessContextValue {
   unlockedMissions: Mission[];
   lockedMissions: Mission[];
   nextMission: Mission | undefined;
+  workoutLogs: WorkoutLogEntry[];
+  tierProgress: TierProgress;
+  workoutLoggedToday: boolean;
   logEntry: (entry: WellnessEntry) => Promise<LogEntryResult>;
+  logWorkout: (dayId: string) => Promise<LogWorkoutResult>;
   updateGoals: (goals: WellnessGoals) => Promise<void>;
   updateReminderSettings: (settings: ReminderSettings) => Promise<void>;
   resetAllData: () => Promise<void>;
@@ -61,17 +77,20 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(
     DEFAULT_REMINDER_SETTINGS
   );
+  const [workoutLogs, setWorkoutLogs] = useState<WorkoutLogEntry[]>([]);
 
   useEffect(() => {
     (async () => {
-      const [loadedEntries, loadedGoals, loadedReminders] = await Promise.all([
+      const [loadedEntries, loadedGoals, loadedReminders, loadedWorkoutLogs] = await Promise.all([
         loadEntries(),
         loadGoals(),
         loadReminderSettings(),
+        loadWorkoutLogs(),
       ]);
       setEntries(loadedEntries);
       setGoals(loadedGoals);
       setReminderSettings(loadedReminders);
+      setWorkoutLogs(loadedWorkoutLogs);
       setLoading(false);
       syncDailyReminder(loadedReminders).catch(() => {});
     })();
@@ -96,6 +115,29 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     };
   };
 
+  const logWorkout = async (dayId: string): Promise<LogWorkoutResult> => {
+    const currentTier = computeTierProgress(workoutLogs).tier;
+    const prevTotalXp = computeTotalXp(entries, goals) + computeWorkoutXp(workoutLogs);
+    const prevLevel = levelInfo(prevTotalXp).level;
+
+    const updatedLogs = await addWorkoutLog({ date: todayKey(), tier: currentTier, dayId });
+    setWorkoutLogs(updatedLogs);
+
+    const newTotalXp = computeTotalXp(entries, goals) + computeWorkoutXp(updatedLogs);
+    const newLevelValue = levelInfo(newTotalXp).level;
+    const leveledUp = newLevelValue > prevLevel;
+    const newlyUnlocked = leveledUp
+      ? MISSIONS.filter((m) => m.unlockLevel > prevLevel && m.unlockLevel <= newLevelValue)
+      : [];
+
+    return {
+      xpEarned: xpForWorkout(currentTier),
+      leveledUp,
+      newLevel: newLevelValue,
+      newlyUnlocked,
+    };
+  };
+
   const updateGoals = async (newGoals: WellnessGoals) => {
     await saveGoals(newGoals);
     setGoals(newGoals);
@@ -112,14 +154,22 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     setEntries([]);
     setGoals(DEFAULT_GOALS);
     setReminderSettings(DEFAULT_REMINDER_SETTINGS);
+    setWorkoutLogs([]);
     await syncDailyReminder(DEFAULT_REMINDER_SETTINGS);
   };
 
   const getEntryForDate = (date: string) => entries.find((e) => e.date === date);
 
   const streak = useMemo(() => computeStreak(entries, goals), [entries, goals]);
-  const totalXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
+  const habitXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
+  const workoutXp = useMemo(() => computeWorkoutXp(workoutLogs), [workoutLogs]);
+  const totalXp = habitXp + workoutXp;
   const level = useMemo(() => levelInfo(totalXp), [totalXp]);
+  const tierProgress = useMemo(() => computeTierProgress(workoutLogs), [workoutLogs]);
+  const workoutLoggedToday = useMemo(
+    () => hasLoggedWorkoutToday(workoutLogs, todayKey()),
+    [workoutLogs]
+  );
   const unlockedMissions = useMemo(
     () => MISSIONS.filter((m) => m.unlockLevel <= level.level),
     [level.level]
@@ -144,7 +194,11 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     unlockedMissions,
     lockedMissions,
     nextMission,
+    workoutLogs,
+    tierProgress,
+    workoutLoggedToday,
     logEntry,
+    logWorkout,
     updateGoals,
     updateReminderSettings,
     resetAllData,

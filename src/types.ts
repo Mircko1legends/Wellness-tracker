@@ -36,6 +36,55 @@ export interface ReminderSettings {
   minute: number; // 0-59
 }
 
+export interface Exercise {
+  id: string;
+  name: string;
+  muscle: string;
+  instructions: string;
+  icon: string;
+}
+
+export interface ExercisePrescription {
+  exerciseId: string;
+  sets: number;
+  reps: string; // e.g. "12", "30s", "AMRAP"
+}
+
+export interface WorkoutDay {
+  id: string;
+  name: string;
+  focus: string;
+  exercises: ExercisePrescription[];
+}
+
+export interface WorkoutTier {
+  level: number;
+  name: string;
+  description: string;
+  sessionsToUnlockNext: number;
+  days: WorkoutDay[];
+}
+
+export interface WorkoutLogEntry {
+  date: string; // YYYY-MM-DD
+  tier: number;
+  dayId: string;
+}
+
+export interface Medication {
+  id: string;
+  name: string;
+  dosage?: string;
+  hour: number;
+  minute: number;
+  enabled: boolean;
+}
+
+export interface MedicationLogEntry {
+  date: string; // YYYY-MM-DD
+  medicationId: string;
+}
+
 export const DEFAULT_GOALS: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
