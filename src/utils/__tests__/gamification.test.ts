@@ -1,5 +1,5 @@
-import { WellnessEntry, WellnessGoals } from "../../types";
-import { computeTotalXp, levelInfo, xpForEntry, xpToReachLevel } from "../gamification";
+import { MedicationLogEntry, WellnessEntry, WellnessGoals } from "../../types";
+import { computeMedicationXp, computeTotalXp, levelInfo, xpForEntry, xpToReachLevel } from "../gamification";
 
 const goals: WellnessGoals = {
   sleepHours: 8,
@@ -43,6 +43,21 @@ describe("computeTotalXp", () => {
   it("sums xp across all entries", () => {
     const entries = [entryFor(), entryFor({ sleepHours: 2 })];
     expect(computeTotalXp(entries, goals)).toBe(50 + 40);
+  });
+});
+
+describe("computeMedicationXp", () => {
+  it("awards a small fixed xp per logged dose", () => {
+    const logs: MedicationLogEntry[] = [
+      { date: "2026-01-01", medicationId: "a" },
+      { date: "2026-01-01", medicationId: "b" },
+      { date: "2026-01-02", medicationId: "a" },
+    ];
+    expect(computeMedicationXp(logs)).toBe(15);
+  });
+
+  it("is zero with no logs", () => {
+    expect(computeMedicationXp([])).toBe(0);
   });
 });
 

@@ -1,5 +1,7 @@
 import { MISSIONS_BY_ID } from "../data/missions";
-import { WellnessEntry, WellnessGoals } from "../types";
+import { MedicationLogEntry, WellnessEntry, WellnessGoals } from "../types";
+
+export const XP_PER_MEDICATION_TAKEN = 5;
 
 export interface LevelInfo {
   level: number;
@@ -46,4 +48,8 @@ export function xpForEntry(entry: WellnessEntry, goals: WellnessGoals): number {
 
 export function computeTotalXp(entries: WellnessEntry[], goals: WellnessGoals): number {
   return entries.reduce((sum, entry) => sum + xpForEntry(entry, goals), 0);
+}
+
+export function computeMedicationXp(logs: MedicationLogEntry[]): number {
+  return logs.length * XP_PER_MEDICATION_TAKEN;
 }

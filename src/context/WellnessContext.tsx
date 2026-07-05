@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { MISSIONS } from "../data/missions";
-import { syncDailyReminder } from "../notifications";
+import { syncDailyReminder, syncMedicationReminders } from "../notifications";
 import {
   addWorkoutLog,
   clearAllData,
@@ -14,26 +14,36 @@ import {
   loadBodyweightKg,
   loadEntries,
   loadGoals,
+  loadMedicationLogs,
+  loadMedications,
   loadReminderSettings,
   loadWorkoutLogs,
   saveBodyweightKg,
   saveGoals,
+  saveMedicationLogs,
+  saveMedications,
   saveReminderSettings,
   upsertEntry,
 } from "../storage/storage";
 import {
   DEFAULT_GOALS,
   DEFAULT_REMINDER_SETTINGS,
+  Medication,
+  MedicationLogEntry,
   Mission,
   ReminderSettings,
   WellnessEntry,
   WellnessGoals,
   WorkoutLogEntry,
 } from "../types";
-import { computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
+import { computeMedicationXp, computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
 import { computeStreak } from "../utils/streak";
 import { computeTierProgress, computeWorkoutXp, hasLoggedWorkoutToday, TierProgress, xpForWorkout } from "../utils/workout";
 import { todayKey } from "../utils/date";
+
+function generateId(): string {
+  return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+}
 
 export interface LogEntryResult {
   xpEarned: number;
@@ -65,6 +75,13 @@ interface WellnessContextValue {
   workoutLoggedToday: boolean;
   bodyweightKg: number;
   updateBodyweightKg: (weightKg: number) => Promise<void>;
+  medications: Medication[];
+  medicationLogs: MedicationLogEntry[];
+  addMedication: (medication: Omit<Medication, "id">) => Promise<void>;
+  updateMedication: (medication: Medication) => Promise<void>;
+  deleteMedication: (medicationId: string) => Promise<void>;
+  isMedicationTakenToday: (medicationId: string) => boolean;
+  toggleMedicationTakenToday: (medicationId: string) => Promise<void>;
   logEntry: (entry: WellnessEntry) => Promise<LogEntryResult>;
   logWorkout: (dayId: string) => Promise<LogWorkoutResult>;
   updateGoals: (goals: WellnessGoals) => Promise<void>;
@@ -84,24 +101,38 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   );
   const [workoutLogs, setWorkoutLogs] = useState<WorkoutLogEntry[]>([]);
   const [bodyweightKg, setBodyweightKg] = useState<number>(DEFAULT_BODYWEIGHT_KG);
+  const [medications, setMedications] = useState<Medication[]>([]);
+  const [medicationLogs, setMedicationLogs] = useState<MedicationLogEntry[]>([]);
 
   useEffect(() => {
     (async () => {
-      const [loadedEntries, loadedGoals, loadedReminders, loadedWorkoutLogs, loadedBodyweight] =
-        await Promise.all([
-          loadEntries(),
-          loadGoals(),
-          loadReminderSettings(),
-          loadWorkoutLogs(),
-          loadBodyweightKg(),
-        ]);
+      const [
+        loadedEntries,
+        loadedGoals,
+        loadedReminders,
+        loadedWorkoutLogs,
+        loadedBodyweight,
+        loadedMedications,
+        loadedMedicationLogs,
+      ] = await Promise.all([
+        loadEntries(),
+        loadGoals(),
+        loadReminderSettings(),
+        loadWorkoutLogs(),
+        loadBodyweightKg(),
+        loadMedications(),
+        loadMedicationLogs(),
+      ]);
       setEntries(loadedEntries);
       setGoals(loadedGoals);
       setReminderSettings(loadedReminders);
       setWorkoutLogs(loadedWorkoutLogs);
       setBodyweightKg(loadedBodyweight);
+      setMedications(loadedMedications);
+      setMedicationLogs(loadedMedicationLogs);
       setLoading(false);
       syncDailyReminder(loadedReminders).catch(() => {});
+      syncMedicationReminders(loadedMedications).catch(() => {});
     })();
   }, []);
 
@@ -152,6 +183,40 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     setBodyweightKg(weightKg);
   };
 
+  const addMedication = async (medication: Omit<Medication, "id">) => {
+    const updated = [...medications, { ...medication, id: generateId() }];
+    await saveMedications(updated);
+    setMedications(updated);
+    await syncMedicationReminders(updated).catch(() => {});
+  };
+
+  const updateMedication = async (medication: Medication) => {
+    const updated = medications.map((m) => (m.id === medication.id ? medication : m));
+    await saveMedications(updated);
+    setMedications(updated);
+    await syncMedicationReminders(updated).catch(() => {});
+  };
+
+  const deleteMedication = async (medicationId: string) => {
+    const updated = medications.filter((m) => m.id !== medicationId);
+    await saveMedications(updated);
+    setMedications(updated);
+    await syncMedicationReminders(updated).catch(() => {});
+  };
+
+  const isMedicationTakenToday = (medicationId: string) =>
+    medicationLogs.some((log) => log.medicationId === medicationId && log.date === todayKey());
+
+  const toggleMedicationTakenToday = async (medicationId: string) => {
+    const today = todayKey();
+    const alreadyTaken = isMedicationTakenToday(medicationId);
+    const updated = alreadyTaken
+      ? medicationLogs.filter((log) => !(log.medicationId === medicationId && log.date === today))
+      : [...medicationLogs, { date: today, medicationId }];
+    await saveMedicationLogs(updated);
+    setMedicationLogs(updated);
+  };
+
   const updateGoals = async (newGoals: WellnessGoals) => {
     await saveGoals(newGoals);
     setGoals(newGoals);
@@ -160,7 +225,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const updateReminderSettings = async (settings: ReminderSettings) => {
     await saveReminderSettings(settings);
     setReminderSettings(settings);
-    await syncDailyReminder(settings);
+    await syncDailyReminder(settings).catch(() => {});
   };
 
   const resetAllData = async () => {
@@ -170,7 +235,10 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     setReminderSettings(DEFAULT_REMINDER_SETTINGS);
     setWorkoutLogs([]);
     setBodyweightKg(DEFAULT_BODYWEIGHT_KG);
-    await syncDailyReminder(DEFAULT_REMINDER_SETTINGS);
+    setMedications([]);
+    setMedicationLogs([]);
+    await syncDailyReminder(DEFAULT_REMINDER_SETTINGS).catch(() => {});
+    await syncMedicationReminders([]).catch(() => {});
   };
 
   const getEntryForDate = (date: string) => entries.find((e) => e.date === date);
@@ -178,7 +246,8 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const streak = useMemo(() => computeStreak(entries, goals), [entries, goals]);
   const habitXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
   const workoutXp = useMemo(() => computeWorkoutXp(workoutLogs), [workoutLogs]);
-  const totalXp = habitXp + workoutXp;
+  const medicationXp = useMemo(() => computeMedicationXp(medicationLogs), [medicationLogs]);
+  const totalXp = habitXp + workoutXp + medicationXp;
   const level = useMemo(() => levelInfo(totalXp), [totalXp]);
   const tierProgress = useMemo(() => computeTierProgress(workoutLogs), [workoutLogs]);
   const workoutLoggedToday = useMemo(
@@ -214,6 +283,13 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     workoutLoggedToday,
     bodyweightKg,
     updateBodyweightKg,
+    medications,
+    medicationLogs,
+    addMedication,
+    updateMedication,
+    deleteMedication,
+    isMedicationTakenToday,
+    toggleMedicationTakenToday,
     logEntry,
     logWorkout,
     updateGoals,

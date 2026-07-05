@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
@@ -8,7 +8,15 @@ import { colors, metricColors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
 
 export function DashboardScreen() {
-  const { goals, streak, level, getEntryForDate } = useWellness();
+  const {
+    goals,
+    streak,
+    level,
+    getEntryForDate,
+    medications,
+    isMedicationTakenToday,
+    toggleMedicationTakenToday,
+  } = useWellness();
   const entry = getEntryForDate(todayKey());
 
   const today = new Date();
@@ -53,6 +61,31 @@ export function DashboardScreen() {
             <Text style={styles.reminderText}>
               Non hai ancora registrato la giornata di oggi. Vai su "Registra" per aggiungerla.
             </Text>
+          </View>
+        )}
+
+        {medications.length > 0 && (
+          <View style={styles.medsCard}>
+            <Text style={styles.medsTitle}>Farmaci di oggi</Text>
+            {medications.map((medication) => {
+              const taken = isMedicationTakenToday(medication.id);
+              return (
+                <TouchableOpacity
+                  key={medication.id}
+                  style={styles.medRow}
+                  onPress={() => toggleMedicationTakenToday(medication.id)}
+                >
+                  <Ionicons
+                    name={taken ? "checkmark-circle" : "ellipse-outline"}
+                    size={20}
+                    color={taken ? colors.success : colors.textMuted}
+                  />
+                  <Text style={[styles.medName, taken && styles.medNameTaken]}>
+                    {medication.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         )}
 
@@ -177,5 +210,34 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: spacing.sm,
+  },
+  medsCard: {
+    backgroundColor: colors.card,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  medsTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.textMuted,
+    marginBottom: spacing.sm,
+  },
+  medRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingVertical: 6,
+  },
+  medName: {
+    fontSize: 14,
+    color: colors.text,
+    fontWeight: "600",
+  },
+  medNameTaken: {
+    color: colors.textMuted,
+    textDecorationLine: "line-through",
   },
 });
