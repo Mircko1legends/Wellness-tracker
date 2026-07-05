@@ -23,7 +23,6 @@ const EMPTY_ENTRY: Omit<WellnessEntry, "date"> = {
   mood: 3,
   sleepHours: 7,
   waterGlasses: 4,
-  activityMinutes: 0,
   notes: "",
   bonusMissions: [],
 };
@@ -39,9 +38,6 @@ export function LogEntryScreen() {
   const [waterGlasses, setWaterGlasses] = useState(
     existing?.waterGlasses ?? EMPTY_ENTRY.waterGlasses
   );
-  const [activityMinutes, setActivityMinutes] = useState(
-    existing?.activityMinutes ?? EMPTY_ENTRY.activityMinutes
-  );
   const [notes, setNotes] = useState(existing?.notes ?? EMPTY_ENTRY.notes ?? "");
   const [bonusMissions, setBonusMissions] = useState<string[]>(existing?.bonusMissions ?? []);
   const [feedback, setFeedback] = useState<{ xp: number; leveledUp: boolean; newLevel: number } | null>(
@@ -50,7 +46,7 @@ export function LogEntryScreen() {
 
   useEffect(() => {
     setFeedback(null);
-  }, [mood, sleepHours, waterGlasses, activityMinutes, notes, bonusMissions]);
+  }, [mood, sleepHours, waterGlasses, notes, bonusMissions]);
 
   const toggleBonusMission = (id: string) => {
     setBonusMissions((prev) =>
@@ -64,7 +60,6 @@ export function LogEntryScreen() {
       mood,
       sleepHours,
       waterGlasses,
-      activityMinutes,
       notes,
       bonusMissions,
     });
@@ -100,14 +95,12 @@ export function LogEntryScreen() {
           max={30}
           onChange={setWaterGlasses}
         />
-        <StepperInput
-          label="Attività fisica"
-          value={activityMinutes}
-          unit="min"
-          step={5}
-          max={600}
-          onChange={setActivityMinutes}
-        />
+        <View style={styles.workoutHint}>
+          <Ionicons name="barbell-outline" size={16} color={colors.textMuted} />
+          <Text style={styles.workoutHintText}>
+            Le serie di allenamento si registrano nella scheda "Allenamento", non qui.
+          </Text>
+        </View>
 
         {bonusMissionOptions.length > 0 && (
           <>
@@ -170,6 +163,23 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text,
     marginBottom: spacing.sm,
+  },
+  workoutHint: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: colors.card,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  workoutHintText: {
+    flex: 1,
+    fontSize: 11,
+    color: colors.textMuted,
+    lineHeight: 15,
   },
   notes: {
     backgroundColor: colors.card,

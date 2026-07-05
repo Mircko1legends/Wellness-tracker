@@ -1,10 +1,10 @@
-import { MedicationLogEntry, WellnessEntry, WellnessGoals } from "../../types";
+import { MedicationLogEntry, WellnessEntry, WellnessGoals, WorkoutLogEntry } from "../../types";
 import { computeMedicationXp, computeTotalXp, levelInfo, xpForEntry, xpToReachLevel } from "../gamification";
 
 const goals: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
-  activityMinutes: 30,
+  setsGoal: 30,
   moodMin: 3,
 };
 
@@ -14,35 +14,43 @@ function entryFor(overrides: Partial<WellnessEntry> = {}): WellnessEntry {
     mood: 3,
     sleepHours: 8,
     waterGlasses: 8,
-    activityMinutes: 30,
     ...overrides,
   };
 }
 
+const setsMet = 30;
+
 describe("xpForEntry", () => {
   it("awards xp for every core goal met", () => {
-    expect(xpForEntry(entryFor(), goals)).toBe(10 + 10 + 20 + 10);
+    expect(xpForEntry(entryFor(), goals, setsMet)).toBe(10 + 10 + 20 + 10);
   });
 
   it("awards partial xp when only some goals are met", () => {
-    expect(xpForEntry(entryFor({ sleepHours: 2, mood: 1 }), goals)).toBe(10 + 20);
+    expect(xpForEntry(entryFor({ sleepHours: 2, mood: 1 }), goals, setsMet)).toBe(10 + 20);
   });
 
   it("adds xp for completed bonus missions", () => {
-    const xp = xpForEntry(entryFor({ bonusMissions: ["meditation"] }), goals);
+    const xp = xpForEntry(entryFor({ bonusMissions: ["meditation"] }), goals, setsMet);
     expect(xp).toBe(10 + 10 + 20 + 10 + 20);
   });
 
   it("ignores unknown bonus mission ids", () => {
-    const xp = xpForEntry(entryFor({ bonusMissions: ["does-not-exist"] }), goals);
+    const xp = xpForEntry(entryFor({ bonusMissions: ["does-not-exist"] }), goals, setsMet);
     expect(xp).toBe(10 + 10 + 20 + 10);
+  });
+
+  it("does not award activity xp when the sets goal is not met", () => {
+    expect(xpForEntry(entryFor(), goals, 0)).toBe(10 + 10 + 10);
   });
 });
 
 describe("computeTotalXp", () => {
   it("sums xp across all entries", () => {
     const entries = [entryFor(), entryFor({ sleepHours: 2 })];
-    expect(computeTotalXp(entries, goals)).toBe(50 + 40);
+    const workoutLogs: WorkoutLogEntry[] = [
+      { date: "2026-01-01", tier: 1, dayId: "t1-a", exerciseSets: [{ exerciseId: "squat", setsCompleted: setsMet }] },
+    ];
+    expect(computeTotalXp(entries, goals, workoutLogs)).toBe(50 + 40);
   });
 });
 

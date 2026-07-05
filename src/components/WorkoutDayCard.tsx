@@ -1,19 +1,50 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { EXERCISES_BY_ID } from "../data/workoutProgram";
 import { colors, radii, spacing } from "../theme";
-import { WorkoutDay } from "../types";
+import { ExerciseSetLog, WorkoutDay } from "../types";
 import { PressableScale } from "./PressableScale";
+import { SetTracker } from "./SetTracker";
 
 interface Props {
   day: WorkoutDay;
   completedToday: boolean;
   disabled: boolean;
-  onComplete: () => void;
+  todaysSets?: ExerciseSetLog[];
+  onSave: (exerciseSets: ExerciseSetLog[]) => void;
 }
 
-export function WorkoutDayCard({ day, completedToday, disabled, onComplete }: Props) {
+export function WorkoutDayCard({ day, completedToday, disabled, todaysSets, onSave }: Props) {
+  const initial = useMemo(() => {
+    const map: Record<string, number> = {};
+    day.exercises.forEach((p) => {
+      const existing = todaysSets?.find((s) => s.exerciseId === p.exerciseId);
+      map[p.exerciseId] = existing?.setsCompleted ?? 0;
+    });
+    return map;
+  }, [day, todaysSets]);
+
+  const [sets, setSets] = useState<Record<string, number>>(initial);
+
+  useEffect(() => {
+    setSets(initial);
+  }, [initial]);
+
+  const totalCompleted = Object.values(sets).reduce((a, b) => a + b, 0);
+  const totalPrescribed = day.exercises.reduce((a, p) => a + p.sets, 0);
+  const hasAnyProgress = totalCompleted > 0;
+  const saveDisabled = disabled || !hasAnyProgress;
+
+  const handleSave = () => {
+    if (saveDisabled) return;
+    const exerciseSets: ExerciseSetLog[] = day.exercises.map((p) => ({
+      exerciseId: p.exerciseId,
+      setsCompleted: sets[p.exerciseId] ?? 0,
+    }));
+    onSave(exerciseSets);
+  };
+
   return (
     <View style={[styles.card, completedToday && styles.cardCompleted]}>
       <View style={styles.header}>
@@ -24,32 +55,31 @@ export function WorkoutDayCard({ day, completedToday, disabled, onComplete }: Pr
         {completedToday && <Ionicons name="checkmark-circle" size={22} color={colors.success} />}
       </View>
 
-      {day.exercises.map((prescription) => {
-        const exercise = EXERCISES_BY_ID[prescription.exerciseId];
-        return (
-          <View key={prescription.exerciseId} style={styles.exerciseRow}>
-            <View style={styles.exerciseIconWrap}>
-              <Ionicons name={(exercise.icon as any) ?? "body-outline"} size={16} color={colors.primary} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.exerciseName}>{exercise.name}</Text>
-              <Text style={styles.exerciseMuscle}>{exercise.muscle}</Text>
-            </View>
-            <Text style={styles.exercisePrescription}>
-              {prescription.sets}x{prescription.reps}
-            </Text>
-          </View>
-        );
-      })}
+      <Text style={styles.totalText}>
+        Serie totali: {totalCompleted}/{totalPrescribed}
+      </Text>
 
-      <PressableScale
-        style={[styles.completeButton, disabled && styles.completeButtonDisabled]}
-        onPress={disabled ? () => {} : onComplete}
-      >
-        <Text style={[styles.completeButtonText, disabled && styles.completeButtonTextDisabled]}>
-          {completedToday ? "Completato oggi ✓" : disabled ? "Hai già allenato oggi" : "Completa allenamento"}
-        </Text>
-      </PressableScale>
+      {day.exercises.map((prescription) => (
+        <SetTracker
+          key={prescription.exerciseId}
+          exercise={EXERCISES_BY_ID[prescription.exerciseId]}
+          prescription={prescription}
+          setsCompleted={sets[prescription.exerciseId] ?? 0}
+          onChangeSetsCompleted={(n) => setSets((s) => ({ ...s, [prescription.exerciseId]: n }))}
+          locked={completedToday || disabled}
+        />
+      ))}
+
+      {!completedToday && (
+        <PressableScale
+          style={[styles.completeButton, saveDisabled && styles.completeButtonDisabled]}
+          onPress={handleSave}
+        >
+          <Text style={[styles.completeButtonText, saveDisabled && styles.completeButtonTextDisabled]}>
+            {disabled ? "Hai già allenato oggi" : "Salva allenamento"}
+          </Text>
+        </PressableScale>
+      )}
     </View>
   );
 }
@@ -70,7 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   name: {
     fontSize: 16,
@@ -82,35 +112,11 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: 2,
   },
-  exerciseRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  exerciseIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: radii.pill,
-    backgroundColor: colors.cardAlt,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  exerciseName: {
-    fontSize: 13,
+  totalText: {
+    fontSize: 12,
     fontWeight: "700",
-    color: colors.text,
-  },
-  exerciseMuscle: {
-    fontSize: 11,
-    color: colors.textMuted,
-  },
-  exercisePrescription: {
-    fontSize: 13,
-    fontWeight: "800",
     color: colors.primary,
+    marginBottom: spacing.xs,
   },
   completeButton: {
     backgroundColor: colors.primary,

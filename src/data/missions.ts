@@ -23,9 +23,9 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: "activity",
-    name: "Movimento",
-    description: "Raggiungi i minuti di attività fisica",
-    icon: "walk-outline",
+    name: "Serie completate",
+    description: "Completa le serie della scheda di allenamento di oggi",
+    icon: "barbell-outline",
     difficulty: 2,
     xpReward: 20,
     unlockLevel: 1,

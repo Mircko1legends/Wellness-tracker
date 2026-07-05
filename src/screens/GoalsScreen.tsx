@@ -14,12 +14,12 @@ export function GoalsScreen() {
 
   const [sleepHours, setSleepHours] = useState(goals.sleepHours);
   const [waterGlasses, setWaterGlasses] = useState(goals.waterGlasses);
-  const [activityMinutes, setActivityMinutes] = useState(goals.activityMinutes);
+  const [setsGoal, setSetsGoal] = useState(goals.setsGoal);
   const [moodMin, setMoodMin] = useState<MoodScore>(goals.moodMin);
   const [saved, setSaved] = useState(false);
 
   const handleSave = async () => {
-    await updateGoals({ sleepHours, waterGlasses, activityMinutes, moodMin });
+    await updateGoals({ sleepHours, waterGlasses, setsGoal, moodMin });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -48,12 +48,11 @@ export function GoalsScreen() {
           onChange={setWaterGlasses}
         />
         <StepperInput
-          label="Attività fisica"
-          value={activityMinutes}
-          unit="min"
-          step={5}
-          max={600}
-          onChange={setActivityMinutes}
+          label="Serie di allenamento"
+          value={setsGoal}
+          unit="serie"
+          max={60}
+          onChange={setSetsGoal}
         />
         <StepperInput
           label="Umore minimo"

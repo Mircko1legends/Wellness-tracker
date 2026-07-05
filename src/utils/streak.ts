@@ -1,5 +1,6 @@
-import { WellnessEntry, WellnessGoals } from "../types";
+import { WellnessEntry, WellnessGoals, WorkoutLogEntry } from "../types";
 import { addDays, parseDateKey, toDateKey } from "./date";
+import { setsCompletedOnDate } from "./workout";
 
 // One missed day is forgiven without breaking the streak, at most once per
 // this many days: a bad day (common with mood/psychotic symptoms, not just
@@ -7,20 +8,20 @@ import { addDays, parseDateKey, toDateKey } from "./date";
 // still breaks it, so the streak stays meaningful.
 const GRACE_COOLDOWN_DAYS = 7;
 
-export function goalsMet(entry: WellnessEntry, goals: WellnessGoals): boolean {
+export function goalsMet(entry: WellnessEntry, goals: WellnessGoals, setsCompletedToday: number): boolean {
   return (
     entry.sleepHours >= goals.sleepHours &&
     entry.waterGlasses >= goals.waterGlasses &&
-    entry.activityMinutes >= goals.activityMinutes &&
+    setsCompletedToday >= goals.setsGoal &&
     entry.mood >= goals.moodMin
   );
 }
 
-export function goalsMetCount(entry: WellnessEntry, goals: WellnessGoals): number {
+export function goalsMetCount(entry: WellnessEntry, goals: WellnessGoals, setsCompletedToday: number): number {
   let count = 0;
   if (entry.sleepHours >= goals.sleepHours) count++;
   if (entry.waterGlasses >= goals.waterGlasses) count++;
-  if (entry.activityMinutes >= goals.activityMinutes) count++;
+  if (setsCompletedToday >= goals.setsGoal) count++;
   if (entry.mood >= goals.moodMin) count++;
   return count;
 }
@@ -35,6 +36,7 @@ export function goalsMetCount(entry: WellnessEntry, goals: WellnessGoals): numbe
 export function computeStreak(
   entries: WellnessEntry[],
   goals: WellnessGoals,
+  workoutLogs: WorkoutLogEntry[],
   today: Date = new Date()
 ): number {
   const byDate = new Map(entries.map((e) => [e.date, e]));
@@ -49,8 +51,9 @@ export function computeStreak(
   let daysSinceGraceUsed = Infinity;
 
   while (true) {
-    const entry = byDate.get(toDateKey(cursor));
-    const met = !!entry && goalsMet(entry, goals);
+    const dateKey = toDateKey(cursor);
+    const entry = byDate.get(dateKey);
+    const met = !!entry && goalsMet(entry, goals, setsCompletedOnDate(workoutLogs, dateKey));
 
     if (met) {
       streak++;
@@ -78,6 +81,7 @@ export function computeStreak(
 export function computeBestStreak(
   entries: WellnessEntry[],
   goals: WellnessGoals,
+  workoutLogs: WorkoutLogEntry[],
   today: Date = new Date()
 ): number {
   if (entries.length === 0) return 0;
@@ -94,8 +98,9 @@ export function computeBestStreak(
   let daysSinceGraceUsed = Infinity;
 
   while (cursor <= end) {
-    const entry = byDate.get(toDateKey(cursor));
-    const met = !!entry && goalsMet(entry, goals);
+    const dateKey = toDateKey(cursor);
+    const entry = byDate.get(dateKey);
+    const met = !!entry && goalsMet(entry, goals, setsCompletedOnDate(workoutLogs, dateKey));
 
     if (met) {
       running++;

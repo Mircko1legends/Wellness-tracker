@@ -41,3 +41,11 @@ export function computeTierProgress(logs: WorkoutLogEntry[]): TierProgress {
 export function hasLoggedWorkoutToday(logs: WorkoutLogEntry[], today: string): boolean {
   return logs.some((log) => log.date === today);
 }
+
+/** Total sets completed across any workout(s) logged on the given date. */
+export function setsCompletedOnDate(logs: WorkoutLogEntry[], date: string): number {
+  return logs
+    .filter((log) => log.date === date)
+    .flatMap((log) => log.exerciseSets ?? [])
+    .reduce((sum, s) => sum + s.setsCompleted, 0);
+}

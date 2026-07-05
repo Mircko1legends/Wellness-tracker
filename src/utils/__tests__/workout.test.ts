@@ -1,5 +1,11 @@
 import { WorkoutLogEntry } from "../../types";
-import { computeTierProgress, computeWorkoutXp, hasLoggedWorkoutToday, xpForWorkout } from "../workout";
+import {
+  computeTierProgress,
+  computeWorkoutXp,
+  hasLoggedWorkoutToday,
+  setsCompletedOnDate,
+  xpForWorkout,
+} from "../workout";
 
 function logsForTier(tier: number, count: number): WorkoutLogEntry[] {
   return Array.from({ length: count }, (_, i) => ({
@@ -66,5 +72,31 @@ describe("hasLoggedWorkoutToday", () => {
     const logs: WorkoutLogEntry[] = [{ date: "2026-01-05", tier: 1, dayId: "t1-a" }];
     expect(hasLoggedWorkoutToday(logs, "2026-01-05")).toBe(true);
     expect(hasLoggedWorkoutToday(logs, "2026-01-06")).toBe(false);
+  });
+});
+
+describe("setsCompletedOnDate", () => {
+  it("sums sets completed across all exercises logged on that date", () => {
+    const logs: WorkoutLogEntry[] = [
+      {
+        date: "2026-01-05",
+        tier: 1,
+        dayId: "t1-a",
+        exerciseSets: [
+          { exerciseId: "squat", setsCompleted: 3 },
+          { exerciseId: "plank", setsCompleted: 2 },
+        ],
+      },
+    ];
+    expect(setsCompletedOnDate(logs, "2026-01-05")).toBe(5);
+  });
+
+  it("is 0 for a date with no logged workout", () => {
+    expect(setsCompletedOnDate([], "2026-01-05")).toBe(0);
+  });
+
+  it("is 0 for a logged workout with no exerciseSets detail", () => {
+    const logs: WorkoutLogEntry[] = [{ date: "2026-01-05", tier: 1, dayId: "t1-a" }];
+    expect(setsCompletedOnDate(logs, "2026-01-05")).toBe(0);
   });
 });

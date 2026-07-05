@@ -1,5 +1,6 @@
-import { WellnessEntry } from "../types";
+import { WellnessEntry, WorkoutLogEntry } from "../types";
 import { addDays, lastNDateKeys } from "./date";
+import { setsCompletedOnDate } from "./workout";
 
 export interface MetricAverage {
   current: number | null;
@@ -10,7 +11,7 @@ export interface WeeklyComparison {
   mood: MetricAverage;
   sleepHours: MetricAverage;
   waterGlasses: MetricAverage;
-  activityMinutes: MetricAverage;
+  setsCompleted: MetricAverage;
 }
 
 function average(entries: WellnessEntry[], dateKeys: string[], pick: (e: WellnessEntry) => number): number | null {
@@ -21,8 +22,14 @@ function average(entries: WellnessEntry[], dateKeys: string[], pick: (e: Wellnes
   return sum / matches.length;
 }
 
+function averageSetsPerDay(logs: WorkoutLogEntry[], dateKeys: string[]): number {
+  const total = dateKeys.reduce((sum, d) => sum + setsCompletedOnDate(logs, d), 0);
+  return total / dateKeys.length;
+}
+
 export function computeWeeklyComparison(
   entries: WellnessEntry[],
+  workoutLogs: WorkoutLogEntry[],
   today: Date = new Date()
 ): WeeklyComparison {
   const currentWeek = lastNDateKeys(7, today);
@@ -41,9 +48,9 @@ export function computeWeeklyComparison(
       current: average(entries, currentWeek, (e) => e.waterGlasses),
       previous: average(entries, previousWeek, (e) => e.waterGlasses),
     },
-    activityMinutes: {
-      current: average(entries, currentWeek, (e) => e.activityMinutes),
-      previous: average(entries, previousWeek, (e) => e.activityMinutes),
+    setsCompleted: {
+      current: averageSetsPerDay(workoutLogs, currentWeek),
+      previous: averageSetsPerDay(workoutLogs, previousWeek),
     },
   };
 }

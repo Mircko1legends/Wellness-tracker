@@ -35,20 +35,6 @@ export const BUDGET_FOODS: FoodCategory[] = [
   },
 ];
 
-export interface MealPlanItem {
-  meal: string;
-  suggestion: string;
-}
-
-export const SAMPLE_MEAL_PLAN: MealPlanItem[] = [
-  { meal: "Colazione", suggestion: "Fiocchi d'avena con latte + 2 uova" },
-  { meal: "Spuntino", suggestion: "Yogurt greco con frutta" },
-  { meal: "Pranzo", suggestion: "Riso, petto di pollo, verdura" },
-  { meal: "Spuntino", suggestion: "Tonno con pane integrale" },
-  { meal: "Cena", suggestion: "Pasta con legumi (o uova) e verdura" },
-  { meal: "Prima di dormire (opzionale)", suggestion: "Ricotta o proteine in polvere" },
-];
-
 export const BUDGET_TIPS: string[] = [
   "Compra in grandi quantità: riso, pasta, avena e legumi secchi costano molto meno al kg.",
   "Legumi secchi invece che in scatola: ammollo la sera prima, costano una frazione del prezzo.",

@@ -16,7 +16,7 @@ interface RowConfig {
 const ROWS: RowConfig[] = [
   { key: "sleepHours", label: "Sonno", icon: "moon-outline", unit: "h", decimals: 1, higherIsBetter: true },
   { key: "waterGlasses", label: "Acqua", icon: "water-outline", unit: "bicchieri", decimals: 1, higherIsBetter: true },
-  { key: "activityMinutes", label: "Attività", icon: "walk-outline", unit: "min", decimals: 0, higherIsBetter: true },
+  { key: "setsCompleted", label: "Serie/giorno", icon: "barbell-outline", unit: "serie", decimals: 1, higherIsBetter: true },
   { key: "mood", label: "Umore", icon: "happy-outline", unit: "/5", decimals: 1, higherIsBetter: true },
 ];
 

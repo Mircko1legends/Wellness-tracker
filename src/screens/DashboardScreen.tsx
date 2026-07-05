@@ -22,6 +22,7 @@ export function DashboardScreen() {
     medicationLogs,
     isMedicationTakenToday,
     toggleMedicationTakenToday,
+    setsCompletedToday,
   } = useWellness();
   const entry = getEntryForDate(todayKey());
 
@@ -140,12 +141,12 @@ export function DashboardScreen() {
             accentBg={metricColors.water.bg}
           />
           <StatCard
-            icon="walk-outline"
-            label="Attività"
-            value={entry ? `${entry.activityMinutes}min` : "—"}
-            goalLabel={`Obiettivo: ${goals.activityMinutes}min`}
-            progress={entry ? entry.activityMinutes / goals.activityMinutes : 0}
-            met={!!entry && entry.activityMinutes >= goals.activityMinutes}
+            icon="barbell-outline"
+            label="Serie"
+            value={`${setsCompletedToday}`}
+            goalLabel={`Obiettivo: ${goals.setsGoal} serie`}
+            progress={setsCompletedToday / goals.setsGoal}
+            met={setsCompletedToday >= goals.setsGoal}
             accentColor={metricColors.activity.fg}
             accentBg={metricColors.activity.bg}
           />

@@ -5,7 +5,6 @@ export interface WellnessEntry {
   mood: MoodScore;
   sleepHours: number;
   waterGlasses: number;
-  activityMinutes: number;
   notes?: string;
   bonusMissions?: string[]; // ids of unlocked bonus missions completed this day
 }
@@ -26,7 +25,7 @@ export interface Mission {
 export interface WellnessGoals {
   sleepHours: number;
   waterGlasses: number;
-  activityMinutes: number;
+  setsGoal: number; // target total workout sets completed per day
   moodMin: MoodScore;
 }
 
@@ -65,10 +64,16 @@ export interface WorkoutTier {
   days: WorkoutDay[];
 }
 
+export interface ExerciseSetLog {
+  exerciseId: string;
+  setsCompleted: number;
+}
+
 export interface WorkoutLogEntry {
   date: string; // YYYY-MM-DD
   tier: number;
   dayId: string;
+  exerciseSets?: ExerciseSetLog[];
 }
 
 export interface Medication {
@@ -88,7 +93,7 @@ export interface MedicationLogEntry {
 export const DEFAULT_GOALS: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
-  activityMinutes: 30,
+  setsGoal: 12,
   moodMin: 3,
 };
 

@@ -4,13 +4,21 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
-import { BUDGET_FOODS, BUDGET_TIPS, SAMPLE_MEAL_PLAN } from "../data/dietGuide";
+import { BUDGET_FOODS, BUDGET_TIPS } from "../data/dietGuide";
 import { colors, radii, spacing } from "../theme";
+import { computeMealPlanTotals, generateDailyMealPlan } from "../utils/mealPlanGenerator";
 import { calculateLeanBulkTargets } from "../utils/nutrition";
 
 export function DietScreen() {
   const { bodyweightKg, updateBodyweightKg } = useWellness();
   const targets = useMemo(() => calculateLeanBulkTargets(bodyweightKg), [bodyweightKg]);
+  const todaysMeals = useMemo(() => generateDailyMealPlan(), []);
+  const mealPlanTotals = useMemo(() => computeMealPlanTotals(todaysMeals), [todaysMeals]);
+  const todayLabel = new Date().toLocaleDateString("it-IT", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
 
   return (
     <View style={styles.container}>
@@ -70,14 +78,35 @@ export function DietScreen() {
           </View>
         ))}
 
-        <Text style={styles.title}>Piano giornaliero di esempio</Text>
+        <Text style={styles.title}>Il tuo piano di oggi</Text>
+        <Text style={styles.dateLabel}>{todayLabel} · cambia ogni giorno</Text>
         <View style={styles.card}>
-          {SAMPLE_MEAL_PLAN.map((item) => (
-            <View key={item.meal} style={styles.mealRow}>
-              <Text style={styles.mealLabel}>{item.meal}</Text>
-              <Text style={styles.mealSuggestion}>{item.suggestion}</Text>
+          {todaysMeals.map((meal, index) => (
+            <View key={`${meal.slot}-${index}`} style={styles.mealRow}>
+              <View style={styles.mealHeaderRow}>
+                <Text style={styles.mealLabel}>{meal.label}</Text>
+                <Text style={styles.mealMacros}>
+                  {meal.recipe.calories} kcal · {meal.recipe.proteinG}g proteine
+                </Text>
+              </View>
+              <Text style={styles.mealSuggestion}>{meal.recipe.name}</Text>
+              <Text style={styles.mealIngredients}>{meal.recipe.ingredients.join(", ")}</Text>
+              <Text style={styles.mealPrep}>~{meal.recipe.prepMinutes} min di preparazione</Text>
             </View>
           ))}
+
+          <View style={styles.totalsRow}>
+            <Text style={styles.totalsLabel}>Totale giornata</Text>
+            <Text style={styles.totalsValue}>
+              {mealPlanTotals.calories} kcal · {mealPlanTotals.proteinG}g P · {mealPlanTotals.carbsG}g C
+              · {mealPlanTotals.fatG}g G
+            </Text>
+          </View>
+          <Text style={styles.disclaimer}>
+            Obiettivo stimato: {targets.calories} kcal · {targets.proteinG}g proteine. Le porzioni
+            sono indicative: aggiustale leggermente in proporzione se il tuo obiettivo è più alto o
+            più basso.
+          </Text>
         </View>
 
         <Text style={styles.title}>Consigli per risparmiare</Text>
@@ -190,5 +219,53 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.text,
     marginTop: 2,
+    fontWeight: "700",
+  },
+  dateLabel: {
+    fontSize: 11,
+    color: colors.textMuted,
+    marginTop: -spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  mealHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  mealMacros: {
+    fontSize: 11,
+    color: colors.textMuted,
+    fontWeight: "700",
+  },
+  mealIngredients: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: 2,
+    lineHeight: 16,
+  },
+  mealPrep: {
+    fontSize: 11,
+    color: colors.textMuted,
+    marginTop: 2,
+    fontStyle: "italic",
+  },
+  totalsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  totalsLabel: {
+    fontSize: 13,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  totalsValue: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.primary,
   },
 });

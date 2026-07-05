@@ -11,11 +11,11 @@ import { goalsMet } from "../utils/streak";
 
 export function MissionsScreen() {
   const navigation = useNavigation();
-  const { level, unlockedMissions, lockedMissions, nextMission, getEntryForDate, goals } =
+  const { level, unlockedMissions, lockedMissions, nextMission, getEntryForDate, goals, setsCompletedToday } =
     useWellness();
 
   const todayEntry = getEntryForDate(todayKey());
-  const coreMetToday = !!todayEntry && goalsMet(todayEntry, goals);
+  const coreMetToday = !!todayEntry && goalsMet(todayEntry, goals, setsCompletedToday);
 
   const isCompletedToday = (missionId: string, core: boolean) => {
     if (!todayEntry) return false;

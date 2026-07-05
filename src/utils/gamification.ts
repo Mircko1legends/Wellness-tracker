@@ -1,5 +1,6 @@
 import { MISSIONS_BY_ID } from "../data/missions";
-import { MedicationLogEntry, WellnessEntry, WellnessGoals } from "../types";
+import { MedicationLogEntry, WellnessEntry, WellnessGoals, WorkoutLogEntry } from "../types";
+import { setsCompletedOnDate } from "./workout";
 
 export const XP_PER_MEDICATION_TAKEN = 5;
 
@@ -38,11 +39,11 @@ export function levelInfo(totalXp: number): LevelInfo {
   };
 }
 
-export function xpForEntry(entry: WellnessEntry, goals: WellnessGoals): number {
+export function xpForEntry(entry: WellnessEntry, goals: WellnessGoals, setsCompletedOnEntryDate: number): number {
   let xp = 0;
   if (entry.sleepHours >= goals.sleepHours) xp += MISSIONS_BY_ID.sleep.xpReward;
   if (entry.waterGlasses >= goals.waterGlasses) xp += MISSIONS_BY_ID.water.xpReward;
-  if (entry.activityMinutes >= goals.activityMinutes) xp += MISSIONS_BY_ID.activity.xpReward;
+  if (setsCompletedOnEntryDate >= goals.setsGoal) xp += MISSIONS_BY_ID.activity.xpReward;
   if (entry.mood >= goals.moodMin) xp += MISSIONS_BY_ID.mood.xpReward;
   for (const id of entry.bonusMissions ?? []) {
     const mission = MISSIONS_BY_ID[id];
@@ -51,8 +52,15 @@ export function xpForEntry(entry: WellnessEntry, goals: WellnessGoals): number {
   return xp;
 }
 
-export function computeTotalXp(entries: WellnessEntry[], goals: WellnessGoals): number {
-  return entries.reduce((sum, entry) => sum + xpForEntry(entry, goals), 0);
+export function computeTotalXp(
+  entries: WellnessEntry[],
+  goals: WellnessGoals,
+  workoutLogs: WorkoutLogEntry[]
+): number {
+  return entries.reduce(
+    (sum, entry) => sum + xpForEntry(entry, goals, setsCompletedOnDate(workoutLogs, entry.date)),
+    0
+  );
 }
 
 export function computeMedicationXp(logs: MedicationLogEntry[]): number {

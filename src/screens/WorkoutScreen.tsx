@@ -7,6 +7,7 @@ import { ScreenHeader } from "../components/ScreenHeader";
 import { useWellness } from "../context/WellnessContext";
 import { WORKOUT_TIERS_BY_LEVEL } from "../data/workoutProgram";
 import { colors, radii, spacing } from "../theme";
+import { ExerciseSetLog } from "../types";
 import { todayKey } from "../utils/date";
 
 export function WorkoutScreen() {
@@ -21,8 +22,8 @@ export function WorkoutScreen() {
     ? 1
     : tierProgress.sessionsCompleted / tierProgress.sessionsToUnlockNext;
 
-  const handleComplete = async (dayId: string) => {
-    const result = await logWorkout(dayId);
+  const handleSave = async (dayId: string, exerciseSets: ExerciseSetLog[]) => {
+    const result = await logWorkout(dayId, exerciseSets);
     setFeedback({ xp: result.xpEarned, leveledUp: result.leveledUp, newLevel: result.newLevel });
   };
 
@@ -79,7 +80,8 @@ export function WorkoutScreen() {
             day={day}
             completedToday={todayLog?.dayId === day.id}
             disabled={workoutLoggedToday && todayLog?.dayId !== day.id}
-            onComplete={() => handleComplete(day.id)}
+            todaysSets={todayLog?.dayId === day.id ? todayLog.exerciseSets : undefined}
+            onSave={(exerciseSets) => handleSave(day.id, exerciseSets)}
           />
         ))}
 

@@ -28,6 +28,7 @@ import {
 import {
   DEFAULT_GOALS,
   DEFAULT_REMINDER_SETTINGS,
+  ExerciseSetLog,
   Medication,
   MedicationLogEntry,
   Mission,
@@ -38,7 +39,14 @@ import {
 } from "../types";
 import { computeMedicationXp, computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
 import { computeBestStreak, computeStreak } from "../utils/streak";
-import { computeTierProgress, computeWorkoutXp, hasLoggedWorkoutToday, TierProgress, xpForWorkout } from "../utils/workout";
+import {
+  computeTierProgress,
+  computeWorkoutXp,
+  hasLoggedWorkoutToday,
+  setsCompletedOnDate,
+  TierProgress,
+  xpForWorkout,
+} from "../utils/workout";
 import { todayKey } from "../utils/date";
 
 function generateId(): string {
@@ -74,6 +82,7 @@ interface WellnessContextValue {
   workoutLogs: WorkoutLogEntry[];
   tierProgress: TierProgress;
   workoutLoggedToday: boolean;
+  setsCompletedToday: number;
   bodyweightKg: number;
   updateBodyweightKg: (weightKg: number) => Promise<void>;
   medications: Medication[];
@@ -84,7 +93,7 @@ interface WellnessContextValue {
   isMedicationTakenToday: (medicationId: string) => boolean;
   toggleMedicationTakenToday: (medicationId: string) => Promise<void>;
   logEntry: (entry: WellnessEntry) => Promise<LogEntryResult>;
-  logWorkout: (dayId: string) => Promise<LogWorkoutResult>;
+  logWorkout: (dayId: string, exerciseSets: ExerciseSetLog[]) => Promise<LogWorkoutResult>;
   updateGoals: (goals: WellnessGoals) => Promise<void>;
   updateReminderSettings: (settings: ReminderSettings) => Promise<void>;
   resetAllData: () => Promise<void>;
@@ -138,33 +147,33 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logEntry = async (entry: WellnessEntry): Promise<LogEntryResult> => {
-    const prevLevel = levelInfo(computeTotalXp(entries, goals)).level;
+    const prevLevel = levelInfo(computeTotalXp(entries, goals, workoutLogs)).level;
     const updated = await upsertEntry(entry);
     setEntries(updated);
 
-    const newLevelValue = levelInfo(computeTotalXp(updated, goals)).level;
+    const newLevelValue = levelInfo(computeTotalXp(updated, goals, workoutLogs)).level;
     const leveledUp = newLevelValue > prevLevel;
     const newlyUnlocked = leveledUp
       ? MISSIONS.filter((m) => m.unlockLevel > prevLevel && m.unlockLevel <= newLevelValue)
       : [];
 
     return {
-      xpEarned: xpForEntry(entry, goals),
+      xpEarned: xpForEntry(entry, goals, setsCompletedOnDate(workoutLogs, entry.date)),
       leveledUp,
       newLevel: newLevelValue,
       newlyUnlocked,
     };
   };
 
-  const logWorkout = async (dayId: string): Promise<LogWorkoutResult> => {
+  const logWorkout = async (dayId: string, exerciseSets: ExerciseSetLog[]): Promise<LogWorkoutResult> => {
     const currentTier = computeTierProgress(workoutLogs).tier;
-    const prevTotalXp = computeTotalXp(entries, goals) + computeWorkoutXp(workoutLogs);
+    const prevTotalXp = computeTotalXp(entries, goals, workoutLogs) + computeWorkoutXp(workoutLogs);
     const prevLevel = levelInfo(prevTotalXp).level;
 
-    const updatedLogs = await addWorkoutLog({ date: todayKey(), tier: currentTier, dayId });
+    const updatedLogs = await addWorkoutLog({ date: todayKey(), tier: currentTier, dayId, exerciseSets });
     setWorkoutLogs(updatedLogs);
 
-    const newTotalXp = computeTotalXp(entries, goals) + computeWorkoutXp(updatedLogs);
+    const newTotalXp = computeTotalXp(entries, goals, updatedLogs) + computeWorkoutXp(updatedLogs);
     const newLevelValue = levelInfo(newTotalXp).level;
     const leveledUp = newLevelValue > prevLevel;
     const newlyUnlocked = leveledUp
@@ -244,9 +253,18 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
 
   const getEntryForDate = (date: string) => entries.find((e) => e.date === date);
 
-  const streak = useMemo(() => computeStreak(entries, goals), [entries, goals]);
-  const bestStreak = useMemo(() => computeBestStreak(entries, goals), [entries, goals]);
-  const habitXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
+  const streak = useMemo(
+    () => computeStreak(entries, goals, workoutLogs),
+    [entries, goals, workoutLogs]
+  );
+  const bestStreak = useMemo(
+    () => computeBestStreak(entries, goals, workoutLogs),
+    [entries, goals, workoutLogs]
+  );
+  const habitXp = useMemo(
+    () => computeTotalXp(entries, goals, workoutLogs),
+    [entries, goals, workoutLogs]
+  );
   const workoutXp = useMemo(() => computeWorkoutXp(workoutLogs), [workoutLogs]);
   const medicationXp = useMemo(() => computeMedicationXp(medicationLogs), [medicationLogs]);
   const totalXp = habitXp + workoutXp + medicationXp;
@@ -254,6 +272,10 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const tierProgress = useMemo(() => computeTierProgress(workoutLogs), [workoutLogs]);
   const workoutLoggedToday = useMemo(
     () => hasLoggedWorkoutToday(workoutLogs, todayKey()),
+    [workoutLogs]
+  );
+  const setsCompletedToday = useMemo(
+    () => setsCompletedOnDate(workoutLogs, todayKey()),
     [workoutLogs]
   );
   const unlockedMissions = useMemo(
@@ -284,6 +306,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     workoutLogs,
     tierProgress,
     workoutLoggedToday,
+    setsCompletedToday,
     bodyweightKg,
     updateBodyweightKg,
     medications,
