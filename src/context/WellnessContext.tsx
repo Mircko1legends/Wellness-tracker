@@ -37,7 +37,7 @@ import {
   WorkoutLogEntry,
 } from "../types";
 import { computeMedicationXp, computeTotalXp, LevelInfo, levelInfo, xpForEntry } from "../utils/gamification";
-import { computeStreak } from "../utils/streak";
+import { computeBestStreak, computeStreak } from "../utils/streak";
 import { computeTierProgress, computeWorkoutXp, hasLoggedWorkoutToday, TierProgress, xpForWorkout } from "../utils/workout";
 import { todayKey } from "../utils/date";
 
@@ -65,6 +65,7 @@ interface WellnessContextValue {
   goals: WellnessGoals;
   reminderSettings: ReminderSettings;
   streak: number;
+  bestStreak: number;
   totalXp: number;
   level: LevelInfo;
   unlockedMissions: Mission[];
@@ -244,6 +245,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const getEntryForDate = (date: string) => entries.find((e) => e.date === date);
 
   const streak = useMemo(() => computeStreak(entries, goals), [entries, goals]);
+  const bestStreak = useMemo(() => computeBestStreak(entries, goals), [entries, goals]);
   const habitXp = useMemo(() => computeTotalXp(entries, goals), [entries, goals]);
   const workoutXp = useMemo(() => computeWorkoutXp(workoutLogs), [workoutLogs]);
   const medicationXp = useMemo(() => computeMedicationXp(medicationLogs), [medicationLogs]);
@@ -273,6 +275,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
     goals,
     reminderSettings,
     streak,
+    bestStreak,
     totalXp,
     level,
     unlockedMissions,

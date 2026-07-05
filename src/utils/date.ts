@@ -15,6 +15,11 @@ export function addDays(date: Date, days: number): Date {
   return copy;
 }
 
+export function parseDateKey(dateKey: string): Date {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function lastNDateKeys(n: number, from: Date = new Date()): string[] {
   const keys: string[] = [];
   for (let i = n - 1; i >= 0; i--) {

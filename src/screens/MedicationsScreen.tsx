@@ -1,12 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
+import { computeMedicationAdherence } from "../utils/medicationAdherence";
+
+const ADHERENCE_WINDOW_DAYS = 30;
 
 function formatTime(hour: number, minute: number): string {
   return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
@@ -16,6 +19,7 @@ export function MedicationsScreen() {
   const navigation = useNavigation();
   const {
     medications,
+    medicationLogs,
     addMedication,
     deleteMedication,
     updateMedication,
@@ -27,6 +31,11 @@ export function MedicationsScreen() {
   const [dosage, setDosage] = useState("");
   const [hour, setHour] = useState(8);
   const [minute, setMinute] = useState(0);
+
+  const adherence = useMemo(
+    () => computeMedicationAdherence(medications, medicationLogs, ADHERENCE_WINDOW_DAYS),
+    [medications, medicationLogs]
+  );
 
   const handleAdd = async () => {
     if (!name.trim()) return;
@@ -45,6 +54,19 @@ export function MedicationsScreen() {
         onBack={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.content}>
+        {adherence.rate !== null && (
+          <View style={styles.adherenceCard}>
+            <Text style={styles.adherenceTitle}>Aderenza ultimi {ADHERENCE_WINDOW_DAYS} giorni</Text>
+            <Text style={styles.adherenceValue}>
+              {adherence.takenCount}/{adherence.expectedCount} dosi ·{" "}
+              {Math.round(adherence.rate * 100)}%
+            </Text>
+            <Text style={styles.adherenceHint}>
+              Utile da mostrare allo psichiatra o a chi ti segue durante i controlli.
+            </Text>
+          </View>
+        )}
+
         {medications.length === 0 && (
           <Text style={styles.emptyText}>
             Nessun farmaco ancora aggiunto. Aggiungine uno qui sotto per ricevere un promemoria
@@ -121,6 +143,33 @@ export function MedicationsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.md, paddingBottom: spacing.xl },
+  adherenceCard: {
+    backgroundColor: colors.card,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  adherenceTitle: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  adherenceValue: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: colors.text,
+    marginTop: 4,
+  },
+  adherenceHint: {
+    fontSize: 11,
+    color: colors.textMuted,
+    marginTop: 4,
+    lineHeight: 15,
+  },
   emptyText: {
     color: colors.textMuted,
     fontSize: 13,

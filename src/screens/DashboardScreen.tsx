@@ -1,23 +1,34 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
 import { colors, metricColors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
+import { computeWeeklyCheckin } from "../utils/weeklyCheckin";
 
 export function DashboardScreen() {
+  const navigation = useNavigation<any>();
   const {
+    entries,
     goals,
     streak,
+    bestStreak,
     level,
     getEntryForDate,
     medications,
+    medicationLogs,
     isMedicationTakenToday,
     toggleMedicationTakenToday,
   } = useWellness();
   const entry = getEntryForDate(todayKey());
+
+  const checkin = useMemo(
+    () => computeWeeklyCheckin(entries, goals, medications, medicationLogs),
+    [entries, goals, medications, medicationLogs]
+  );
 
   const today = new Date();
   const dateLabel = today.toLocaleDateString("it-IT", {
@@ -32,15 +43,20 @@ export function DashboardScreen() {
         eyebrow={dateLabel}
         title="Il tuo benessere"
         right={
-          <View style={styles.badgeRow}>
-            <View style={styles.streakBadge}>
-              <Ionicons name="flame" size={16} color={colors.accent} />
-              <Text style={styles.streakBadgeText}>{streak}</Text>
+          <View style={styles.badgeColumn}>
+            <View style={styles.badgeRow}>
+              <View style={styles.streakBadge}>
+                <Ionicons name="flame" size={16} color={colors.accent} />
+                <Text style={styles.streakBadgeText}>{streak}</Text>
+              </View>
+              <View style={styles.streakBadge}>
+                <Ionicons name="star" size={14} color={colors.accent} />
+                <Text style={styles.streakBadgeText}>Lv.{level.level}</Text>
+              </View>
             </View>
-            <View style={styles.streakBadge}>
-              <Ionicons name="star" size={14} color={colors.accent} />
-              <Text style={styles.streakBadgeText}>Lv.{level.level}</Text>
-            </View>
+            {bestStreak > streak && (
+              <Text style={styles.recordText}>Record: {bestStreak}</Text>
+            )}
           </View>
         }
         footer={
@@ -62,6 +78,19 @@ export function DashboardScreen() {
               Non hai ancora registrato la giornata di oggi. Vai su "Registra" per aggiungerla.
             </Text>
           </View>
+        )}
+
+        {checkin.hasConcerns && (
+          <TouchableOpacity
+            style={styles.checkinCard}
+            onPress={() => navigation.navigate("More", { screen: "Checkin" })}
+          >
+            <Ionicons name="chatbubble-ellipses-outline" size={18} color={colors.primary} />
+            <Text style={styles.checkinText}>
+              Un paio di cose da notare questa settimana. Tocca per il check-in settimanale.
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+          </TouchableOpacity>
         )}
 
         {medications.length > 0 && (
@@ -148,9 +177,18 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     paddingBottom: spacing.xl,
   },
+  badgeColumn: {
+    alignItems: "flex-end",
+  },
   badgeRow: {
     flexDirection: "row",
     gap: spacing.xs,
+  },
+  recordText: {
+    fontSize: 10,
+    color: colors.textMuted,
+    marginTop: 4,
+    fontWeight: "600",
   },
   streakBadge: {
     flexDirection: "row",
@@ -201,6 +239,22 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   reminderText: {
+    flex: 1,
+    fontSize: 12,
+    color: colors.text,
+  },
+  checkinCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: colors.cardAlt,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  checkinText: {
     flex: 1,
     fontSize: 12,
     color: colors.text,
