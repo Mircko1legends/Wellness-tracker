@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { EXERCISE_POSE_CATEGORY, POSE_CATEGORIES } from "../data/exercisePoses";
 import { colors, radii, spacing } from "../theme";
 import { Exercise, ExercisePrescription } from "../types";
-import { AnimeCharacter } from "./AnimeCharacter";
+import { AnimeCharacter3D } from "./AnimeCharacter3D";
 
 interface Props {
   exercise: Exercise;
@@ -62,7 +62,7 @@ export function SetTracker({ exercise, prescription, setsCompleted, onChangeSets
 
       {showForm && (
         <View style={styles.formCard}>
-          <AnimeCharacter category={poseCategory} size={120} />
+          <AnimeCharacter3D category={poseCategory} size={120} />
           <Text style={styles.formText}>{exercise.instructions}</Text>
         </View>
       )}
