@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { View } from "react-native";
-import Svg, { Circle, Ellipse, G, Path, Rect } from "react-native-svg";
+import { Circle, Defs, G, LinearGradient, Path, Rect, Stop, Svg } from "react-native-svg";
 import { CharacterPose, PoseCategoryDef } from "../data/exercisePoses";
 import { colors } from "../theme";
 
@@ -32,6 +32,10 @@ interface Props {
 export function AnimeCharacter({ category, size = 140 }: Props) {
   const [pose, setPose] = useState<CharacterPose>(category.frames[0]);
   const startRef = useRef(Date.now());
+  // Unique per instance so multiple characters on screen at once don't
+  // collide on the same <LinearGradient id>, which would make one of them
+  // render with a missing fill.
+  const gradientId = useId();
 
   useEffect(() => {
     startRef.current = Date.now();
@@ -47,11 +51,24 @@ export function AnimeCharacter({ category, size = 140 }: Props) {
     return () => clearInterval(interval);
   }, [category]);
 
+  const skinGradId = `skin${gradientId}`;
+  const shortsGradId = `shorts${gradientId}`;
+
   return (
     <View style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}>
       <Svg width={size} height={size} viewBox="-20 -10 160 160">
+        <Defs>
+          <LinearGradient id={skinGradId} x1="0" y1="0" x2="1" y2="1">
+            <Stop offset="0" stopColor={SKIN} />
+            <Stop offset="1" stopColor={SKIN_DARK} />
+          </LinearGradient>
+          <LinearGradient id={shortsGradId} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={ACCENT} />
+            <Stop offset="1" stopColor={ACCENT_DARK} />
+          </LinearGradient>
+        </Defs>
         <G rotation={category.grounded ? 90 : 0} origin="60,72">
-          <CharacterRig pose={pose} />
+          <CharacterRig pose={pose} skinFill={`url(#${skinGradId})`} shortsFill={`url(#${shortsGradId})`} />
         </G>
       </Svg>
     </View>
@@ -59,86 +76,198 @@ export function AnimeCharacter({ category, size = 140 }: Props) {
 }
 
 const SKIN = colors.primary;
+const SKIN_DARK = "#9FC71A";
 const ACCENT = colors.accent;
+const ACCENT_DARK = "#B8271F";
 const OUTLINE = "#0B0D10";
 
-function CharacterRig({ pose }: { pose: CharacterPose }) {
+interface RigProps {
+  pose: CharacterPose;
+  skinFill: string;
+  shortsFill: string;
+}
+
+function taperedLimb(x: number, yTop: number, yBot: number, wTop: number, wBot: number, fill: string) {
+  const mid = (yTop + yBot) / 2;
+  return (
+    <Path
+      d={`M ${x - wTop / 2} ${yTop} Q ${x - wTop / 2 - 1} ${mid} ${x - wBot / 2} ${yBot}
+          L ${x + wBot / 2} ${yBot} Q ${x + wTop / 2 + 1} ${mid} ${x + wTop / 2} ${yTop} Z`}
+      fill={fill}
+      stroke={OUTLINE}
+      strokeWidth={2}
+      strokeLinejoin="round"
+    />
+  );
+}
+
+function CharacterRig({ pose, skinFill, shortsFill }: RigProps) {
   const hipX = 60;
   const hipY = 84 + pose.hipHeight;
   const upperArmLen = 20;
-  const forearmLen = 17;
-  const thighLen = 22;
+  const forearmLen = 18;
+  const thighLen = 23;
   const shinLen = 20;
 
   const shoulderX = 60;
-  const shoulderY = hipY - 34;
+  const shoulderY = hipY - 35;
   const headCx = 60;
-  const headCy = shoulderY - 14;
+  const headCy = shoulderY - 15;
+
+  function armGroup(side: 1 | -1, shoulderAngle: number, elbowAngle: number) {
+    const sx = shoulderX + side * 15;
+    return (
+      <G rotation={shoulderAngle} origin={`${sx},${shoulderY + 3}`}>
+        <Circle cx={sx} cy={shoulderY + 2} r={6} fill={skinFill} stroke={OUTLINE} strokeWidth={2} />
+        {taperedLimb(sx, shoulderY + 3, shoulderY + 3 + upperArmLen, 11, 8, skinFill)}
+        <G rotation={elbowAngle} origin={`${sx},${shoulderY + 3 + upperArmLen}`}>
+          {taperedLimb(sx, shoulderY + 3 + upperArmLen, shoulderY + 3 + upperArmLen + forearmLen, 8, 6.5, skinFill)}
+          <Rect
+            x={sx - 4.5}
+            y={shoulderY + 3 + upperArmLen + forearmLen - 2}
+            width={9}
+            height={4}
+            rx={1.5}
+            fill={ACCENT}
+            stroke={OUTLINE}
+            strokeWidth={1.3}
+          />
+          <Circle
+            cx={sx}
+            cy={shoulderY + 3 + upperArmLen + forearmLen + 5}
+            r={6}
+            fill={skinFill}
+            stroke={OUTLINE}
+            strokeWidth={2}
+          />
+        </G>
+      </G>
+    );
+  }
+
+  function legGroup(side: 1 | -1, hipAngle: number, kneeAngle: number) {
+    const lx = hipX + side * 7;
+    const footTip = side > 0 ? `${lx - 8} ${hipY + thighLen + shinLen} L ${lx + 9} ${hipY + thighLen + shinLen} L ${lx + 9} ${hipY + thighLen + shinLen + 5} L ${lx - 8} ${hipY + thighLen + shinLen + 6}`
+      : `${lx - 9} ${hipY + thighLen + shinLen} L ${lx + 8} ${hipY + thighLen + shinLen} L ${lx + 8} ${hipY + thighLen + shinLen + 6} L ${lx - 9} ${hipY + thighLen + shinLen + 5}`;
+    return (
+      <G rotation={hipAngle} origin={`${lx},${hipY}`}>
+        {taperedLimb(lx, hipY, hipY + thighLen, 13, 9, skinFill)}
+        <G rotation={kneeAngle} origin={`${lx},${hipY + thighLen}`}>
+          {taperedLimb(lx, hipY + thighLen, hipY + thighLen + shinLen, 9, 7, skinFill)}
+          <Path d={`M ${footTip} Z`} fill={OUTLINE} />
+        </G>
+      </G>
+    );
+  }
 
   return (
     <G>
-      {/* legs (behind torso) */}
-      <G rotation={pose.rightHipAngle} origin={`${hipX + 6},${hipY}`}>
-        <Rect x={hipX + 6 - 5} y={hipY} width={10} height={thighLen} rx={5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-        <G rotation={pose.rightKneeAngle} origin={`${hipX + 6},${hipY + thighLen}`}>
-          <Rect x={hipX + 6 - 4.5} y={hipY + thighLen} width={9} height={shinLen} rx={4.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          <Ellipse cx={hipX + 6} cy={hipY + thighLen + shinLen + 3} rx={7} ry={4} fill={OUTLINE} />
-        </G>
-      </G>
-      <G rotation={pose.leftHipAngle} origin={`${hipX - 6},${hipY}`}>
-        <Rect x={hipX - 6 - 5} y={hipY} width={10} height={thighLen} rx={5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-        <G rotation={pose.leftKneeAngle} origin={`${hipX - 6},${hipY + thighLen}`}>
-          <Rect x={hipX - 6 - 4.5} y={hipY + thighLen} width={9} height={shinLen} rx={4.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          <Ellipse cx={hipX - 6} cy={hipY + thighLen + shinLen + 3} rx={7} ry={4} fill={OUTLINE} />
-        </G>
-      </G>
+      {legGroup(1, pose.rightHipAngle, pose.rightKneeAngle)}
+      {legGroup(-1, pose.leftHipAngle, pose.leftKneeAngle)}
 
-      {/* torso + head, leaning as a unit */}
       <G rotation={pose.torsoAngle} origin={`${hipX},${hipY}`}>
-        {/* shorts */}
-        <Rect x={hipX - 12} y={hipY - 10} width={24} height={14} rx={4} fill={ACCENT} stroke={OUTLINE} strokeWidth={2} />
-        {/* torso: broad shoulders tapering to waist */}
+        {/* fighting shorts with side stripes and belt knot */}
         <Path
-          d={`M ${hipX - 10} ${hipY} L ${shoulderX - 15} ${shoulderY} Q ${shoulderX} ${shoulderY - 6} ${shoulderX + 15} ${shoulderY} L ${hipX + 10} ${hipY} Z`}
-          fill={SKIN}
+          d={`M ${hipX - 13} ${hipY - 11} L ${hipX + 13} ${hipY - 11} L ${hipX + 15} ${hipY + 5} Q ${hipX} ${hipY + 9} ${hipX - 15} ${hipY + 5} Z`}
+          fill={shortsFill}
+          stroke={OUTLINE}
+          strokeWidth={2}
+        />
+        <Path d={`M ${hipX - 13} ${hipY - 9} L ${hipX - 15.5} ${hipY + 4}`} stroke={SKIN} strokeWidth={2} opacity={0.85} />
+        <Path d={`M ${hipX + 13} ${hipY - 9} L ${hipX + 15.5} ${hipY + 4}`} stroke={SKIN} strokeWidth={2} opacity={0.85} />
+        <Rect x={hipX - 3} y={hipY - 11} width={6} height={5} rx={1} fill={OUTLINE} />
+
+        {/* torso: broad shoulders tapering to a narrow waist */}
+        <Path
+          d={`M ${hipX - 9} ${hipY}
+              C ${hipX - 13} ${hipY - 14} ${shoulderX - 17} ${shoulderY + 8} ${shoulderX - 17} ${shoulderY}
+              Q ${shoulderX} ${shoulderY - 7} ${shoulderX + 17} ${shoulderY}
+              C ${shoulderX + 17} ${shoulderY + 8} ${hipX + 13} ${hipY - 14} ${hipX + 9} ${hipY} Z`}
+          fill={skinFill}
           stroke={OUTLINE}
           strokeWidth={2.5}
         />
-        {/* ab lines for a muscular look */}
         <Path
-          d={`M ${hipX} ${shoulderY + 6} L ${hipX} ${hipY - 8}`}
+          d={`M ${shoulderX - 11} ${shoulderY + 7} Q ${shoulderX} ${shoulderY + 11} ${shoulderX + 11} ${shoulderY + 7}`}
           stroke={OUTLINE}
-          strokeWidth={1.5}
-          opacity={0.5}
+          strokeWidth={1.3}
+          opacity={0.55}
+          fill="none"
         />
+        <Path d={`M ${hipX} ${shoulderY + 10} L ${hipX} ${hipY - 6}`} stroke={OUTLINE} strokeWidth={1.3} opacity={0.5} />
+        <Path d={`M ${hipX - 5} ${shoulderY + 15} L ${hipX - 5} ${hipY - 8}`} stroke={OUTLINE} strokeWidth={1} opacity={0.35} />
+        <Path d={`M ${hipX + 5} ${shoulderY + 15} L ${hipX + 5} ${hipY - 8}`} stroke={OUTLINE} strokeWidth={1} opacity={0.35} />
 
-        {/* arms */}
-        <G rotation={pose.rightShoulderAngle} origin={`${shoulderX + 14},${shoulderY + 2}`}>
-          <Rect x={shoulderX + 14 - 4.5} y={shoulderY + 2} width={9} height={upperArmLen} rx={4.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          <G rotation={pose.rightElbowAngle} origin={`${shoulderX + 14},${shoulderY + 2 + upperArmLen}`}>
-            <Rect x={shoulderX + 14 - 4} y={shoulderY + 2 + upperArmLen} width={8} height={forearmLen} rx={4} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-            <Circle cx={shoulderX + 14} cy={shoulderY + 2 + upperArmLen + forearmLen + 3} r={5.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          </G>
-        </G>
-        <G rotation={pose.leftShoulderAngle} origin={`${shoulderX - 14},${shoulderY + 2}`}>
-          <Rect x={shoulderX - 14 - 4.5} y={shoulderY + 2} width={9} height={upperArmLen} rx={4.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          <G rotation={pose.leftElbowAngle} origin={`${shoulderX - 14},${shoulderY + 2 + upperArmLen}`}>
-            <Rect x={shoulderX - 14 - 4} y={shoulderY + 2 + upperArmLen} width={8} height={forearmLen} rx={4} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-            <Circle cx={shoulderX - 14} cy={shoulderY + 2 + upperArmLen + forearmLen + 3} r={5.5} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
-          </G>
-        </G>
+        {armGroup(1, pose.rightShoulderAngle, pose.rightElbowAngle)}
+        {armGroup(-1, pose.leftShoulderAngle, pose.leftElbowAngle)}
 
         {/* head, with its own subtle tilt */}
         <G rotation={pose.headAngle} origin={`${headCx},${headCy}`}>
-          <Circle cx={headCx} cy={headCy} r={11} fill={SKIN} stroke={OUTLINE} strokeWidth={2.5} />
-          {/* spiky anime hair */}
+          <Circle cx={headCx} cy={headCy} r={12} fill={skinFill} stroke={OUTLINE} strokeWidth={2.5} />
           <Path
-            d={`M ${headCx - 11} ${headCy - 4} L ${headCx - 14} ${headCy - 15} L ${headCx - 6} ${headCy - 9} L ${headCx - 4} ${headCy - 19} L ${headCx + 2} ${headCy - 10} L ${headCx + 6} ${headCy - 18} L ${headCx + 9} ${headCy - 8} L ${headCx + 12} ${headCy - 12} L ${headCx + 10} ${headCy - 2} Z`}
+            d={`M ${headCx - 7} ${headCy + 7} Q ${headCx} ${headCy + 11} ${headCx + 7} ${headCy + 7}`}
+            stroke={OUTLINE}
+            strokeWidth={1}
+            opacity={0.4}
+            fill="none"
+          />
+
+          {/* headband tails, drawn before hair so the hair sits on top */}
+          <Path
+            d={`M ${headCx + 11} ${headCy + 2} Q ${headCx + 18} ${headCy + 8} ${headCx + 13} ${headCy + 16}`}
+            stroke={ACCENT_DARK}
+            strokeWidth={3}
+            fill="none"
+            strokeLinecap="round"
+          />
+          <Path
+            d={`M ${headCx + 11} ${headCy} Q ${headCx + 20} ${headCy + 3} ${headCx + 17} ${headCy + 12}`}
+            stroke={ACCENT}
+            strokeWidth={3}
+            fill="none"
+            strokeLinecap="round"
+          />
+
+          {/* spiky hair: valleys stay near the top of the head so the fill
+              reads as spikes, not a blob covering the face */}
+          <Path
+            d={`M ${headCx - 9} ${headCy - 9}
+                L ${headCx - 17} ${headCy - 25}
+                L ${headCx - 8} ${headCy - 14}
+                L ${headCx - 4} ${headCy - 29}
+                L ${headCx} ${headCy - 14}
+                L ${headCx + 4} ${headCy - 31}
+                L ${headCx + 8} ${headCy - 14}
+                L ${headCx + 18} ${headCy - 23}
+                L ${headCx + 9} ${headCy - 9}
+                Z`}
             fill={OUTLINE}
           />
-          {/* eyes: confident/determined */}
-          <Path d={`M ${headCx - 6} ${headCy} L ${headCx - 2} ${headCy - 1}`} stroke={OUTLINE} strokeWidth={1.8} />
-          <Path d={`M ${headCx + 2} ${headCy - 1} L ${headCx + 6} ${headCy}`} stroke={OUTLINE} strokeWidth={1.8} />
+          <Path
+            d={`M ${headCx + 1} ${headCy - 27} L ${headCx + 4} ${headCy - 16} L ${headCx - 1} ${headCy - 17} Z`}
+            fill={SKIN}
+            opacity={0.45}
+          />
+
+          <Path
+            d={`M ${headCx - 12} ${headCy - 1} Q ${headCx} ${headCy - 7} ${headCx + 12} ${headCy - 1} L ${headCx + 12} ${headCy + 2} Q ${headCx} ${headCy - 3} ${headCx - 12} ${headCy + 2} Z`}
+            fill={ACCENT}
+            stroke={OUTLINE}
+            strokeWidth={1.3}
+          />
+
+          {/* intense angled eyebrows + eyes */}
+          <Path d={`M ${headCx - 8} ${headCy - 3} L ${headCx - 2} ${headCy - 1}`} stroke={OUTLINE} strokeWidth={2.2} strokeLinecap="round" />
+          <Path d={`M ${headCx + 2} ${headCy - 1} L ${headCx + 8} ${headCy - 3}`} stroke={OUTLINE} strokeWidth={2.2} strokeLinecap="round" />
+          <Path d={`M ${headCx - 7} ${headCy + 2} L ${headCx - 2} ${headCy + 1}`} stroke={OUTLINE} strokeWidth={1.6} strokeLinecap="round" />
+          <Path d={`M ${headCx + 2} ${headCy + 1} L ${headCx + 7} ${headCy + 2}`} stroke={OUTLINE} strokeWidth={1.6} strokeLinecap="round" />
+          <Path
+            d={`M ${headCx - 2.5} ${headCy + 6} L ${headCx + 2.5} ${headCy + 6}`}
+            stroke={OUTLINE}
+            strokeWidth={1.4}
+            strokeLinecap="round"
+            opacity={0.7}
+          />
         </G>
       </G>
     </G>
