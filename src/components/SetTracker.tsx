@@ -1,10 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { EXERCISE_POSE_CATEGORY, POSE_CATEGORIES } from "../data/exercisePoses";
 import { colors, radii, spacing } from "../theme";
 import { Exercise, ExercisePrescription } from "../types";
-import { AnimeCharacter3D } from "./AnimeCharacter3D";
 
 interface Props {
   exercise: Exercise;
@@ -16,7 +14,6 @@ interface Props {
 
 export function SetTracker({ exercise, prescription, setsCompleted, onChangeSetsCompleted, locked }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const poseCategory = POSE_CATEGORIES[EXERCISE_POSE_CATEGORY[exercise.id]];
 
   const togglePill = (index: number) => {
     if (locked) return;
@@ -62,7 +59,6 @@ export function SetTracker({ exercise, prescription, setsCompleted, onChangeSets
 
       {showForm && (
         <View style={styles.formCard}>
-          <AnimeCharacter3D category={poseCategory} size={120} />
           <Text style={styles.formText}>{exercise.instructions}</Text>
         </View>
       )}
