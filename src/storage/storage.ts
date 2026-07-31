@@ -77,11 +77,27 @@ export async function saveReminderSettings(settings: ReminderSettings): Promise<
   await AsyncStorage.setItem(KEYS.reminders, JSON.stringify(settings));
 }
 
+// Older builds logged a bare setsCompleted count instead of actual reps per
+// set; normalize any such records so they don't crash code that now expects
+// repsPerSet.
+function normalizeWorkoutLog(log: WorkoutLogEntry): WorkoutLogEntry {
+  if (!log.exerciseSets) return log;
+  return {
+    ...log,
+    exerciseSets: log.exerciseSets.map((s) => {
+      if (Array.isArray(s.repsPerSet)) return s;
+      const legacyCount = (s as unknown as { setsCompleted?: number }).setsCompleted ?? 0;
+      return { exerciseId: s.exerciseId, repsPerSet: Array(legacyCount).fill(0) };
+    }),
+  };
+}
+
 export async function loadWorkoutLogs(): Promise<WorkoutLogEntry[]> {
   const raw = await AsyncStorage.getItem(KEYS.workoutLogs);
   if (!raw) return [];
   try {
-    return JSON.parse(raw) as WorkoutLogEntry[];
+    const logs = JSON.parse(raw) as WorkoutLogEntry[];
+    return logs.map(normalizeWorkoutLog);
   } catch {
     return [];
   }

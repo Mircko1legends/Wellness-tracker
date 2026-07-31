@@ -6,6 +6,7 @@ const goals: WellnessGoals = {
   waterGlasses: 8,
   setsGoal: 30,
   moodMin: 3,
+  startingWorkoutTier: 1,
 };
 
 function entryFor(overrides: Partial<WellnessEntry> = {}): WellnessEntry {
@@ -48,7 +49,12 @@ describe("computeTotalXp", () => {
   it("sums xp across all entries", () => {
     const entries = [entryFor(), entryFor({ sleepHours: 2 })];
     const workoutLogs: WorkoutLogEntry[] = [
-      { date: "2026-01-01", tier: 1, dayId: "t1-a", exerciseSets: [{ exerciseId: "squat", setsCompleted: setsMet }] },
+      {
+        date: "2026-01-01",
+        tier: 1,
+        dayId: "t1-a",
+        exerciseSets: [{ exerciseId: "squat", repsPerSet: Array(setsMet).fill(10) }],
+      },
     ];
     expect(computeTotalXp(entries, goals, workoutLogs)).toBe(50 + 40);
   });

@@ -1,5 +1,6 @@
 import { WorkoutLogEntry } from "../../types";
 import {
+  averageRecentReps,
   computeTierProgress,
   computeWorkoutXp,
   hasLoggedWorkoutToday,
@@ -59,11 +60,24 @@ describe("computeTierProgress", () => {
       ...logsForTier(2, 8),
       ...logsForTier(3, 10),
       ...logsForTier(4, 12),
-      ...logsForTier(5, 999),
+      ...logsForTier(5, 10),
+      ...logsForTier(6, 12),
+      ...logsForTier(7, 999),
     ];
     const progress = computeTierProgress(logs);
-    expect(progress.tier).toBe(5);
+    expect(progress.tier).toBe(7);
     expect(progress.isMaxTier).toBe(true);
+  });
+
+  it("honors a manual starting tier, skipping session-gated beginner tiers", () => {
+    const progress = computeTierProgress([], 6);
+    expect(progress.tier).toBe(6);
+    expect(progress.sessionsCompleted).toBe(0);
+  });
+
+  it("never lets a lower starting tier override progress already earned from logs", () => {
+    const progress = computeTierProgress(logsForTier(1, 6), 1);
+    expect(progress.tier).toBe(2);
   });
 });
 
@@ -83,8 +97,8 @@ describe("setsCompletedOnDate", () => {
         tier: 1,
         dayId: "t1-a",
         exerciseSets: [
-          { exerciseId: "squat", setsCompleted: 3 },
-          { exerciseId: "plank", setsCompleted: 2 },
+          { exerciseId: "squat", repsPerSet: [10, 10, 8] },
+          { exerciseId: "plank", repsPerSet: [20, 20] },
         ],
       },
     ];
@@ -98,5 +112,31 @@ describe("setsCompletedOnDate", () => {
   it("is 0 for a logged workout with no exerciseSets detail", () => {
     const logs: WorkoutLogEntry[] = [{ date: "2026-01-05", tier: 1, dayId: "t1-a" }];
     expect(setsCompletedOnDate(logs, "2026-01-05")).toBe(0);
+  });
+});
+
+describe("averageRecentReps", () => {
+  function logWithReps(date: string, exerciseId: string, repsPerSet: number[]): WorkoutLogEntry {
+    return { date, tier: 6, dayId: "t6-a", exerciseSets: [{ exerciseId, repsPerSet }] };
+  }
+
+  it("is null when the exercise has never been logged", () => {
+    expect(averageRecentReps([], "diamond-pushup")).toBeNull();
+  });
+
+  it("averages reps across the most recent sessions only", () => {
+    const logs = [
+      logWithReps("2026-01-01", "diamond-pushup", [10, 10]),
+      logWithReps("2026-01-02", "diamond-pushup", [20, 20]),
+      logWithReps("2026-01-03", "diamond-pushup", [20, 20]),
+      logWithReps("2026-01-04", "diamond-pushup", [20, 20]),
+    ];
+    // sessionCount defaults to 3, so the oldest session (10,10) should be excluded
+    expect(averageRecentReps(logs, "diamond-pushup")).toBe(20);
+  });
+
+  it("ignores other exercises", () => {
+    const logs = [logWithReps("2026-01-01", "squat", [15, 15])];
+    expect(averageRecentReps(logs, "diamond-pushup")).toBeNull();
   });
 });

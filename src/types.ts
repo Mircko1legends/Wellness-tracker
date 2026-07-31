@@ -27,6 +27,7 @@ export interface WellnessGoals {
   waterGlasses: number;
   setsGoal: number; // target total workout sets completed per day
   moodMin: MoodScore;
+  startingWorkoutTier: number; // manual floor for tier progression, for skipping tiers already mastered
 }
 
 export interface ReminderSettings {
@@ -66,7 +67,7 @@ export interface WorkoutTier {
 
 export interface ExerciseSetLog {
   exerciseId: string;
-  setsCompleted: number;
+  repsPerSet: number[]; // actual reps (or seconds, for timed holds) achieved in each completed set
 }
 
 export interface WorkoutLogEntry {
@@ -93,8 +94,9 @@ export interface MedicationLogEntry {
 export const DEFAULT_GOALS: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
-  setsGoal: 12,
+  setsGoal: 16,
   moodMin: 3,
+  startingWorkoutTier: 6, // 20 strict diamond push-ups is well past "beginner" — start at Avanzato
 };
 
 export const DEFAULT_REMINDER_SETTINGS: ReminderSettings = {

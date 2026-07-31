@@ -5,6 +5,7 @@ import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
+import { MAX_WORKOUT_TIER, WORKOUT_TIERS_BY_LEVEL } from "../data/workoutProgram";
 import { colors, radii, spacing } from "../theme";
 import { MoodScore } from "../types";
 
@@ -16,10 +17,11 @@ export function GoalsScreen() {
   const [waterGlasses, setWaterGlasses] = useState(goals.waterGlasses);
   const [setsGoal, setSetsGoal] = useState(goals.setsGoal);
   const [moodMin, setMoodMin] = useState<MoodScore>(goals.moodMin);
+  const [startingWorkoutTier, setStartingWorkoutTier] = useState(goals.startingWorkoutTier);
   const [saved, setSaved] = useState(false);
 
   const handleSave = async () => {
-    await updateGoals({ sleepHours, waterGlasses, setsGoal, moodMin });
+    await updateGoals({ sleepHours, waterGlasses, setsGoal, moodMin, startingWorkoutTier });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -62,6 +64,18 @@ export function GoalsScreen() {
           max={5}
           onChange={(v) => setMoodMin(v as MoodScore)}
         />
+        <StepperInput
+          label="Livello di partenza allenamento"
+          value={startingWorkoutTier}
+          unit={`· ${WORKOUT_TIERS_BY_LEVEL[startingWorkoutTier]?.name ?? ""}`}
+          min={1}
+          max={MAX_WORKOUT_TIER}
+          onChange={setStartingWorkoutTier}
+        />
+        <Text style={styles.hint}>
+          Se sei già allenato non serve rifare le settimane da principiante: alza il livello di
+          partenza e la scheda parte direttamente da lì.
+        </Text>
 
         <PressableScale style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>{saved ? "Obiettivi salvati ✓" : "Salva obiettivi"}</Text>
@@ -91,5 +105,12 @@ const styles = StyleSheet.create({
     color: colors.onPrimary,
     fontSize: 16,
     fontWeight: "800",
+  },
+  hint: {
+    fontSize: 11,
+    color: colors.textMuted,
+    marginTop: -spacing.sm,
+    marginBottom: spacing.md,
+    lineHeight: 15,
   },
 });

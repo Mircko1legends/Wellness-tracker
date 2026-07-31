@@ -17,21 +17,21 @@ interface Props {
 
 export function WorkoutDayCard({ day, completedToday, disabled, todaysSets, onSave }: Props) {
   const initial = useMemo(() => {
-    const map: Record<string, number> = {};
+    const map: Record<string, number[]> = {};
     day.exercises.forEach((p) => {
       const existing = todaysSets?.find((s) => s.exerciseId === p.exerciseId);
-      map[p.exerciseId] = existing?.setsCompleted ?? 0;
+      map[p.exerciseId] = existing?.repsPerSet ?? [];
     });
     return map;
   }, [day, todaysSets]);
 
-  const [sets, setSets] = useState<Record<string, number>>(initial);
+  const [sets, setSets] = useState<Record<string, number[]>>(initial);
 
   useEffect(() => {
     setSets(initial);
   }, [initial]);
 
-  const totalCompleted = Object.values(sets).reduce((a, b) => a + b, 0);
+  const totalCompleted = Object.values(sets).reduce((a, arr) => a + arr.length, 0);
   const totalPrescribed = day.exercises.reduce((a, p) => a + p.sets, 0);
   const hasAnyProgress = totalCompleted > 0;
   const saveDisabled = disabled || !hasAnyProgress;
@@ -40,7 +40,7 @@ export function WorkoutDayCard({ day, completedToday, disabled, todaysSets, onSa
     if (saveDisabled) return;
     const exerciseSets: ExerciseSetLog[] = day.exercises.map((p) => ({
       exerciseId: p.exerciseId,
-      setsCompleted: sets[p.exerciseId] ?? 0,
+      repsPerSet: sets[p.exerciseId] ?? [],
     }));
     onSave(exerciseSets);
   };
@@ -64,8 +64,8 @@ export function WorkoutDayCard({ day, completedToday, disabled, todaysSets, onSa
           key={prescription.exerciseId}
           exercise={EXERCISES_BY_ID[prescription.exerciseId]}
           prescription={prescription}
-          setsCompleted={sets[prescription.exerciseId] ?? 0}
-          onChangeSetsCompleted={(n) => setSets((s) => ({ ...s, [prescription.exerciseId]: n }))}
+          repsPerSet={sets[prescription.exerciseId] ?? []}
+          onChangeRepsPerSet={(reps) => setSets((s) => ({ ...s, [prescription.exerciseId]: reps }))}
           locked={completedToday || disabled}
         />
       ))}

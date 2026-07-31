@@ -7,6 +7,7 @@ const goals: WellnessGoals = {
   waterGlasses: 8,
   setsGoal: 12,
   moodMin: 3,
+  startingWorkoutTier: 1,
 };
 
 function entryFor(date: string, overrides: Partial<WellnessEntry> = {}): WellnessEntry {
@@ -20,7 +21,12 @@ function entryFor(date: string, overrides: Partial<WellnessEntry> = {}): Wellnes
 }
 
 function workoutLogFor(date: string, setsCompleted = 15): WorkoutLogEntry {
-  return { date, tier: 1, dayId: "t1-a", exerciseSets: [{ exerciseId: "squat", setsCompleted }] };
+  return {
+    date,
+    tier: 1,
+    dayId: "t1-a",
+    exerciseSets: [{ exerciseId: "squat", repsPerSet: Array(setsCompleted).fill(10) }],
+  };
 }
 
 describe("goalsMet", () => {

@@ -166,7 +166,7 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logWorkout = async (dayId: string, exerciseSets: ExerciseSetLog[]): Promise<LogWorkoutResult> => {
-    const currentTier = computeTierProgress(workoutLogs).tier;
+    const currentTier = computeTierProgress(workoutLogs, goals.startingWorkoutTier).tier;
     const prevTotalXp = computeTotalXp(entries, goals, workoutLogs) + computeWorkoutXp(workoutLogs);
     const prevLevel = levelInfo(prevTotalXp).level;
 
@@ -269,7 +269,10 @@ export function WellnessProvider({ children }: { children: React.ReactNode }) {
   const medicationXp = useMemo(() => computeMedicationXp(medicationLogs), [medicationLogs]);
   const totalXp = habitXp + workoutXp + medicationXp;
   const level = useMemo(() => levelInfo(totalXp), [totalXp]);
-  const tierProgress = useMemo(() => computeTierProgress(workoutLogs), [workoutLogs]);
+  const tierProgress = useMemo(
+    () => computeTierProgress(workoutLogs, goals.startingWorkoutTier),
+    [workoutLogs, goals.startingWorkoutTier]
+  );
   const workoutLoggedToday = useMemo(
     () => hasLoggedWorkoutToday(workoutLogs, todayKey()),
     [workoutLogs]

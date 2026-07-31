@@ -39,7 +39,7 @@ describe("computeWeeklyComparison", () => {
         date: toDateKey(today),
         tier: 1,
         dayId: "t1-a",
-        exerciseSets: [{ exerciseId: "squat", setsCompleted: 14 }],
+        exerciseSets: [{ exerciseId: "squat", repsPerSet: Array(14).fill(10) }],
       },
     ];
     const result = computeWeeklyComparison([], workoutLogs, today);

@@ -1,25 +1,52 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
 import { Exercise, ExercisePrescription } from "../types";
+import { averageRecentReps } from "../utils/workout";
 
 interface Props {
   exercise: Exercise;
   prescription: ExercisePrescription;
-  setsCompleted: number;
-  onChangeSetsCompleted: (n: number) => void;
+  repsPerSet: number[];
+  onChangeRepsPerSet: (reps: number[]) => void;
   locked: boolean;
 }
 
-export function SetTracker({ exercise, prescription, setsCompleted, onChangeSetsCompleted, locked }: Props) {
-  const [showForm, setShowForm] = useState(false);
+function parseTarget(reps: string): { value: number; unit: "s" | "reps" } {
+  const secMatch = reps.match(/^(\d+)s/);
+  if (secMatch) return { value: parseInt(secMatch[1], 10), unit: "s" };
+  const numMatch = reps.match(/\d+/);
+  return { value: numMatch ? parseInt(numMatch[0], 10) : 10, unit: "reps" };
+}
+
+export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPerSet, locked }: Props) {
+  const [showInfo, setShowInfo] = useState(false);
+  const { workoutLogs } = useWellness();
+  const target = parseTarget(prescription.reps);
 
   const togglePill = (index: number) => {
     if (locked) return;
     const setNumber = index + 1;
-    onChangeSetsCompleted(setsCompleted === setNumber ? setNumber - 1 : setNumber);
+    if (setNumber <= repsPerSet.length) {
+      onChangeRepsPerSet(repsPerSet.slice(0, index));
+    } else {
+      const extended = [...repsPerSet];
+      while (extended.length < setNumber) extended.push(target.value);
+      onChangeRepsPerSet(extended);
+    }
   };
+
+  const adjustSetReps = (index: number, delta: number) => {
+    if (locked) return;
+    const updated = [...repsPerSet];
+    updated[index] = Math.max(0, updated[index] + delta);
+    onChangeRepsPerSet(updated);
+  };
+
+  const avgRecent = averageRecentReps(workoutLogs, exercise.id);
+  const showProgressionHint = !locked && avgRecent !== null && avgRecent >= target.value * 1.5;
 
   return (
     <View style={styles.container}>
@@ -32,12 +59,16 @@ export function SetTracker({ exercise, prescription, setsCompleted, onChangeSets
           {prescription.sets}x{prescription.reps}
         </Text>
         <TouchableOpacity
-          onPress={() => setShowForm((s) => !s)}
+          onPress={() => setShowInfo((s) => !s)}
           hitSlop={8}
-          style={styles.formButton}
-          accessibilityLabel={`Mostra la forma corretta: ${exercise.name}`}
+          style={styles.infoButton}
+          accessibilityLabel={`Mostra istruzioni: ${exercise.name}`}
         >
-          <Ionicons name="body" size={18} color={showForm ? colors.primary : colors.textMuted} />
+          <Ionicons
+            name="information-circle-outline"
+            size={18}
+            color={showInfo ? colors.primary : colors.textMuted}
+          />
         </TouchableOpacity>
       </View>
 
@@ -47,17 +78,48 @@ export function SetTracker({ exercise, prescription, setsCompleted, onChangeSets
             key={i}
             onPress={() => togglePill(i)}
             disabled={locked}
-            style={[styles.pill, i < setsCompleted && styles.pillFilled]}
+            style={[styles.pill, i < repsPerSet.length && styles.pillFilled]}
           >
-            <Text style={[styles.pillText, i < setsCompleted && styles.pillTextFilled]}>{i + 1}</Text>
+            <Text style={[styles.pillText, i < repsPerSet.length && styles.pillTextFilled]}>{i + 1}</Text>
           </TouchableOpacity>
         ))}
         <Text style={styles.countText}>
-          {setsCompleted}/{prescription.sets} serie
+          {repsPerSet.length}/{prescription.sets} serie
         </Text>
       </View>
 
-      {showForm && (
+      {repsPerSet.length > 0 && (
+        <View style={styles.repsRow}>
+          {repsPerSet.map((reps, i) => (
+            <View key={i} style={styles.repsChip}>
+              <Text style={styles.repsChipLabel}>S{i + 1}</Text>
+              <TouchableOpacity onPress={() => adjustSetReps(i, -1)} disabled={locked} hitSlop={6}>
+                <Ionicons name="remove" size={13} color={colors.textMuted} />
+              </TouchableOpacity>
+              <Text style={styles.repsChipValue}>
+                {reps}
+                {target.unit === "s" ? "s" : ""}
+              </Text>
+              <TouchableOpacity onPress={() => adjustSetReps(i, 1)} disabled={locked} hitSlop={6}>
+                <Ionicons name="add" size={13} color={colors.textMuted} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {showProgressionHint && (
+        <View style={styles.hintCard}>
+          <Ionicons name="trending-up" size={14} color={colors.primary} />
+          <Text style={styles.hintText}>
+            Media recente {Math.round(avgRecent as number)}
+            {target.unit === "s" ? "s" : " reps"} contro un obiettivo di {target.value}: prova una
+            variante più difficile.
+          </Text>
+        </View>
+      )}
+
+      {showInfo && (
         <View style={styles.formCard}>
           <Text style={styles.formText}>{exercise.instructions}</Text>
         </View>
@@ -91,7 +153,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: colors.primary,
   },
-  formButton: {
+  infoButton: {
     padding: 2,
   },
   pillsRow: {
@@ -128,6 +190,51 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginLeft: spacing.xs,
     fontWeight: "600",
+  },
+  repsRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: spacing.xs,
+  },
+  repsChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.cardAlt,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  repsChipLabel: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.textMuted,
+  },
+  repsChipValue: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.text,
+    minWidth: 22,
+    textAlign: "center",
+  },
+  hintCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: spacing.xs,
+    padding: spacing.xs,
+    backgroundColor: colors.cardAlt,
+    borderRadius: radii.sm,
+  },
+  hintText: {
+    flex: 1,
+    fontSize: 11,
+    color: colors.primary,
+    fontWeight: "600",
+    lineHeight: 15,
   },
   formCard: {
     alignItems: "center",

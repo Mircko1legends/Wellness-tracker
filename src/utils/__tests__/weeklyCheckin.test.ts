@@ -7,6 +7,7 @@ const goals: WellnessGoals = {
   waterGlasses: 8,
   setsGoal: 12,
   moodMin: 3,
+  startingWorkoutTier: 1,
 };
 
 const today = new Date("2026-01-10T12:00:00");
