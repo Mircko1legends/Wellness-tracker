@@ -46,7 +46,7 @@ export const WORKOUT_TIERS: WorkoutTier[] = [
   {
     level: 1,
     name: "Fondamenta",
-    description: "Si parte da zero: impara il movimento corretto prima del carico.",
+    description: "Costruisci volume e costanza sui movimenti che già sai fare.",
     sessionsToUnlockNext: 6,
     days: [
       {
@@ -54,7 +54,7 @@ export const WORKOUT_TIERS: WorkoutTier[] = [
         name: "Giorno A",
         focus: "Parte superiore & core",
         exercises: [
-          { exerciseId: "knee-pushup", sets: 3, reps: "8" },
+          { exerciseId: "pushup", sets: 3, reps: "6" },
           { exerciseId: "plank", sets: 3, reps: "20s" },
           { exerciseId: "superman", sets: 3, reps: "10" },
           { exerciseId: "glute-bridge", sets: 3, reps: "12" },

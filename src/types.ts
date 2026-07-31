@@ -94,9 +94,9 @@ export interface MedicationLogEntry {
 export const DEFAULT_GOALS: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
-  setsGoal: 16,
+  setsGoal: 12,
   moodMin: 3,
-  startingWorkoutTier: 6, // 20 strict diamond push-ups is well past "beginner" — start at Avanzato
+  startingWorkoutTier: 1,
 };
 
 export const DEFAULT_REMINDER_SETTINGS: ReminderSettings = {
