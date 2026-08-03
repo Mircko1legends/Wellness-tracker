@@ -36,6 +36,28 @@ export const EXERCISES: Exercise[] = [
   { id: "dragon-flag", name: "Dragon flag", muscle: "Core (elite)", icon: "flame-outline", instructions: "Sdraiato, tieniti a un appoggio dietro la testa, solleva tutto il corpo teso tranne le spalle e scendi controllato senza inarcare la schiena." },
   { id: "handstand-pushup-wall", name: "Verticale al muro con piegamento", muscle: "Spalle (elite)", icon: "arrow-up-circle-outline", instructions: "In verticale con i piedi al muro, scendi piegando le braccia fino a sfiorare la testa a terra e risali in spinta." },
   { id: "clap-pushup", name: "Piegamenti con battito", muscle: "Petto/Potenza (elite)", icon: "hand-right-outline", instructions: "Scendi controllato e spingi con forza esplosiva fino a staccare le mani e battere le mani a mezz'aria." },
+
+  // --- Livello avanzato: spinta ---
+  { id: "typewriter-pushup", name: "Piegamenti typewriter", muscle: "Petto/Tricipiti (unilaterale)", icon: "sync-outline", instructions: "Scendi in basso largo e scorri lateralmente da un braccio piegato all'altro senza risalire, poi spingi su." },
+  { id: "deficit-diamond-pushup", name: "Piegamenti a diamante in deficit", muscle: "Tricipiti (avanzato)", icon: "diamond-outline", instructions: "Mani a diamante su un rialzo stabile (libri o gradino), scendi oltre il livello dei piedi per un range di movimento più ampio." },
+  { id: "wall-handstand-hold", name: "Verticale al muro (hold)", muscle: "Spalle (isometrico)", icon: "triangle-outline", instructions: "Cammina con le mani verso il muro fino a essere in verticale con la pancia o schiena al muro, e mantieni la posizione." },
+  { id: "wall-handstand-pushup", name: "Piegamenti in verticale al muro", muscle: "Spalle (elite)", icon: "triangle-outline", instructions: "Dalla verticale al muro, scendi piegando i gomiti fino a sfiorare la testa a terra e risali spingendo con le spalle." },
+
+  // --- Livello avanzato: gambe ---
+  { id: "shrimp-squat", name: "Shrimp squat", muscle: "Gambe (unilaterale avanzato)", icon: "body-outline", instructions: "In piedi su una gamba, afferra la caviglia dell'altra gamba dietro di te e scendi fino a sfiorare il ginocchio a terra." },
+  { id: "cossack-squat", name: "Squat cosacco", muscle: "Gambe/Adduttori", icon: "walk-outline", instructions: "Piedi molto larghi, sposta il peso su una gamba piegandola mentre l'altra resta tesa lateralmente, poi cambia lato." },
+  { id: "sissy-squat", name: "Sissy squat", muscle: "Quadricipiti (avanzato)", icon: "trending-up-outline", instructions: "Sui talloni sollevati, inclina ginocchia e busto in avanti mantenendo il corpo in linea retta, scendi controllando con i quadricipiti." },
+  { id: "broad-jump", name: "Salto in lungo da fermo", muscle: "Gambe/Potenza", icon: "flash-outline", instructions: "Da fermo, carica sulle gambe e salta il più lontano possibile in avanti, atterrando morbido sugli avampiedi." },
+
+  // --- Livello avanzato: core ---
+  { id: "hollow-rocks", name: "Hollow rocks", muscle: "Core (dinamico)", icon: "remove-outline", instructions: "Dalla posizione di hollow hold, dondola avanti e indietro mantenendo la forma senza far toccare la schiena bassa a terra." },
+  { id: "side-plank-leg-lift", name: "Plank laterale con sollevamento gamba", muscle: "Core obliqui/Glutei", icon: "remove-outline", instructions: "In plank laterale, solleva e abbassa la gamba superiore mantenendo il bacino alto e stabile." },
+  { id: "v-ups", name: "V-ups", muscle: "Addominali (dinamico)", icon: "arrow-up-outline", instructions: "Sdraiato supino, solleva contemporaneamente busto e gambe tese cercando di toccare i piedi con le mani, a formare una V." },
+  { id: "tucked-dragon-flag", name: "Bandiera raccolta", muscle: "Core (avanzato)", icon: "remove-outline", instructions: "Sdraiato, mani dietro la testa come appoggio, solleva bacino e ginocchia piegate al petto mantenendo il corpo rigido dalle spalle in giù." },
+  { id: "l-sit-tuck", name: "L-sit raccolto", muscle: "Core/Flessori dell'anca", icon: "triangle-outline", instructions: "Seduto, mani a terra ai lati dei fianchi, spingi per sollevare il bacino con le ginocchia raccolte al petto." },
+
+  // --- Livello avanzato: catena posteriore ---
+  { id: "superman-hold", name: "Superman hold", muscle: "Schiena bassa (isometrico)", icon: "airplane-outline", instructions: "Come il Superman ma mantieni braccia e gambe sollevate e tese per l'intera durata, senza muoverti." },
 ];
 
 export const EXERCISES_BY_ID: Record<string, Exercise> = Object.fromEntries(
