@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
 import { Exercise, ExercisePrescription } from "../types";
+import { parsePrescription } from "../utils/prescription";
 import { averageRecentReps } from "../utils/workout";
 
 interface Props {
@@ -14,17 +15,10 @@ interface Props {
   locked: boolean;
 }
 
-function parseTarget(reps: string): { value: number; unit: "s" | "reps" } {
-  const secMatch = reps.match(/^(\d+)s/);
-  if (secMatch) return { value: parseInt(secMatch[1], 10), unit: "s" };
-  const numMatch = reps.match(/\d+/);
-  return { value: numMatch ? parseInt(numMatch[0], 10) : 10, unit: "reps" };
-}
-
 export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPerSet, locked }: Props) {
   const [showInfo, setShowInfo] = useState(false);
   const { workoutLogs } = useWellness();
-  const target = parseTarget(prescription.reps);
+  const target = parsePrescription(prescription.reps);
 
   const togglePill = (index: number) => {
     if (locked) return;
@@ -33,7 +27,7 @@ export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPer
       onChangeRepsPerSet(repsPerSet.slice(0, index));
     } else {
       const extended = [...repsPerSet];
-      while (extended.length < setNumber) extended.push(target.value);
+      while (extended.length < setNumber) extended.push(target.isAmrap ? 0 : target.target);
       onChangeRepsPerSet(extended);
     }
   };
@@ -46,7 +40,8 @@ export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPer
   };
 
   const avgRecent = averageRecentReps(workoutLogs, exercise.id);
-  const showProgressionHint = !locked && avgRecent !== null && avgRecent >= target.value * 1.5;
+  const showProgressionHint =
+    !locked && !target.isAmrap && avgRecent !== null && avgRecent >= target.target * 1.5;
 
   return (
     <View style={styles.container}>
@@ -84,7 +79,7 @@ export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPer
           </TouchableOpacity>
         ))}
         <Text style={styles.countText}>
-          {repsPerSet.length}/{prescription.sets} serie
+          {repsPerSet.length}/{prescription.sets} serie{target.perSide ? " · per lato" : ""}
         </Text>
       </View>
 
@@ -98,7 +93,7 @@ export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPer
               </TouchableOpacity>
               <Text style={styles.repsChipValue}>
                 {reps}
-                {target.unit === "s" ? "s" : ""}
+                {target.isTimeBased ? "s" : ""}
               </Text>
               <TouchableOpacity onPress={() => adjustSetReps(i, 1)} disabled={locked} hitSlop={6}>
                 <Ionicons name="add" size={13} color={colors.textMuted} />
@@ -113,7 +108,7 @@ export function SetTracker({ exercise, prescription, repsPerSet, onChangeRepsPer
           <Ionicons name="trending-up" size={14} color={colors.primary} />
           <Text style={styles.hintText}>
             Media recente {Math.round(avgRecent as number)}
-            {target.unit === "s" ? "s" : " reps"} contro un obiettivo di {target.value}: prova una
+            {target.isTimeBased ? "s" : " reps"} contro un obiettivo di {target.target}: prova una
             variante più difficile.
           </Text>
         </View>
