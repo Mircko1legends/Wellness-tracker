@@ -18,6 +18,7 @@ interface MenuItem {
 const ITEMS: MenuItem[] = [
   { route: "Checkin", icon: "chatbubble-ellipses-outline", title: "Check-in settimanale", subtitle: "Sonno, umore e farmaci degli ultimi 7 giorni" },
   { route: "Medications", icon: "medkit-outline", title: "Farmaci", subtitle: "Promemoria e check giornaliero" },
+  { route: "Finance", icon: "wallet-outline", title: "Finanza", subtitle: "Entrate, spese fisse e una tantum per mese" },
   { route: "Products", icon: "sparkles-outline", title: "Prodotti", subtitle: "Skincare, hair care e integratori per budget" },
   { route: "Missions", icon: "trophy-outline", title: "Missioni", subtitle: "Livello, XP e abitudini sbloccate" },
   { route: "Goals", icon: "flag-outline", title: "Obiettivi", subtitle: "Traguardi giornalieri di sonno, acqua, attività" },

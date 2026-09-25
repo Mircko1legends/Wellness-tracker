@@ -9,6 +9,7 @@ import {
   WellnessGoals,
   WorkoutLogEntry,
 } from "../types";
+import { EMPTY_FINANCE, FinanceData } from "../utils/finance";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -18,6 +19,7 @@ const KEYS = {
   medications: "@wellness/medications",
   medicationLogs: "@wellness/medicationLogs",
   bodyweightKg: "@wellness/bodyweightKg",
+  finance: "@wellness/finance",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -148,6 +150,20 @@ export async function saveBodyweightKg(weightKg: number): Promise<void> {
   await AsyncStorage.setItem(KEYS.bodyweightKg, String(weightKg));
 }
 
+export async function loadFinance(): Promise<FinanceData> {
+  const raw = await AsyncStorage.getItem(KEYS.finance);
+  if (!raw) return EMPTY_FINANCE;
+  try {
+    return { ...EMPTY_FINANCE, ...JSON.parse(raw) } as FinanceData;
+  } catch {
+    return EMPTY_FINANCE;
+  }
+}
+
+export async function saveFinance(data: FinanceData): Promise<void> {
+  await AsyncStorage.setItem(KEYS.finance, JSON.stringify(data));
+}
+
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
     KEYS.entries,
@@ -157,5 +173,6 @@ export async function clearAllData(): Promise<void> {
     KEYS.medications,
     KEYS.medicationLogs,
     KEYS.bodyweightKg,
+    KEYS.finance,
   ]);
 }
