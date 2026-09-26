@@ -17,6 +17,7 @@ interface MenuItem {
 
 const ITEMS: MenuItem[] = [
   { route: "WeekReport", icon: "bulb-outline", title: "Resoconto settimana", subtitle: "Routine, dieta, palestra, skincare: da copiare per il brainstorm della domenica" },
+  { route: "ProgressPhotos", icon: "camera-outline", title: "Foto progressi", subtitle: "Viso, pelle e fisico: prima e adesso, una volta al mese" },
   { route: "LifeGoals", icon: "trophy-outline", title: "I miei obiettivi", subtitle: "Maturità, Sant'Anna, Muay Thai, fisico, inglese… tappa per tappa" },
   { route: "Checkin", icon: "chatbubble-ellipses-outline", title: "Check-in settimanale", subtitle: "Sonno, umore e farmaci degli ultimi 7 giorni" },
   { route: "Medications", icon: "medkit-outline", title: "Farmaci", subtitle: "Promemoria e check giornaliero" },

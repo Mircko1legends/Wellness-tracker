@@ -1,5 +1,5 @@
 import { matchFood } from "../foods";
-import { searchOpenFoodFacts, parseItem, planMealItems, reliability, sanitizePhotoItems, totals } from "../meals";
+import { addLayer, applyScale, itemFromFood, searchOpenFoodFacts, parseItem, planMealItems, reliability, sanitizePhotoItems, totals } from "../meals";
 import { defaultPlanPack } from "../../timeline/pack";
 import { dayTimeline } from "../../timeline/plan";
 
@@ -65,5 +65,35 @@ describe("Open Food Facts", () => {
     })) as unknown as typeof fetch;
     const r = await searchOpenFoodFacts("pesto", fake);
     expect(r).toEqual([{ name: "Pesto · Marca", per100: { kcal: 520, protein: 5, carbs: 6, fat: 52 } }]);
+  });
+});
+
+describe("kitchen scale", () => {
+  it("reads the display from the AI answer and ignores nonsense", () => {
+    expect(sanitizePhotoItems({ scale: 245, items: [] }).scaleGrams).toBe(245);
+    expect(sanitizePhotoItems({ scale: { grams: "312" }, items: [] }).scaleGrams).toBe(312);
+    expect(sanitizePhotoItems({ scale: null, items: [] }).scaleGrams).toBeNull();
+  });
+
+  it("uses the scale weight exactly for a single food", () => {
+    const [pasta] = applyScale([itemFromFood("pasta cotta", 180, false)], { grams: 232, tared: true, plateGrams: 0 });
+    expect(pasta).toMatchObject({ grams: 232, weighed: true });
+  });
+
+  it("subtracts the plate when not tared and splits a total by the photo's proportions", () => {
+    const items = applyScale([itemFromFood("riso cotto", 150, false), itemFromFood("pollo", 50, false)], { grams: 700, tared: false, plateGrams: 300 });
+    expect(items.map((i) => i.grams)).toEqual([300, 100]);
+    expect(items.every((i) => i.scaled)).toBe(true);
+    expect(reliability(items)).toBe("totale");
+  });
+
+  it("weighs one layer at a time exactly", () => {
+    let items = addLayer([], 0, sanitizePhotoItems({ items: [{ name: "riso cotto", grams: 0 }] }), 180);
+    items = addLayer(items, 180, sanitizePhotoItems({ items: [{ name: "olio", grams: 0 }] }), 192);
+    expect(items.map((i) => [i.foodName, i.grams, i.weighed])).toEqual([
+      ["Riso (cotto)", 180, true],
+      ["Olio extravergine d'oliva", 12, true],
+    ]);
+    expect(reliability(items)).toBe("affidabile");
   });
 });

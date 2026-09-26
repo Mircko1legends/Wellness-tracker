@@ -10,9 +10,17 @@ import { useTimeline } from "../context/TimelineContext";
 import { AiReadError } from "../import/gemini";
 import type { DietStackParamList } from "../navigation/DietStack";
 import { searchFoods } from "../nutrition/foods";
+import { bulkAdvice, upsertWeight, WeightEntry, weightTrend } from "../nutrition/weight";
+import { useWellness } from "../context/WellnessContext";
 import {
+  addLayer,
   analyzeMealPhoto,
+  applyScale,
+  foodGramsOnScale,
   itemFromFood,
+  layerPrompt,
+  PhotoResult,
+  reapplyScale,
   MealEntry,
   MealItem,
   OnlineFood,
@@ -22,13 +30,15 @@ import {
   searchOpenFoodFacts,
   totals,
 } from "../nutrition/meals";
-import { loadMealLog, saveMealLog } from "../storage/storage";
+import { DEFAULT_MEAL_SETTINGS, loadWeightLog, saveWeightLog, loadMealLog, loadMealSettings, MealSettings, saveMealLog, saveMealSettings } from "../storage/storage";
 import { colors, radii, spacing } from "../theme";
 import { dayTimeline } from "../timeline/plan";
 import { todayKey } from "../utils/date";
 import { isoWeekNumber } from "../utils/weeklyTable";
 
 type Props = NativeStackScreenProps<DietStackParamList, "Meals">;
+
+const RELIABILITY_LABEL = { affidabile: "Affidabile", totale: "Peso totale da bilancia", stima: "Stima", incompleto: "Incompleto" };
 
 const nowHm = () => {
   const d = new Date();
@@ -85,6 +95,50 @@ function FoodSearch({ initial, onPick }: { initial: string; onPick: (name: strin
   );
 }
 
+function ScaleBox({ draft, onChange }: { draft: MealEntry; onChange: (d: MealEntry) => void }) {
+  const scale = draft.scale!;
+  const update = (patch: Partial<typeof scale>) => {
+    const next = { ...scale, ...patch };
+    onChange({ ...draft, scale: next, items: reapplyScale(draft.items, next) });
+  };
+  return (
+    <View style={styles.scaleBox}>
+      <View style={styles.itemRow}>
+        <Ionicons name="scale-outline" size={18} color={colors.primary} />
+        <Text style={styles.scaleText}>Bilancia letta:</Text>
+        <TextInput
+          accessibilityLabel="Numero sulla bilancia"
+          style={styles.grams}
+          keyboardType="numeric"
+          value={String(scale.grams)}
+          onChangeText={(v) => update({ grams: Math.max(0, Math.round(Number(v.replace(",", ".")) || 0)) })}
+        />
+        <Text style={styles.hint}>g</Text>
+      </View>
+      <View style={styles.itemRow}>
+        <Text style={[styles.hint, { flex: 1 }]}>Tara fatta con il piatto sopra</Text>
+        <Switch value={scale.tared} onValueChange={(tared) => update({ tared })} trackColor={{ true: colors.primary, false: colors.border }} />
+      </View>
+      {!scale.tared && (
+        <View style={styles.itemRow}>
+          <Text style={[styles.hint, { flex: 1 }]}>Peso del piatto vuoto</Text>
+          <TextInput
+            accessibilityLabel="Peso del piatto"
+            style={styles.grams}
+            keyboardType="numeric"
+            value={String(scale.plateGrams)}
+            onChangeText={(v) => update({ plateGrams: Math.max(0, Math.round(Number(v) || 0)) })}
+          />
+          <Text style={styles.hint}>g</Text>
+        </View>
+      )}
+      <Text style={styles.hint}>
+        Cibo sulla bilancia: {foodGramsOnScale(scale)} g. Controlla che il numero sia quello del display.
+      </Text>
+    </View>
+  );
+}
+
 function Editor({ draft, onChange, onSave, onCancel }: { draft: MealEntry; onChange: (d: MealEntry) => void; onSave: () => void; onCancel: () => void }) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
@@ -94,6 +148,7 @@ function Editor({ draft, onChange, onSave, onCancel }: { draft: MealEntry; onCha
   return (
     <View style={[styles.card, styles.editor]}>
       <Text style={styles.cardTitle}>{draft.title}</Text>
+      {draft.scale && <ScaleBox draft={draft} onChange={onChange} />}
       {draft.items.map((item, i) => (
         <View key={i} style={styles.item}>
           <TouchableOpacity onPress={() => setOpenIdx(openIdx === i ? null : i)}>
@@ -162,7 +217,7 @@ function Editor({ draft, onChange, onSave, onCancel }: { draft: MealEntry; onCha
         </TouchableOpacity>
       </View>
       <Macros t={t} />
-      <Text style={[styles.hint, { marginTop: 4 }, rel === "affidabile" && { color: colors.success }]}>{RELIABILITY_TEXT[rel]}</Text>
+      <Text style={[styles.hint, { marginTop: 4 }, (rel === "affidabile" || rel === "totale") && { color: colors.success }]}>{RELIABILITY_TEXT[rel]}</Text>
       <View style={[styles.buttonRow, { marginTop: spacing.sm }]}>
         <PressableScale style={[styles.button, { flex: 1 }]} onPress={onSave}>
           <Text style={styles.buttonText}>Salva pasto</Text>
@@ -175,6 +230,55 @@ function Editor({ draft, onChange, onSave, onCancel }: { draft: MealEntry; onCha
   );
 }
 
+function WeightCard() {
+  const { bodyweightKg, updateBodyweightKg } = useWellness();
+  const [log, setLog] = useState<WeightEntry[]>([]);
+  const [kg, setKg] = useState(bodyweightKg);
+  const today = todayKey();
+  useEffect(() => {
+    loadWeightLog().then((l) => {
+      setLog(l);
+      if (l.length) setKg(l[l.length - 1].kg);
+    });
+  }, []);
+  const trend = weightTrend(log, today);
+  const todays = log.find((w) => w.date === today);
+  const record = async () => {
+    const next = upsertWeight(log, today, kg);
+    setLog(next);
+    await saveWeightLog(next);
+    await updateBodyweightKg(Math.round(kg));
+  };
+  const step = (d: number) => setKg(Math.max(30, Math.round((kg + d) * 10) / 10));
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>Peso e massa</Text>
+      <View style={styles.itemRow}>
+        <TouchableOpacity accessibilityLabel="Meno peso" style={styles.stepBtn} onPress={() => step(-0.1)}>
+          <Ionicons name="remove" size={16} color={colors.primary} />
+        </TouchableOpacity>
+        <Text style={styles.weight}>{kg.toFixed(1).replace(".", ",")} kg</Text>
+        <TouchableOpacity accessibilityLabel="Più peso" style={styles.stepBtn} onPress={() => step(0.1)}>
+          <Ionicons name="add" size={16} color={colors.primary} />
+        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
+        <TouchableOpacity style={styles.smallBtn} onPress={record}>
+          <Text style={styles.smallBtnText}>{todays ? "Aggiorna oggi" : "Registra oggi"}</Text>
+        </TouchableOpacity>
+      </View>
+      {trend && (
+        <Text style={styles.macros}>
+          Tendenza: {trend.kgPerWeek >= 0 ? "+" : ""}
+          {String(trend.kgPerWeek).replace(".", ",")} kg a settimana ({trend.pctPerWeek >= 0 ? "+" : ""}
+          {String(trend.pctPerWeek).replace(".", ",")}%)
+        </Text>
+      )}
+      <Text style={styles.hint}>{bulkAdvice(trend)}</Text>
+      <Text style={[styles.hint, { marginTop: 4 }]}>Il peso oscilla di 1–2 kg da un giorno all'altro (acqua, cibo): conta solo la tendenza.</Text>
+    </View>
+  );
+}
+
 export function MealsScreen({ navigation }: Props) {
   const { plan, ai, updateAi } = useTimeline();
   const date = todayKey();
@@ -183,9 +287,13 @@ export function MealsScreen({ navigation }: Props) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [key, setKey] = useState("");
+  const [mealSettings, setMealSettings] = useState<MealSettings>(DEFAULT_MEAL_SETTINGS);
+  const [layer, setLayer] = useState<{ title: string; items: MealItem[]; grams: number; pending: PhotoResult | null } | null>(null);
+  const [manualReading, setManualReading] = useState("");
 
   useEffect(() => {
     loadMealLog().then(setLog);
+    loadMealSettings().then(setMealSettings);
   }, []);
 
   const meals = useMemo(() => planMeals(dayTimeline(plan, new Date().getDay(), isoWeekNumber(date))), [plan, date]);
@@ -201,28 +309,44 @@ export function MealsScreen({ navigation }: Props) {
   const logPlan = (title: string, items: MealItem[]) =>
     persist([...log, { id: `${Date.now()}`, date, time: nowHm(), title, origin: "piano", items }]);
 
-  const fromPhoto = async (title: string, camera: boolean) => {
-    setMessage("");
+  const pickPhoto = async (camera: boolean): Promise<ImagePicker.ImagePickerAsset | null> => {
     if (!ai.geminiApiKey) {
       setMessage("Per leggere le foto serve la chiave gratuita di Gemini: incollala qui sotto.");
-      return;
+      return null;
     }
-    try {
-      const options: ImagePicker.ImagePickerOptions = { base64: true, quality: 0.5, mediaTypes: ["images"] };
-      if (camera) {
-        const perm = await ImagePicker.requestCameraPermissionsAsync();
-        if (!perm.granted) {
-          setMessage("Senza permesso per la fotocamera puoi scegliere una foto dalla galleria.");
-          return;
-        }
+    const options: ImagePicker.ImagePickerOptions = { base64: true, quality: 0.6, mediaTypes: ["images"] };
+    if (camera) {
+      const perm = await ImagePicker.requestCameraPermissionsAsync();
+      if (!perm.granted) {
+        setMessage("Senza permesso per la fotocamera puoi scegliere una foto dalla galleria.");
+        return null;
       }
-      const result = camera ? await ImagePicker.launchCameraAsync(options) : await ImagePicker.launchImageLibraryAsync(options);
-      const asset = result.canceled ? null : result.assets[0];
-      if (!asset?.base64) return;
+    }
+    const result = camera ? await ImagePicker.launchCameraAsync(options) : await ImagePicker.launchImageLibraryAsync(options);
+    const asset = result.canceled ? null : result.assets[0];
+    return asset?.base64 ? asset : null;
+  };
+
+  const fromPhoto = async (title: string, camera: boolean) => {
+    setMessage("");
+    try {
+      const asset = await pickPhoto(camera);
+      if (!asset) return;
       setBusy(true);
-      const { items, note } = await analyzeMealPhoto(asset.base64, asset.mimeType ?? "image/jpeg", ai);
-      setDraft({ id: `${Date.now()}`, date, time: nowHm(), title, origin: "foto", items });
-      setMessage(items.length ? note : "Nella foto non ho riconosciuto alimenti: aggiungili a mano.");
+      const result = await analyzeMealPhoto(asset.base64!, asset.mimeType ?? "image/jpeg", ai);
+      const entry: MealEntry = { id: `${Date.now()}`, date, time: nowHm(), title, origin: "foto", items: result.items };
+      if (result.scaleGrams !== null && result.items.length) {
+        entry.scale = { grams: result.scaleGrams, tared: mealSettings.tared, plateGrams: mealSettings.plateGrams };
+        entry.items = applyScale(result.items, entry.scale);
+      }
+      setDraft(entry);
+      setMessage(
+        !result.items.length
+          ? "Nella foto non ho riconosciuto alimenti: aggiungili a mano."
+          : result.scaleGrams !== null
+            ? `Ho visto la bilancia: ${result.scaleGrams} g. ${result.note}`.trim()
+            : result.note
+      );
     } catch (e) {
       setMessage(e instanceof AiReadError ? e.message : "Analisi non riuscita, riprova.");
     } finally {
@@ -230,8 +354,54 @@ export function MealsScreen({ navigation }: Props) {
     }
   };
 
+  const layerPhoto = async (camera: boolean) => {
+    if (!layer) return;
+    setMessage("");
+    try {
+      const asset = await pickPhoto(camera);
+      if (!asset) return;
+      setBusy(true);
+      const result = await analyzeMealPhoto(
+        asset.base64!,
+        asset.mimeType ?? "image/jpeg",
+        ai,
+        undefined,
+        layerPrompt(layer.grams, layer.items.map((i) => i.name))
+      );
+      if (result.scaleGrams === null) {
+        setLayer({ ...layer, pending: result });
+        setMessage("Non riesco a leggere il display: scrivi tu il numero della bilancia.");
+      } else {
+        setLayer({ ...layer, items: addLayer(layer.items, layer.grams, result, result.scaleGrams), grams: result.scaleGrams, pending: null });
+      }
+    } catch (e) {
+      setMessage(e instanceof AiReadError ? e.message : "Analisi non riuscita, riprova.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const confirmManualReading = () => {
+    const n = Math.round(Number(manualReading.replace(",", ".")));
+    if (!layer?.pending || !Number.isFinite(n) || n <= layer.grams) return;
+    setLayer({ ...layer, items: addLayer(layer.items, layer.grams, layer.pending, n), grams: n, pending: null });
+    setManualReading("");
+    setMessage("");
+  };
+
+  const finishLayers = () => {
+    if (!layer) return;
+    setDraft({ id: `${Date.now()}`, date, time: nowHm(), title: layer.title, origin: "foto", items: layer.items });
+    setLayer(null);
+  };
+
   const save = async () => {
     if (!draft) return;
+    if (draft.scale && (draft.scale.tared !== mealSettings.tared || draft.scale.plateGrams !== mealSettings.plateGrams)) {
+      const next = { tared: draft.scale.tared, plateGrams: draft.scale.plateGrams };
+      setMealSettings(next);
+      await saveMealSettings(next);
+    }
     await persist([...log.filter((e) => e.id !== draft.id), draft]);
     setDraft(null);
     setMessage("");
@@ -256,6 +426,8 @@ export function MealsScreen({ navigation }: Props) {
           <Text style={[styles.hint, { marginTop: 6 }]}>Sono numeri per orientarti, non un voto. Un giorno diverso dal piano va bene.</Text>
         </View>
 
+        <WeightCard />
+
         {busy && (
           <View style={[styles.card, styles.row]}>
             <ActivityIndicator color={colors.primary} />
@@ -270,6 +442,49 @@ export function MealsScreen({ navigation }: Props) {
             <PressableScale style={[styles.button, { marginTop: spacing.sm }]} onPress={() => key.trim() && updateAi({ ...ai, geminiApiKey: key.trim() }).then(() => setMessage(""))}>
               <Text style={styles.buttonText}>Salva chiave</Text>
             </PressableScale>
+          </View>
+        )}
+
+        {layer && (
+          <View style={[styles.card, styles.editor]}>
+            <Text style={styles.cardTitle}>Pesa a strati · {layer.title}</Text>
+            <Text style={styles.hint}>
+              1. Metti il piatto vuoto sulla bilancia e fai la tara (0 g).{"\n"}2. Aggiungi un alimento e scatta con il display
+              ben visibile.{"\n"}3. Ripeti per ogni alimento, olio compreso. Ogni peso è esatto: è la differenza sul display.
+            </Text>
+            {layer.items.map((item, i) => (
+              <Text key={i} style={styles.line}>
+                ✓ {item.name}: {item.grams} g
+              </Text>
+            ))}
+            <Text style={styles.hint}>Bilancia ora: {layer.grams} g</Text>
+            {layer.pending && (
+              <View style={styles.itemRow}>
+                <TextInput
+                  accessibilityLabel="Numero sul display"
+                  value={manualReading}
+                  onChangeText={setManualReading}
+                  keyboardType="numeric"
+                  placeholder="Numero sul display"
+                  placeholderTextColor={colors.textMuted}
+                  style={[styles.input, { flex: 1 }]}
+                />
+                <TouchableOpacity style={styles.smallBtn} onPress={confirmManualReading}>
+                  <Text style={styles.smallBtnText}>Usa</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={[styles.buttonRow, { marginTop: spacing.sm }]}>
+              <PressableScale style={[styles.button, { flex: 1 }]} onPress={() => layerPhoto(true)}>
+                <Text style={styles.buttonText}>Scatta</Text>
+              </PressableScale>
+              <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={() => layerPhoto(false)}>
+                <Text style={styles.ghostText}>Galleria</Text>
+              </PressableScale>
+              <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={layer.items.length ? finishLayers : () => setLayer(null)}>
+                <Text style={styles.ghostText}>{layer.items.length ? "Fine" : "Annulla"}</Text>
+              </PressableScale>
+            </View>
           </View>
         )}
 
@@ -292,7 +507,7 @@ export function MealsScreen({ navigation }: Props) {
                       {e.origin === "piano" ? "Come da piano" : e.origin === "foto" ? "Da foto" : "A mano"} · {e.time}
                     </Text>
                     <Macros t={totals(e.items)} />
-                    <Text style={styles.hint}>{reliability(e.items) === "affidabile" ? "Affidabile" : reliability(e.items) === "stima" ? "Stima" : "Incompleto"}</Text>
+                    <Text style={styles.hint}>{RELIABILITY_LABEL[reliability(e.items)]}</Text>
                   </View>
                   <TouchableOpacity accessibilityLabel="Modifica pasto" onPress={() => setDraft(e)}>
                     <Ionicons name="create-outline" size={18} color={colors.textMuted} />
@@ -309,6 +524,9 @@ export function MealsScreen({ navigation }: Props) {
                   </PressableScale>
                   <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={() => fromPhoto(activity.title, true)}>
                     <Text style={styles.ghostText}>Foto</Text>
+                  </PressableScale>
+                  <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={() => setLayer({ title: activity.title, items: [], grams: 0, pending: null })}>
+                    <Text style={styles.ghostText}>Strati</Text>
                   </PressableScale>
                   <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={() => setDraft({ id: `${Date.now()}`, date, time: nowHm(), title: activity.title, origin: "manuale", items: items.map((i) => ({ ...i })) })}>
                     <Text style={styles.ghostText}>Modifica</Text>
@@ -351,6 +569,12 @@ export function MealsScreen({ navigation }: Props) {
               <Text style={styles.ghostText}>A mano</Text>
             </PressableScale>
           </View>
+          <PressableScale style={[styles.ghost, { marginTop: spacing.sm }]} onPress={() => setLayer({ title: "Fuori piano", items: [], grams: 0, pending: null })}>
+            <Text style={styles.ghostText}>Pesa a strati sulla bilancia (il più preciso)</Text>
+          </PressableScale>
+          <Text style={[styles.hint, { marginTop: 6 }]}>
+            Con una foto normale, se il piatto è sulla bilancia l'app legge il display e usa quel peso.
+          </Text>
         </View>
 
         <Text style={styles.hint}>
@@ -405,4 +629,8 @@ const styles = StyleSheet.create({
   result: { color: colors.text, fontSize: 13, paddingVertical: 4 },
   resultMuted: { color: colors.textMuted, fontSize: 12 },
   link: { color: colors.primary, fontSize: 13, fontWeight: "600" },
+  weight: { color: colors.text, fontWeight: "900", fontSize: 18, minWidth: 80, textAlign: "center" },
+  line: { fontSize: 13, color: colors.text, lineHeight: 20 },
+  scaleBox: { backgroundColor: colors.cardAlt, borderRadius: radii.md, padding: spacing.sm, marginBottom: spacing.sm, gap: 4 },
+  scaleText: { color: colors.text, fontWeight: "700", fontSize: 13 },
 });

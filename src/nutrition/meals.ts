@@ -13,6 +13,7 @@ export interface MealItem {
   name: string;
   grams: number;
   weighed: boolean; // true = weighed on a scale (or known from the plan)
+  scaled?: boolean; // share of a total weight read from the scale (split between foods is estimated)
   per100: Per100 | null; // null = no nutrition data found
   source: "tabella" | "openfoodfacts" | "manuale";
   foodName?: string; // what the values refer to, e.g. "Petto di pollo (crudo)"
@@ -25,6 +26,13 @@ export interface MealEntry {
   title: string;
   origin: "foto" | "piano" | "manuale";
   items: MealItem[];
+  scale?: ScaleReading; // what the kitchen scale showed in the photo
+}
+
+export interface ScaleReading {
+  grams: number; // number on the display
+  tared: boolean; // zeroed with the empty plate on it
+  plateGrams: number; // subtracted when not tared
 }
 
 export interface Totals extends Per100 {
@@ -61,19 +69,47 @@ export function totals(items: MealItem[]): Totals {
   };
 }
 
-export type Reliability = "affidabile" | "stima" | "incompleto";
+export type Reliability = "affidabile" | "totale" | "stima" | "incompleto";
 
-/** Weighed + found in the table = reliable; anything estimated from a photo is only an estimate. */
+/** Weighed + found in the table = reliable; a scale total split by eye is next; a photo alone is only an estimate. */
 export function reliability(items: MealItem[]): Reliability {
   if (!items.length || items.some((i) => !i.per100)) return "incompleto";
-  return items.every((i) => i.weighed) ? "affidabile" : "stima";
+  if (items.every((i) => i.weighed)) return "affidabile";
+  if (items.every((i) => i.weighed || i.scaled)) return "totale";
+  return "stima";
 }
 
 export const RELIABILITY_TEXT: Record<Reliability, string> = {
   affidabile: "Affidabile: grammi pesati e valori da tabella nutrizionale.",
+  totale:
+    "Quasi affidabile: il peso totale viene dalla bilancia, ma la divisione tra gli alimenti è stimata. Per il massimo usa \"Pesa a strati\".",
   stima: "Stima: le porzioni viste in foto possono sbagliare del 20–30% o più, soprattutto olio e condimenti. Pesa per avere dati affidabili.",
   incompleto: "Incompleto: qualche alimento non ha valori. Tocca l'alimento per sceglierlo dalla tabella o cercarlo online.",
 };
+
+/** Re-applies a corrected reading: foods whose grams came from the scale go back to their photo share. */
+export function reapplyScale(items: MealItem[], scale: ScaleReading): MealItem[] {
+  return applyScale(items.map((i) => (i.scaled ? { ...i, weighed: false, scaled: false } : i)), scale);
+}
+
+export function foodGramsOnScale(scale: ScaleReading): number {
+  return Math.max(0, Math.round(scale.tared ? scale.grams : scale.grams - scale.plateGrams));
+}
+
+/**
+ * Makes the foods add up to what the scale shows. One food → its weight is exact.
+ * Several foods → the total is exact and the photo's proportions split it.
+ */
+export function applyScale(items: MealItem[], scale: ScaleReading): MealItem[] {
+  const total = foodGramsOnScale(scale);
+  const free = items.filter((i) => !i.weighed);
+  const fixed = items.filter((i) => i.weighed).reduce((a, i) => a + i.grams, 0);
+  const rest = Math.max(0, total - fixed);
+  if (!free.length) return items;
+  if (free.length === 1) return items.map((i) => (i.weighed ? i : { ...i, grams: rest, weighed: true, scaled: true }));
+  const sum = free.reduce((a, i) => a + i.grams, 0) || free.length;
+  return items.map((i) => (i.weighed ? i : { ...i, grams: Math.round((rest * (i.grams || 1)) / sum), scaled: true }));
+}
 
 const QTY = /^(\d+(?:[.,]\d+)?)\s*(kg|g|gr|ml|l)?\b\s*(?:di\s+)?(.*)$/i;
 
@@ -134,26 +170,65 @@ export function planMeals(timeline: PlanActivity[]): { activity: PlanActivity; i
     .filter((m) => m.items.length > 0);
 }
 
+const FOOD_NAMES = () => FOODS.map((f) => f.aliases[0]).join(", ");
+
+const SCALE_RULES = `Se il piatto è su una bilancia da cucina con il display visibile, leggi il numero sul display e mettilo in "scale" (in grammi; se il display è in kg converti). Se non c'è una bilancia o il numero non si legge bene, "scale" è null: non inventarlo.`;
+
 export const MEAL_PHOTO_PROMPT = `Sei un nutrizionista. Guarda la foto del pasto e elenca ogni alimento visibile con la stima dei grammi nel piatto (peso cotto se è cotto).
 Conta anche olio, condimenti, salse e bevande se si vedono. Non inventare alimenti che non vedi.
-Usa quando puoi uno di questi nomi semplici in italiano: ${FOODS.map((f) => f.aliases[0]).join(", ")}; per la pasta o il riso già cotti scrivi "pasta cotta" o "riso cotto".
-Rispondi solo con JSON: {"items":[{"name":"pasta cotta","grams":180},{"name":"olio","grams":10}],"note":"eventuali dubbi in una frase"}`;
+${SCALE_RULES}
+Usa quando puoi uno di questi nomi semplici in italiano: ${FOOD_NAMES()}; per la pasta o il riso già cotti scrivi "pasta cotta" o "riso cotto".
+Rispondi solo con JSON: {"scale":245,"items":[{"name":"pasta cotta","grams":180},{"name":"olio","grams":10}],"note":"eventuali dubbi in una frase"}`;
 
-export function sanitizePhotoItems(raw: any): { items: MealItem[]; note: string } {
+/** Weighing one food at a time on a tared plate: each photo adds one food, the scale difference is its exact weight. */
+export function layerPrompt(previousGrams: number, previousFoods: string[]): string {
+  return `Stiamo pesando un pasto un alimento alla volta su una bilancia da cucina.
+Prima di questa foto la bilancia segnava ${previousGrams} g e sul piatto c'erano: ${previousFoods.length ? previousFoods.join(", ") : "niente (piatto vuoto, tara fatta)"}.
+Leggi il numero sul display e dimmi quale alimento è stato aggiunto adesso (uno solo, il più evidente tra quelli nuovi).
+${SCALE_RULES}
+Usa quando puoi uno di questi nomi semplici in italiano: ${FOOD_NAMES()}.
+Rispondi solo con JSON: {"scale":320,"items":[{"name":"riso cotto","grams":0}],"note":"eventuali dubbi in una frase"}`;
+}
+
+export interface PhotoResult {
+  items: MealItem[];
+  note: string;
+  scaleGrams: number | null;
+}
+
+export function sanitizePhotoItems(raw: any): PhotoResult {
   const list = Array.isArray(raw?.items) ? raw.items : [];
   const items = list
     .map((i: any) => {
       const name = typeof i?.name === "string" ? i.name.trim().slice(0, 60) : "";
       const grams = Math.round(Number(i?.grams));
-      if (!name || !Number.isFinite(grams) || grams <= 0 || grams > 2000) return null;
+      if (!name || !Number.isFinite(grams) || grams < 0 || grams > 2000) return null;
       return itemFromFood(name, grams, false);
     })
     .filter((i: MealItem | null): i is MealItem => i !== null);
-  return { items, note: typeof raw?.note === "string" ? raw.note.slice(0, 200) : "" };
+  const scale = Number(typeof raw?.scale === "object" && raw?.scale !== null ? raw.scale.grams : raw?.scale);
+  return {
+    items,
+    note: typeof raw?.note === "string" ? raw.note.slice(0, 200) : "",
+    scaleGrams: Number.isFinite(scale) && scale > 0 && scale < 10000 ? Math.round(scale) : null,
+  };
 }
 
-export async function analyzeMealPhoto(base64: string, mimeType: string, settings: AiSettings, fetchImpl: FetchLike = fetch as unknown as FetchLike) {
-  return sanitizePhotoItems(await callGemini(MEAL_PHOTO_PROMPT, base64, mimeType, settings, fetchImpl));
+export async function analyzeMealPhoto(
+  base64: string,
+  mimeType: string,
+  settings: AiSettings,
+  fetchImpl: FetchLike = fetch as unknown as FetchLike,
+  prompt: string = MEAL_PHOTO_PROMPT
+): Promise<PhotoResult> {
+  return sanitizePhotoItems(await callGemini(prompt, base64, mimeType, settings, fetchImpl));
+}
+
+/** Adds the food of a new layer: its weight is the scale difference, so it counts as weighed. */
+export function addLayer(items: MealItem[], previousGrams: number, result: PhotoResult, newReading: number): MealItem[] {
+  const delta = Math.max(0, Math.round(newReading - previousGrams));
+  const name = result.items[0]?.name ?? "alimento";
+  return [...items, itemFromFood(name, delta, true)];
 }
 
 export interface OnlineFood {

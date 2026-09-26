@@ -1,4 +1,5 @@
 import * as Notifications from "expo-notifications";
+import { STEP_CATEGORY } from "../notificationActions";
 import { isNotificationsSupported, requestNotificationPermission } from "../notifications";
 import { dayTimeline, TimelinePlan } from "./plan";
 
@@ -11,15 +12,17 @@ interface Planned {
   title: string;
   body: string;
   weekdays: Set<number>;
+  /** Start notification of an activity: its buttons log the whole activity. */
+  activity?: { time: string; name: string };
 }
 
 /** Same time + text on every weekday collapses into one daily notification. */
 export function planNotifications(plan: TimelinePlan, eachStep: boolean): Planned[] {
   const byKey = new Map<string, Planned>();
-  const add = (weekday: number, time: string, title: string, body: string) => {
+  const add = (weekday: number, time: string, title: string, body: string, activity?: Planned["activity"]) => {
     const key = `${time}|${title}|${body}`;
     const [hour, minute] = time.split(":").map(Number);
-    const entry = byKey.get(key) ?? { hour, minute, title, body, weekdays: new Set<number>() };
+    const entry = byKey.get(key) ?? { hour, minute, title, body, weekdays: new Set<number>(), activity };
     entry.weekdays.add(weekday);
     byKey.set(key, entry);
   };
@@ -29,11 +32,11 @@ export function planNotifications(plan: TimelinePlan, eachStep: boolean): Planne
       const [first, ...rest] = activity.steps;
       const name = activity.group ?? activity.title;
       if (activity.weeks) {
-        add(weekday, activity.start, `${activity.start} · ${name}`, "La scheda di questa settimana è nell'app.");
+        add(weekday, activity.start, `${activity.start} · ${name}`, "La scheda di questa settimana è nell'app.", { time: activity.start, name });
         continue;
       }
       const more = rest.length ? ` (+${rest.length} passi)` : "";
-      add(weekday, activity.start, `${activity.start} · ${name}`, `${first?.label ?? "Inizia"}${more}`);
+      add(weekday, activity.start, `${activity.start} · ${name}`, `${first?.label ?? "Inizia"}${more}`, { time: activity.start, name });
       if (eachStep) rest.forEach((step) => add(weekday, step.time, `${step.time} · ${name}`, step.label));
     }
   }
@@ -53,7 +56,9 @@ export async function syncTimelineNotifications(plan: TimelinePlan, eachStep: bo
 
   let count = 0;
   for (const [i, p] of planned.entries()) {
-    const content = { title: p.title, body: p.body };
+    const content: Notifications.NotificationContentInput = p.activity
+      ? { title: p.title, body: p.body, categoryIdentifier: STEP_CATEGORY, data: { kind: "step", ...p.activity } }
+      : { title: p.title, body: p.body };
     if (p.weekdays.size === 7) {
       if (count >= MAX_SCHEDULED) break;
       await Notifications.scheduleNotificationAsync({

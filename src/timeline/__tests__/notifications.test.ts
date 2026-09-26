@@ -39,5 +39,12 @@ describe("planNotifications", () => {
     );
     expect(planned).toHaveLength(1);
     expect(planned[0].title).toBe("18:40 · Pesi 45'");
+    expect(planned[0].activity).toEqual({ time: "18:40", name: "Pesi 45'" });
+  });
+
+  it("gives action buttons only to the start of an activity", () => {
+    const planned = planNotifications({ routine, meals: [] }, true);
+    expect(planned.filter((p) => p.activity).map((p) => p.activity!.name).sort()).toEqual(["MMA", "Sveglia e idratazione"]);
+    expect(planned.some((p) => !p.activity)).toBe(true);
   });
 });

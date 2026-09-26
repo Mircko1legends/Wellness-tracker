@@ -1,6 +1,7 @@
 import { goalProgress, LifeGoal, nextMilestone } from "../goals/goals";
 import { bestKg, GymSession, PROGRAMS } from "../gym/gym";
 import { MealEntry, reliability, totals } from "../nutrition/meals";
+import { WeightEntry, weightTrend } from "../nutrition/weight";
 import { dayTimeline, PlanActivity, PlanStep, stepStatus, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 import { WellnessEntry } from "../types";
 import { addDays, parseDateKey, toDateKey } from "../utils/date";
@@ -46,6 +47,8 @@ export interface WeekReport {
   water: { daysOnTarget: number; days: number; avgGlasses: number | null; target: number };
   mood: { values: { date: string; mood: number }[]; average: number | null; stableDays: number };
   gym: { sessions: number; best: { name: string; kg: number }[] };
+  lastProgressPhoto: string | null;
+  weight: { weighIns: number; kgPerWeek: number | null; pctPerWeek: number | null };
   meals: { days: number; avgKcal: number | null; avgProtein: number | null; logged: number; reliable: number };
   goals: { title: string; percent: number; next: string | null }[];
 }
@@ -60,6 +63,8 @@ export interface WeekReportInput {
   gymLog: GymSession[];
   goals: LifeGoal[];
   mealLog?: MealEntry[];
+  weightLog?: WeightEntry[];
+  progressPhotos?: { date: string; kind: string }[];
 }
 
 /** Monday of the ISO week containing `date`, up to `date` itself. */
@@ -137,6 +142,15 @@ export function computeWeekReport(input: WeekReportInput, today: string): WeekRe
         .map((ex) => ({ name: ex.name.replace(/ \(.*\)$/, ""), kg: bestKg(weekSessions, ex.id) }))
         .filter((x): x is { name: string; kg: number } => x.kg !== null),
     },
+    lastProgressPhoto: (input.progressPhotos ?? []).map((p) => p.date).sort().pop() ?? null,
+    weight: (() => {
+      const t = weightTrend(input.weightLog ?? [], today);
+      return {
+        weighIns: (input.weightLog ?? []).filter((w) => days.includes(w.date)).length,
+        kgPerWeek: t?.kgPerWeek ?? null,
+        pctPerWeek: t?.pctPerWeek ?? null,
+      };
+    })(),
     meals: {
       days: mealDays.length,
       avgKcal: avg(perDay.map((t) => t.kcal)),
@@ -183,6 +197,12 @@ export function reportText(r: WeekReport): string {
       ? `Pasti registrati: ${r.meals.logged} in ${r.meals.days} giorni · media ${r.meals.avgKcal} kcal e ${r.meals.avgProtein} g proteine nei giorni registrati · pesati/affidabili ${r.meals.reliable}/${r.meals.logged}`
       : "Pasti: non registrati"
   );
+  lines.push(
+    r.weight.kgPerWeek === null
+      ? `Peso: ${r.weight.weighIns} pesate questa settimana (tendenza non ancora calcolabile)`
+      : `Peso: tendenza ${r.weight.kgPerWeek >= 0 ? "+" : ""}${r.weight.kgPerWeek} kg/settimana (${r.weight.pctPerWeek}%), ${r.weight.weighIns} pesate questa settimana`
+  );
+  if (r.lastProgressPhoto) lines.push(`Ultima foto progressi: ${r.lastProgressPhoto}`);
   if (r.goals.length) {
     lines.push("");
     lines.push("Obiettivi:");

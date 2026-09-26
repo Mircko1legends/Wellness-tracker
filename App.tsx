@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useState } from "react";
+import { NotificationActionsBridge } from "./src/components/NotificationActionsBridge";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AppReloadContext } from "./src/backup/AppReload";
 import { useAutoBackup } from "./src/backup/useAutoBackup";
@@ -23,6 +24,7 @@ export default function App() {
             <TimelineProvider>
               <GoalsProvider>
                 <WaterProvider>
+                  <NotificationActionsBridge />
                   <RootNavigator />
                   <StatusBar style="light" />
                 </WaterProvider>

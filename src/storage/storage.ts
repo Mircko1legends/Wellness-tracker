@@ -19,6 +19,8 @@ import { LifeGoal } from "../goals/goals";
 import { DEFAULT_WATER_SETTINGS, WaterDay, WaterSettings } from "../water/water";
 import { GymSession } from "../gym/gym";
 import { MealEntry } from "../nutrition/meals";
+import { WeightEntry } from "../nutrition/weight";
+import type { ProgressPhoto } from "../progress/photos";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -43,6 +45,9 @@ const KEYS = {
   gymLog: "@wellness/gymLog",
   gymVideos: "@wellness/gymVideos",
   mealLog: "@wellness/mealLog",
+  mealSettings: "@wellness/mealSettings",
+  weightLog: "@wellness/weightLog",
+  progressPhotos: "@wellness/progressPhotos",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -263,6 +268,17 @@ export const loadGymVideos = () => loadJson<Record<string, string>>(KEYS.gymVide
 export const saveGymVideos = (v: Record<string, string>) => AsyncStorage.setItem(KEYS.gymVideos, JSON.stringify(v));
 export const loadMealLog = () => loadJson<MealEntry[]>(KEYS.mealLog, []);
 export const saveMealLog = (log: MealEntry[]) => AsyncStorage.setItem(KEYS.mealLog, JSON.stringify(log));
+export interface MealSettings {
+  tared: boolean; // usually zero the scale with the plate on
+  plateGrams: number;
+}
+export const DEFAULT_MEAL_SETTINGS: MealSettings = { tared: true, plateGrams: 0 };
+export const loadMealSettings = () => loadJson<MealSettings>(KEYS.mealSettings, DEFAULT_MEAL_SETTINGS);
+export const loadWeightLog = () => loadJson<WeightEntry[]>(KEYS.weightLog, []);
+export const saveWeightLog = (log: WeightEntry[]) => AsyncStorage.setItem(KEYS.weightLog, JSON.stringify(log));
+export const loadProgressPhotos = () => loadJson<ProgressPhoto[]>(KEYS.progressPhotos, []);
+export const saveProgressPhotos = (p: ProgressPhoto[]) => AsyncStorage.setItem(KEYS.progressPhotos, JSON.stringify(p));
+export const saveMealSettings = (s: MealSettings) => AsyncStorage.setItem(KEYS.mealSettings, JSON.stringify(s));
 
 /** The date on which "giornata no" was switched on; it only applies to that day. */
 export const loadMinimalDay = async () => (await AsyncStorage.getItem(KEYS.dayMode)) ?? "";
@@ -296,5 +312,8 @@ export async function clearAllData(): Promise<void> {
     KEYS.gymLog,
     KEYS.gymVideos,
     KEYS.mealLog,
+    KEYS.mealSettings,
+    KEYS.weightLog,
+    KEYS.progressPhotos,
   ]);
 }

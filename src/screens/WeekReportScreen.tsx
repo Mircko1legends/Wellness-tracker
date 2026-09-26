@@ -12,7 +12,9 @@ import { GymSession } from "../gym/gym";
 import type { MoreStackParamList } from "../navigation/MoreStack";
 import { AREA_LABELS, AreaId, computeWeekReport, percent, reportText } from "../report/weekly";
 import { MealEntry } from "../nutrition/meals";
-import { loadGymLog, loadMealLog } from "../storage/storage";
+import { WeightEntry } from "../nutrition/weight";
+import { ProgressPhoto } from "../progress/photos";
+import { loadGymLog, loadMealLog, loadProgressPhotos, loadWeightLog } from "../storage/storage";
 import { colors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
 import { formatMood } from "../utils/mood";
@@ -26,19 +28,23 @@ export function WeekReportScreen({ navigation }: Props) {
   const { goals } = useGoals();
   const [gymLog, setGymLog] = useState<GymSession[]>([]);
   const [mealLog, setMealLog] = useState<MealEntry[]>([]);
+  const [weightLog, setWeightLog] = useState<WeightEntry[]>([]);
+  const [progressPhotos, setProgressPhotos] = useState<ProgressPhoto[]>([]);
   const [copied, setCopied] = useState("");
   useEffect(() => {
     loadGymLog().then(setGymLog);
     loadMealLog().then(setMealLog);
+    loadWeightLog().then(setWeightLog);
+    loadProgressPhotos().then(setProgressPhotos);
   }, []);
 
   const report = useMemo(
     () =>
       computeWeekReport(
-        { plan, timelineLog: log, water, waterSettings, entries, moodRange: wellnessGoals.moodRange, gymLog, goals, mealLog },
+        { plan, timelineLog: log, water, waterSettings, entries, moodRange: wellnessGoals.moodRange, gymLog, goals, mealLog, weightLog, progressPhotos },
         todayKey()
       ),
-    [plan, log, water, waterSettings, entries, wellnessGoals.moodRange, gymLog, goals, mealLog]
+    [plan, log, water, waterSettings, entries, wellnessGoals.moodRange, gymLog, goals, mealLog, weightLog, progressPhotos]
   );
   const text = reportText(report);
 

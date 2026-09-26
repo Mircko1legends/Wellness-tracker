@@ -33,6 +33,8 @@ interface TimelineContextValue {
   clearRoutine: () => Promise<void>;
   clearDiet: () => Promise<void>;
   setStep: (date: string, stepId: string, status: StepStatus) => Promise<void>;
+  /** Sets many steps at once (a notification's "Fatto"), without toggling ones already in that state. */
+  setSteps: (date: string, stepIds: string[], status: Exclude<StepStatus, null>) => Promise<void>;
   statusOf: (date: string, stepId: string) => StepStatus;
   updateSettings: (next: TimelineSettings) => Promise<void>;
   updateAi: (next: AiSettings) => Promise<void>;
@@ -92,6 +94,13 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
     await saveTimelineLog(next);
   };
 
+  const setSteps = async (date: string, stepIds: string[], status: Exclude<StepStatus, null>) => {
+    let next = log;
+    for (const id of stepIds) if (stepStatus(next, date, id) !== status) next = setStepStatus(next, date, id, status);
+    setLog(next);
+    await saveTimelineLog(next);
+  };
+
   const updateSettings = async (next: TimelineSettings) => {
     setSettings(next);
     await saveTimelineSettings(next);
@@ -123,6 +132,7 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
         clearRoutine: () => persistPlan({ ...plan, routine: [], routineSource: undefined }),
         clearDiet: () => persistPlan({ ...plan, meals: [], dietSource: undefined }),
         setStep,
+        setSteps,
         statusOf: (date, stepId) => stepStatus(log, date, stepId),
         updateSettings,
         updateAi,
