@@ -1,13 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { useAppReload } from "../backup/AppReload";
 import {
   chooseBackupFolder,
+  exportBackupJson,
   fileNameFromUri,
   getBackupFolder,
   getLastBackupAt,
   isBackupSupported,
+  restoreFromJson,
   restoreLatestBackup,
   runBackup,
 } from "../backup/backup";
@@ -18,6 +20,58 @@ function formatDateTime(ms: number): string {
   const d = new Date(ms);
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)} alle ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+async function pickBackupText(): Promise<string | null> {
+  const DocumentPicker = await import("expo-document-picker");
+  const result = await DocumentPicker.getDocumentAsync({ type: ["application/json", "*/*"], copyToCacheDirectory: true });
+  if (result.canceled || !result.assets?.length) return null;
+  const uri = result.assets[0].uri;
+  if (Platform.OS === "web") return (await fetch(uri)).text();
+  const { readAsStringAsync } = await import("expo-file-system/legacy");
+  return readAsStringAsync(uri);
+}
+
+function downloadOnWeb(json: string) {
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `wellness-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+/** Moving data between the web version and the installed app, or restoring any backup file. */
+function FileTransfer({ onMessage }: { onMessage: (m: string) => void }) {
+  const reload = useAppReload();
+  const restoreFile = async () => {
+    const json = await pickBackupText();
+    if (!json) return;
+    const result = await restoreFromJson(json);
+    if (result.status === "restored") {
+      onMessage(`Ripristinato il backup del ${formatDateTime(result.createdAt)}.`);
+      reload();
+    } else {
+      onMessage("Il file scelto non è un backup di questa app.");
+    }
+  };
+  return (
+    <View style={styles.spaced}>
+      <View style={styles.row}>
+        {Platform.OS === "web" && (
+          <PressableScale style={[styles.button, { flex: 1 }]} onPress={async () => downloadOnWeb(await exportBackupJson())}>
+            <Text style={styles.buttonText}>Scarica backup</Text>
+          </PressableScale>
+        )}
+        <PressableScale style={[styles.ghost, { flex: 1 }]} onPress={restoreFile}>
+          <Text style={styles.ghostText}>Ripristina da un file</Text>
+        </PressableScale>
+      </View>
+    </View>
+  );
 }
 
 /** `compact` shows nothing once a folder is set: used on the dashboard as a one-time nudge. */
@@ -38,6 +92,23 @@ export function BackupCard({ compact = false }: { compact?: boolean }) {
     refresh();
   }, []);
 
+  if (Platform.OS === "web") {
+    if (compact) return null;
+    return (
+      <View style={styles.card}>
+        <View style={styles.titleRow}>
+          <Ionicons name="shield-checkmark-outline" size={18} color={colors.primary} />
+          <Text style={styles.title}>Backup dei dati</Text>
+        </View>
+        <Text style={styles.hint}>
+          Nella versione web i dati restano nel browser. Scarica un backup per conservarli o per passarli all'app
+          Android: lì usa "Ripristina da un file".
+        </Text>
+        <FileTransfer onMessage={setMessage} />
+        {message && <Text style={styles.message}>{message}</Text>}
+      </View>
+    );
+  }
   if (!isBackupSupported || folder === undefined) return null;
   if (compact && folder) return null;
 
@@ -131,6 +202,8 @@ export function BackupCard({ compact = false }: { compact?: boolean }) {
             </View>
           </View>
         ))}
+
+      {!compact && <FileTransfer onMessage={setMessage} />}
 
       {!folder && (
         <Text style={[styles.hint, styles.spaced]}>

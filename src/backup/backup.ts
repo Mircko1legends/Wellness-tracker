@@ -121,6 +121,24 @@ export function parseBackup(json: string): BackupFile | null {
   }
 }
 
+export async function exportBackupJson(): Promise<string> {
+  return JSON.stringify({ app: "wellness-tracker", version: BACKUP_FORMAT_VERSION, createdAt: Date.now(), data: await takeSnapshot() });
+}
+
+async function writeSnapshot(data: StorageSnapshot) {
+  const currentKeys = (await AsyncStorage.getAllKeys()).filter((k) => k.startsWith(DATA_PREFIX));
+  await AsyncStorage.multiRemove(currentKeys);
+  await AsyncStorage.multiSet(Object.entries(data).filter(([k]) => k.startsWith(DATA_PREFIX)));
+}
+
+/** Restores from a backup file picked by the user (e.g. one downloaded from the web version). */
+export async function restoreFromJson(json: string): Promise<RestoreResult> {
+  const backup = parseBackup(json);
+  if (!backup) return { status: "none" };
+  await writeSnapshot(backup.data);
+  return { status: "restored", createdAt: backup.createdAt };
+}
+
 /** Finds the newest backup in the chosen folder and writes it back into app storage. */
 export type RestoreResult =
   | { status: "restored"; createdAt: number }
@@ -142,9 +160,7 @@ export async function restoreLatestBackup(): Promise<RestoreResult> {
     const backup = parseBackup(await SAF.readAsStringAsync(newest));
     if (!backup) return { status: "none" };
 
-    const currentKeys = (await AsyncStorage.getAllKeys()).filter((k) => k.startsWith(DATA_PREFIX));
-    await AsyncStorage.multiRemove(currentKeys);
-    await AsyncStorage.multiSet(Object.entries(backup.data));
+    await writeSnapshot(backup.data);
     return { status: "restored", createdAt: backup.createdAt };
   } catch {
     return { status: "no-access" };
