@@ -16,6 +16,7 @@ import {
   saveTimelineSettings,
   TimelineSettings,
 } from "../storage/storage";
+import { syncBrainstormReminders } from "../report/notifications";
 import { syncTimelineNotifications } from "../timeline/notifications";
 import { defaultPlanPack, PlanPack } from "../timeline/pack";
 import { buildMeals, buildRoutine, EMPTY_PLAN, setStepStatus, StepStatus, stepStatus, TimelineDayLog, TimelinePlan } from "../timeline/plan";
@@ -67,7 +68,9 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
       setSettings(s);
       setAi(a);
       setLoading(false);
-      syncTimelineNotifications(p, s.notifyEachStep).catch(() => {});
+      syncTimelineNotifications(p, s.notifyEachStep)
+        .then(() => syncBrainstormReminders())
+        .catch(() => {});
     })();
   }, []);
 

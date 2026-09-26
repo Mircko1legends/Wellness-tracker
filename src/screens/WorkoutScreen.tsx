@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { WorkoutDayCard } from "../components/WorkoutDayCard";
@@ -11,6 +12,7 @@ import { ExerciseSetLog } from "../types";
 import { todayKey } from "../utils/date";
 
 export function WorkoutScreen() {
+  const navigation = useNavigation();
   const { tierProgress, workoutLogs, workoutLoggedToday, logWorkout } = useWellness();
   const [feedback, setFeedback] = useState<{ xp: number; leveledUp: boolean; newLevel: number } | null>(
     null
@@ -33,6 +35,7 @@ export function WorkoutScreen() {
         eyebrow={`Livello ${tier.level}${tierProgress.isMaxTier ? " · Max" : ""}`}
         title={tier.name}
         subtitle={tier.description}
+        onBack={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.progressCard}>

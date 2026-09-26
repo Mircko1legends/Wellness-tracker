@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { BRAINSTORM_START } from "../report/weekly";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BackupCard } from "../components/BackupCard";
@@ -92,6 +93,19 @@ export function DashboardScreen() {
               Non hai ancora registrato la giornata di oggi. Vai su "Registra" per aggiungerla.
             </Text>
           </View>
+        )}
+
+        {new Date().getDay() === 0 && new Date().getHours() >= 17 && todayKey() >= BRAINSTORM_START && (
+          <TouchableOpacity
+            style={styles.checkinCard}
+            onPress={() => navigation.navigate("More", { screen: "WeekReport" })}
+          >
+            <Ionicons name="bulb-outline" size={18} color={colors.primary} />
+            <Text style={styles.checkinText}>
+              Domenica sera: apri il resoconto della settimana e portalo al brainstorm.
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+          </TouchableOpacity>
         )}
 
         {checkin.hasConcerns && (

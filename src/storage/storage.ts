@@ -17,6 +17,7 @@ import { AiSettings, DEFAULT_AI_SETTINGS } from "../import/gemini";
 import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 import { LifeGoal } from "../goals/goals";
 import { DEFAULT_WATER_SETTINGS, WaterDay, WaterSettings } from "../water/water";
+import { GymSession } from "../gym/gym";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -38,6 +39,7 @@ const KEYS = {
   waterLog: "@wellness/waterLog",
   dayMode: "@wellness/dayMode",
   defaultPlanApplied: "@wellness/defaultPlanApplied",
+  gymLog: "@wellness/gymLog",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -251,6 +253,9 @@ export const saveWaterSettings = (s: WaterSettings) => AsyncStorage.setItem(KEYS
 export const loadWaterLog = () => loadJson<WaterDay[]>(KEYS.waterLog, []);
 export const saveWaterLog = (log: WaterDay[]) => AsyncStorage.setItem(KEYS.waterLog, JSON.stringify(log));
 
+export const loadGymLog = () => loadJson<GymSession[]>(KEYS.gymLog, []);
+export const saveGymLog = (log: GymSession[]) => AsyncStorage.setItem(KEYS.gymLog, JSON.stringify(log));
+
 /** The date on which "giornata no" was switched on; it only applies to that day. */
 export const loadMinimalDay = async () => (await AsyncStorage.getItem(KEYS.dayMode)) ?? "";
 export const saveMinimalDay = (date: string) => AsyncStorage.setItem(KEYS.dayMode, date);
@@ -280,5 +285,6 @@ export async function clearAllData(): Promise<void> {
     KEYS.waterLog,
     KEYS.dayMode,
     KEYS.defaultPlanApplied,
+    KEYS.gymLog,
   ]);
 }

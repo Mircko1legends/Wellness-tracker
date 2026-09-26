@@ -5,7 +5,7 @@ import React from "react";
 import { DashboardScreen } from "../screens/DashboardScreen";
 import { DietScreen } from "../screens/DietScreen";
 import { LogEntryScreen } from "../screens/LogEntryScreen";
-import { WorkoutScreen } from "../screens/WorkoutScreen";
+import { WorkoutStack } from "./WorkoutStack";
 import { colors } from "../theme";
 import { DayStack } from "./DayStack";
 import { MoreStack } from "./MoreStack";
@@ -48,7 +48,7 @@ export function RootNavigator() {
         <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Oggi" }} />
         <Tab.Screen name="DayTab" component={DayStack} options={{ title: "Giornata" }} />
         <Tab.Screen name="Log" component={LogEntryScreen} options={{ title: "Registra" }} />
-        <Tab.Screen name="Workout" component={WorkoutScreen} options={{ title: "Allenamento" }} />
+        <Tab.Screen name="Workout" component={WorkoutStack} options={{ title: "Allenamento" }} />
         <Tab.Screen name="Diet" component={DietScreen} options={{ title: "Dieta" }} />
         <Tab.Screen name="More" component={MoreStack} options={{ title: "Altro" }} />
       </Tab.Navigator>
