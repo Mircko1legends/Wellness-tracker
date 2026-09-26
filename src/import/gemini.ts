@@ -22,13 +22,13 @@ Non inventare alimenti o quantità. Rispondi solo con JSON in questo formato:
 
 export class AiReadError extends Error {}
 
-type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{
+export type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{
   ok: boolean;
   status: number;
   json: () => Promise<any>;
 }>;
 
-async function callGemini(prompt: string, base64: string, mimeType: string, settings: AiSettings, fetchImpl: FetchLike): Promise<any> {
+export async function callGemini(prompt: string, base64: string, mimeType: string, settings: AiSettings, fetchImpl: FetchLike): Promise<any> {
   if (!settings.geminiApiKey.trim()) throw new AiReadError("Manca la chiave API di Gemini: aggiungila nelle impostazioni di importazione.");
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(settings.model)}:generateContent`;
   let res;

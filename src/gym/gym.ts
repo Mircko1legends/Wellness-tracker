@@ -9,6 +9,9 @@ export interface GymExercise {
   /** kg added when every set hits the top of the range (per dumbbell for dumbbell lifts). */
   increment: number;
   startKg: number;
+  /** Rest between sets: longer on heavy multi-joint lifts, where short rests cut the reps (and the growth stimulus). */
+  restSec: number;
+  videoQuery: string;
 }
 
 export interface GymSet {
@@ -26,16 +29,16 @@ export interface GymSession {
 // Mirrors the "Pesi 45′" steps of the built-in plan (core work stays a simple step in the timeline).
 export const PROGRAMS: Record<ProgramId, GymExercise[]> = {
   A: [
-    { id: "squat", name: "Squat (o goblet squat)", sets: 3, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 20 },
-    { id: "panca-manubri", name: "Panca piana con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 10 },
-    { id: "rematore", name: "Rematore con manubrio o al cavo", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 12 },
-    { id: "stacco-rumeno", name: "Stacco rumeno", sets: 2, repsMin: 8, repsMax: 10, increment: 2.5, startKg: 20 },
+    { id: "squat", name: "Squat (o goblet squat)", sets: 3, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 20, restSec: 180, videoQuery: "squat tecnica corretta" },
+    { id: "panca-manubri", name: "Panca piana con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 10, restSec: 150, videoQuery: "panca piana manubri tecnica corretta" },
+    { id: "rematore", name: "Rematore con manubrio o al cavo", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 12, restSec: 120, videoQuery: "rematore manubrio tecnica corretta" },
+    { id: "stacco-rumeno", name: "Stacco rumeno", sets: 2, repsMin: 8, repsMax: 10, increment: 2.5, startKg: 20, restSec: 180, videoQuery: "stacco rumeno tecnica corretta" },
   ],
   B: [
-    { id: "pressa", name: "Pressa (o affondi)", sets: 3, repsMin: 8, repsMax: 12, increment: 5, startKg: 40 },
-    { id: "military-manubri", name: "Military press con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 10, increment: 1, startKg: 8 },
-    { id: "lat-machine", name: "Lat machine (o trazioni)", sets: 3, repsMin: 6, repsMax: 12, increment: 2.5, startKg: 30 },
-    { id: "hip-thrust", name: "Hip thrust (o leg curl)", sets: 2, repsMin: 10, repsMax: 12, increment: 5, startKg: 30 },
+    { id: "pressa", name: "Pressa (o affondi)", sets: 3, repsMin: 8, repsMax: 12, increment: 5, startKg: 40, restSec: 150, videoQuery: "leg press tecnica corretta" },
+    { id: "military-manubri", name: "Military press con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 10, increment: 1, startKg: 8, restSec: 150, videoQuery: "military press manubri tecnica corretta" },
+    { id: "lat-machine", name: "Lat machine (o trazioni)", sets: 3, repsMin: 6, repsMax: 12, increment: 2.5, startKg: 30, restSec: 120, videoQuery: "lat machine tecnica corretta" },
+    { id: "hip-thrust", name: "Hip thrust (o leg curl)", sets: 2, repsMin: 10, repsMax: 12, increment: 5, startKg: 30, restSec: 120, videoQuery: "hip thrust tecnica corretta" },
   ],
 };
 
@@ -118,4 +121,25 @@ export function formatSets(sets: GymSet[]): string {
 
 export function fmtKg(kg: number): string {
   return String(kg).replace(".", ",");
+}
+
+export function formatRest(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const r = Math.max(0, Math.round(sec % 60));
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+/** YouTube video id from a watch/short/embed/youtu.be link. */
+export function youtubeId(url: string): string | null {
+  const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.exec(url);
+  return m ? m[1] : null;
+}
+
+export function youtubeSearchUrl(query: string): string {
+  return `https://m.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+
+/** Official embeddable player in privacy-enhanced mode. */
+export function youtubeEmbedUrl(id: string): string {
+  return `https://www.youtube-nocookie.com/embed/${id}?playsinline=1&rel=0`;
 }

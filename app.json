@@ -18,7 +18,10 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.mircko1legends.wellnesstracker"
+      "package": "com.mircko1legends.wellnesstracker",
+      "permissions": [
+        "android.permission.VIBRATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,7 +30,15 @@
       "baseUrl": "/Wellness-tracker"
     },
     "plugins": [
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "La fotocamera serve per fotografare i pasti e stimarne i valori nutrizionali.",
+          "photosPermission": "L'accesso alle foto serve per analizzare un pasto già fotografato.",
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }

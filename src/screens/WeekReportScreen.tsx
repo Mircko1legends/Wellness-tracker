@@ -11,7 +11,8 @@ import { useWellness } from "../context/WellnessContext";
 import { GymSession } from "../gym/gym";
 import type { MoreStackParamList } from "../navigation/MoreStack";
 import { AREA_LABELS, AreaId, computeWeekReport, percent, reportText } from "../report/weekly";
-import { loadGymLog } from "../storage/storage";
+import { MealEntry } from "../nutrition/meals";
+import { loadGymLog, loadMealLog } from "../storage/storage";
 import { colors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
 import { formatMood } from "../utils/mood";
@@ -24,18 +25,20 @@ export function WeekReportScreen({ navigation }: Props) {
   const { entries, goals: wellnessGoals } = useWellness();
   const { goals } = useGoals();
   const [gymLog, setGymLog] = useState<GymSession[]>([]);
+  const [mealLog, setMealLog] = useState<MealEntry[]>([]);
   const [copied, setCopied] = useState("");
   useEffect(() => {
     loadGymLog().then(setGymLog);
+    loadMealLog().then(setMealLog);
   }, []);
 
   const report = useMemo(
     () =>
       computeWeekReport(
-        { plan, timelineLog: log, water, waterSettings, entries, moodRange: wellnessGoals.moodRange, gymLog, goals },
+        { plan, timelineLog: log, water, waterSettings, entries, moodRange: wellnessGoals.moodRange, gymLog, goals, mealLog },
         todayKey()
       ),
-    [plan, log, water, waterSettings, entries, wellnessGoals.moodRange, gymLog, goals]
+    [plan, log, water, waterSettings, entries, wellnessGoals.moodRange, gymLog, goals, mealLog]
   );
   const text = reportText(report);
 
@@ -92,6 +95,9 @@ export function WeekReportScreen({ navigation }: Props) {
             Umore: {report.mood.values.length ? `${report.mood.values.map((m) => formatMood(m.mood)).join(" ")} · ${report.mood.stableDays}/${report.mood.values.length} giorni nella zona stabile` : "non registrato"}
           </Text>
           <Text style={styles.line}>Palestra: {report.gym.sessions} sessioni registrate</Text>
+          <Text style={styles.line}>
+            Pasti: {report.meals.days ? `media ${report.meals.avgKcal} kcal · ${report.meals.avgProtein} g proteine (${report.meals.days} giorni registrati)` : "non registrati"}
+          </Text>
           {report.mostSkipped.length > 0 && (
             <Text style={styles.line}>Più saltate: {report.mostSkipped.map((m) => `${m.title} (${m.skipped})`).join(", ")}</Text>
           )}

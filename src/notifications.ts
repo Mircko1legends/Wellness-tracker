@@ -8,10 +8,11 @@ const MEDICATION_PREFIX = "medication-";
 export const isNotificationsSupported = Platform.OS !== "web";
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
+  handleNotification: async (notification) => ({
     shouldShowBanner: true,
     shouldShowList: true,
-    shouldPlaySound: false,
+    // The rest timer must ring even with the app open.
+    shouldPlaySound: notification.request.identifier.startsWith("rest-"),
     shouldSetBadge: false,
   }),
 });

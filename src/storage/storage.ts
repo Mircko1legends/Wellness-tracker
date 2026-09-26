@@ -18,6 +18,7 @@ import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 import { LifeGoal } from "../goals/goals";
 import { DEFAULT_WATER_SETTINGS, WaterDay, WaterSettings } from "../water/water";
 import { GymSession } from "../gym/gym";
+import { MealEntry } from "../nutrition/meals";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -40,6 +41,8 @@ const KEYS = {
   dayMode: "@wellness/dayMode",
   defaultPlanApplied: "@wellness/defaultPlanApplied",
   gymLog: "@wellness/gymLog",
+  gymVideos: "@wellness/gymVideos",
+  mealLog: "@wellness/mealLog",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -255,6 +258,11 @@ export const saveWaterLog = (log: WaterDay[]) => AsyncStorage.setItem(KEYS.water
 
 export const loadGymLog = () => loadJson<GymSession[]>(KEYS.gymLog, []);
 export const saveGymLog = (log: GymSession[]) => AsyncStorage.setItem(KEYS.gymLog, JSON.stringify(log));
+/** Exercise id → YouTube video id chosen by the user. */
+export const loadGymVideos = () => loadJson<Record<string, string>>(KEYS.gymVideos, {});
+export const saveGymVideos = (v: Record<string, string>) => AsyncStorage.setItem(KEYS.gymVideos, JSON.stringify(v));
+export const loadMealLog = () => loadJson<MealEntry[]>(KEYS.mealLog, []);
+export const saveMealLog = (log: MealEntry[]) => AsyncStorage.setItem(KEYS.mealLog, JSON.stringify(log));
 
 /** The date on which "giornata no" was switched on; it only applies to that day. */
 export const loadMinimalDay = async () => (await AsyncStorage.getItem(KEYS.dayMode)) ?? "";
@@ -286,5 +294,7 @@ export async function clearAllData(): Promise<void> {
     KEYS.dayMode,
     KEYS.defaultPlanApplied,
     KEYS.gymLog,
+    KEYS.gymVideos,
+    KEYS.mealLog,
   ]);
 }

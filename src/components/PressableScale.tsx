@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Animated, Pressable, StyleProp, ViewStyle } from "react-native";
+import { Animated, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 interface Props {
   onPress: () => void;
@@ -19,8 +19,12 @@ export function PressableScale({ onPress, style, children }: Props) {
     }).start();
   };
 
+  // Sizing must live on the outer Pressable, or "flex: 1" buttons don't stretch in a row.
+  const flat = StyleSheet.flatten(style) ?? {};
+  const outer: ViewStyle = { flex: flat.flex, alignSelf: flat.alignSelf, width: flat.width };
+
   return (
-    <Pressable onPress={onPress} onPressIn={() => animateTo(0.96)} onPressOut={() => animateTo(1)}>
+    <Pressable style={outer} onPress={onPress} onPressIn={() => animateTo(0.96)} onPressOut={() => animateTo(1)}>
       <Animated.View style={[style, { transform: [{ scale }] }]}>{children}</Animated.View>
     </Pressable>
   );

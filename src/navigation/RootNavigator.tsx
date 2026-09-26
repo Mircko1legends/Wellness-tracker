@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { DashboardScreen } from "../screens/DashboardScreen";
-import { DietScreen } from "../screens/DietScreen";
+import { DietStack } from "./DietStack";
 import { LogEntryScreen } from "../screens/LogEntryScreen";
 import { WorkoutStack } from "./WorkoutStack";
 import { colors } from "../theme";
@@ -49,7 +49,7 @@ export function RootNavigator() {
         <Tab.Screen name="DayTab" component={DayStack} options={{ title: "Giornata" }} />
         <Tab.Screen name="Log" component={LogEntryScreen} options={{ title: "Registra" }} />
         <Tab.Screen name="Workout" component={WorkoutStack} options={{ title: "Allenamento" }} />
-        <Tab.Screen name="Diet" component={DietScreen} options={{ title: "Dieta" }} />
+        <Tab.Screen name="Diet" component={DietStack} options={{ title: "Dieta" }} />
         <Tab.Screen name="More" component={MoreStack} options={{ title: "Altro" }} />
       </Tab.Navigator>
     </NavigationContainer>

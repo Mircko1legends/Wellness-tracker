@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
@@ -10,6 +11,7 @@ import { computeMealPlanTotals, generateDailyMealPlan } from "../utils/mealPlanG
 import { calculateLeanBulkTargets } from "../utils/nutrition";
 
 export function DietScreen() {
+  const navigation = useNavigation();
   const { bodyweightKg, updateBodyweightKg } = useWellness();
   const targets = useMemo(() => calculateLeanBulkTargets(bodyweightKg), [bodyweightKg]);
   const todaysMeals = useMemo(() => generateDailyMealPlan(), []);
@@ -22,7 +24,7 @@ export function DietScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Dieta" subtitle="Massa magra, budget minimo" />
+      <ScreenHeader title="Dieta" subtitle="Massa magra, budget minimo" onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.card}>
           <Text style={styles.sectionLabel}>Il tuo peso corporeo</Text>

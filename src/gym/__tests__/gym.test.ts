@@ -1,4 +1,4 @@
-import { GymSession, lastSessionWith, PROGRAMS, programFromTitles, sessionVolume, suggestNext, upsertSession, formatSets } from "../gym";
+import { formatRest, youtubeId, GymSession, lastSessionWith, PROGRAMS, programFromTitles, sessionVolume, suggestNext, upsertSession, formatSets } from "../gym";
 
 const squat = PROGRAMS.A[0]; // 3 × 6–10, +2.5
 
@@ -36,5 +36,13 @@ describe("gym log", () => {
     expect(lastSessionWith(log, "squat", "2026-10-09")?.date).toBe("2026-10-05");
     expect(sessionVolume(log[1])).toBe(400);
     expect(formatSets([{ kg: 12.5, reps: 8 }, { kg: 12.5, reps: 7 }])).toBe("12,5 kg × 8, 7");
+  });
+
+  it("formats rest and reads YouTube links", () => {
+    expect(formatRest(150)).toBe("2:30");
+    expect(youtubeId("https://www.youtube.com/watch?v=abcdefghijk&t=3")).toBe("abcdefghijk");
+    expect(youtubeId("https://m.youtube.com/watch?app=m&v=ABCDEFGHIJK")).toBe("ABCDEFGHIJK");
+    expect(youtubeId("https://youtu.be/abc_def-123")).toBe("abc_def-123");
+    expect(youtubeId("https://m.youtube.com/results?search_query=squat")).toBeNull();
   });
 });

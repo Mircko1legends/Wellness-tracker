@@ -1,12 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useTimeline } from "../context/TimelineContext";
 import {
   bestKg,
   fmtKg,
+  formatRest,
   formatSets,
   GymExercise,
   GymSession,
@@ -18,9 +19,11 @@ import {
   sessionVolume,
   suggestNext,
   upsertSession,
+  youtubeSearchUrl,
 } from "../gym/gym";
+import { cancelRestAlarm, ringNow, scheduleRestAlarm } from "../gym/restTimer";
 import type { WorkoutStackParamList } from "../navigation/WorkoutStack";
-import { loadGymLog, saveGymLog } from "../storage/storage";
+import { loadGymLog, loadGymVideos, saveGymLog } from "../storage/storage";
 import { colors, radii, spacing } from "../theme";
 import { dayTimeline } from "../timeline/plan";
 import { formatShortLabel, todayKey } from "../utils/date";
@@ -69,12 +72,14 @@ function ExerciseCard({
   date,
   sets,
   onChange,
+  onVideo,
 }: {
   exercise: GymExercise;
   log: GymSession[];
   date: string;
   sets: DraftSet[];
   onChange: (sets: DraftSet[]) => void;
+  onVideo: () => void;
 }) {
   const last = lastSessionWith(log, exercise.id, date);
   const suggestion = suggestNext(exercise, last?.exercises[exercise.id]);
@@ -82,9 +87,15 @@ function ExerciseCard({
   const update = (i: number, patch: Partial<DraftSet>) => onChange(sets.map((s, j) => (j === i ? { ...s, ...patch } : s)));
   return (
     <View style={styles.card}>
-      <Text style={styles.exName}>{exercise.name}</Text>
+      <View style={styles.exHeader}>
+        <Text style={[styles.exName, { flex: 1 }]}>{exercise.name}</Text>
+        <TouchableOpacity accessibilityLabel={`Video tecnica ${exercise.name}`} style={styles.videoBtn} onPress={onVideo}>
+          <Ionicons name="logo-youtube" size={16} color={colors.text} />
+          <Text style={styles.videoText}>Tecnica</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.hint}>
-        {exercise.sets} × {exercise.repsMin}–{exercise.repsMax}
+        {exercise.sets} × {exercise.repsMin}–{exercise.repsMax} · recupero {formatRest(exercise.restSec)}
         {last ? `  ·  ultima volta (${formatShortLabel(last.date)}): ${formatSets(last.exercises[exercise.id])}` : ""}
       </Text>
       <Text style={styles.suggestion}>{suggestion.note}</Text>
@@ -119,6 +130,58 @@ export function GymScreen({ navigation }: Props) {
   const [program, setProgram] = useState<ProgramId>("A");
   const [draft, setDraft] = useState<Draft>({});
   const logRef = useRef<GymSession[]>([]);
+  const [rest, setRest] = useState<{ endAt: number; total: number; exercise: string } | null>(null);
+  const [now, setNow] = useState(Date.now());
+  const [restDone, setRestDone] = useState("");
+
+  useEffect(() => {
+    if (!rest) return;
+    const timer = setInterval(() => {
+      const t = Date.now();
+      setNow(t);
+      if (t >= rest.endAt) {
+        ringNow();
+        setRestDone(`Recupero finito: prossima serie di ${rest.exercise}`);
+        setRest(null);
+      }
+    }, 250);
+    return () => clearInterval(timer);
+  }, [rest]);
+
+  useEffect(() => {
+    if (!restDone) return;
+    const t = setTimeout(() => setRestDone(""), 8000);
+    return () => clearTimeout(t);
+  }, [restDone]);
+
+  const startRest = (exercise: GymExercise, seconds = exercise.restSec) => {
+    const endAt = Date.now() + seconds * 1000;
+    setRestDone("");
+    setNow(Date.now());
+    setRest({ endAt, total: seconds, exercise: exercise.name.replace(/ \(.*\)$/, "") });
+    scheduleRestAlarm(seconds, exercise.name.replace(/ \(.*\)$/, "")).catch(() => {});
+  };
+
+  const addRest = (delta: number) => {
+    if (!rest) return;
+    const endAt = Math.max(Date.now() + 1000, rest.endAt + delta * 1000);
+    setRest({ ...rest, endAt, total: rest.total + delta });
+    scheduleRestAlarm((endAt - Date.now()) / 1000, rest.exercise).catch(() => {});
+  };
+
+  const stopRest = () => {
+    setRest(null);
+    cancelRestAlarm().catch(() => {});
+  };
+
+  const openVideo = async (exercise: GymExercise) => {
+    if (Platform.OS === "web") {
+      const id = (await loadGymVideos())[exercise.id];
+      Linking.openURL(id ? `https://www.youtube.com/watch?v=${id}` : youtubeSearchUrl(exercise.videoQuery));
+      return;
+    }
+    navigation.navigate("ExerciseVideo", { exerciseId: exercise.id, name: exercise.name, query: exercise.videoQuery });
+  };
 
   useEffect(() => {
     loadGymLog().then((l) => {
@@ -138,6 +201,11 @@ export function GymScreen({ navigation }: Props) {
   };
 
   const changeExercise = async (exerciseId: string, sets: DraftSet[]) => {
+    const before = draft[exerciseId] ?? [];
+    if (sets.some((set, i) => set.done && !before[i]?.done)) {
+      const exercise = PROGRAMS[program].find((e) => e.id === exerciseId);
+      if (exercise) startRest(exercise);
+    }
     const nextDraft = { ...draft, [exerciseId]: sets };
     setDraft(nextDraft);
     const exercises: GymSession["exercises"] = {};
@@ -179,12 +247,13 @@ export function GymScreen({ navigation }: Props) {
           ))}
         </View>
         <Text style={styles.hint}>
-          Dopo ogni serie correggi kg e ripetizioni se serve e tocca ✓. Si salva da solo. Se il maestro o un istruttore ti
+          Dopo ogni serie correggi kg e ripetizioni se serve e tocca ✓: si salva da solo e parte il recupero, che suona
+          anche a schermo spento. Se il maestro o un istruttore ti
           dice di cambiare esercizio o carico, ascolta loro.
         </Text>
 
         {PROGRAMS[program].map((ex) => (
-          <ExerciseCard key={ex.id} exercise={ex} log={log} date={date} sets={draft[ex.id] ?? []} onChange={(s) => changeExercise(ex.id, s)} />
+          <ExerciseCard key={ex.id} exercise={ex} log={log} date={date} sets={draft[ex.id] ?? []} onChange={(s) => changeExercise(ex.id, s)} onVideo={() => openVideo(ex)} />
         ))}
 
         {progress.length > 0 && (
@@ -213,13 +282,35 @@ export function GymScreen({ navigation }: Props) {
           <Text style={styles.link}>Allenamento a corpo libero (per i giorni fuori dalla palestra)</Text>
         </TouchableOpacity>
       </ScrollView>
+      {rest && (
+        <View style={styles.timer} accessibilityLiveRegion="polite">
+          <View style={{ flex: 1 }}>
+            <Text style={styles.timerLabel}>Recupero · {rest.exercise}</Text>
+            <Text style={styles.timerValue}>{formatRest(Math.ceil((rest.endAt - now) / 1000))}</Text>
+          </View>
+          <TouchableOpacity style={styles.timerBtn} onPress={() => addRest(-15)}>
+            <Text style={styles.timerBtnText}>−15″</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.timerBtn} onPress={() => addRest(30)}>
+            <Text style={styles.timerBtnText}>+30″</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.timerBtn} onPress={stopRest}>
+            <Text style={styles.timerBtnText}>Salta</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {!rest && restDone ? (
+        <TouchableOpacity style={[styles.timer, styles.timerDone]} onPress={() => setRestDone("")}>
+          <Text style={styles.timerDoneText}>{restDone}</Text>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.md, paddingBottom: spacing.xl },
+  content: { padding: spacing.md, paddingBottom: 120 },
   row: { flexDirection: "row", gap: spacing.sm, marginBottom: spacing.sm },
   tab: { flex: 1, paddingVertical: spacing.sm, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, alignItems: "center" },
   tabOn: { backgroundColor: colors.primary, borderColor: colors.primary },
@@ -235,6 +326,29 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   cardTitle: { fontSize: 15, fontWeight: "800", color: colors.text, marginBottom: 6 },
+  exHeader: { flexDirection: "row", alignItems: "flex-start", gap: spacing.sm },
+  videoBtn: { flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: "#C4302B", borderRadius: radii.pill, paddingHorizontal: 10, paddingVertical: 4 },
+  videoText: { color: colors.text, fontSize: 11, fontWeight: "800" },
+  timer: {
+    position: "absolute",
+    left: spacing.md,
+    right: spacing.md,
+    bottom: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: colors.cardAlt,
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+  },
+  timerLabel: { color: colors.textMuted, fontSize: 12, fontWeight: "700" },
+  timerValue: { color: colors.primary, fontSize: 30, fontWeight: "900", fontVariant: ["tabular-nums"] },
+  timerBtn: { paddingHorizontal: 10, paddingVertical: 8, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border },
+  timerBtnText: { color: colors.text, fontWeight: "700", fontSize: 13 },
+  timerDone: { backgroundColor: colors.primary },
+  timerDoneText: { color: colors.onPrimary, fontWeight: "800", fontSize: 14, flex: 1, textAlign: "center" },
   exName: { fontSize: 15, fontWeight: "800", color: colors.text, marginBottom: 2 },
   suggestion: { fontSize: 12, color: colors.primary, marginBottom: spacing.sm, lineHeight: 17 },
   setRow: { flexDirection: "row", alignItems: "center", gap: 6, paddingVertical: 4, borderRadius: radii.sm },
