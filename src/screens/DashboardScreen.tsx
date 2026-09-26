@@ -2,6 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BackupCard } from "../components/BackupCard";
+import { useLens } from "../context/LensContext";
+import { LensTonightCard } from "./LensScreen";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
@@ -24,6 +27,7 @@ export function DashboardScreen() {
     toggleMedicationTakenToday,
     setsCompletedToday,
   } = useWellness();
+  const lens = useLens();
   const entry = getEntryForDate(todayKey());
 
   const checkin = useMemo(
@@ -72,6 +76,8 @@ export function DashboardScreen() {
         }
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <BackupCard compact />
+        {(lens.settings.enabled || !!lens.settings.lensStartDate) && <LensTonightCard />}
         {!entry && (
           <View style={styles.reminderCard}>
             <Ionicons name="alert-circle-outline" size={18} color={colors.primary} />

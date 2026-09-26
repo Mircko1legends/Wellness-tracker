@@ -10,6 +10,7 @@ import {
   WorkoutLogEntry,
 } from "../types";
 import { EMPTY_FINANCE, FinanceData } from "../utils/finance";
+import { DEFAULT_LENS_SETTINGS, LensDay, LensSettings } from "../utils/lens";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -20,6 +21,8 @@ const KEYS = {
   medicationLogs: "@wellness/medicationLogs",
   bodyweightKg: "@wellness/bodyweightKg",
   finance: "@wellness/finance",
+  lens: "@wellness/lens",
+  lensLog: "@wellness/lensLog",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -164,6 +167,34 @@ export async function saveFinance(data: FinanceData): Promise<void> {
   await AsyncStorage.setItem(KEYS.finance, JSON.stringify(data));
 }
 
+export async function loadLensSettings(): Promise<LensSettings> {
+  const raw = await AsyncStorage.getItem(KEYS.lens);
+  if (!raw) return DEFAULT_LENS_SETTINGS;
+  try {
+    return { ...DEFAULT_LENS_SETTINGS, ...JSON.parse(raw) } as LensSettings;
+  } catch {
+    return DEFAULT_LENS_SETTINGS;
+  }
+}
+
+export async function saveLensSettings(settings: LensSettings): Promise<void> {
+  await AsyncStorage.setItem(KEYS.lens, JSON.stringify(settings));
+}
+
+export async function loadLensLog(): Promise<LensDay[]> {
+  const raw = await AsyncStorage.getItem(KEYS.lensLog);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as LensDay[];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveLensLog(log: LensDay[]): Promise<void> {
+  await AsyncStorage.setItem(KEYS.lensLog, JSON.stringify(log));
+}
+
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
     KEYS.entries,
@@ -174,5 +205,7 @@ export async function clearAllData(): Promise<void> {
     KEYS.medicationLogs,
     KEYS.bodyweightKg,
     KEYS.finance,
+    KEYS.lens,
+    KEYS.lensLog,
   ]);
 }

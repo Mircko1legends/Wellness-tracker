@@ -2,6 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Alert, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { useAppReload } from "../backup/AppReload";
+import { BackupCard } from "../components/BackupCard";
 import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
@@ -13,6 +15,7 @@ import { exportEntries } from "../utils/csvExport";
 export function SettingsScreen() {
   const navigation = useNavigation();
   const { entries, reminderSettings, updateReminderSettings, resetAllData } = useWellness();
+  const reload = useAppReload();
   const [enabled, setEnabled] = useState(reminderSettings.enabled);
   const [hour, setHour] = useState(reminderSettings.hour);
   const [minute, setMinute] = useState(reminderSettings.minute);
@@ -59,6 +62,8 @@ export function SettingsScreen() {
           onPress: async () => {
             await resetAllData();
             setEnabled(false);
+            // Remounts the lens provider, which pushes the now-disabled settings to the native alarm.
+            reload();
           },
         },
       ]
@@ -69,6 +74,7 @@ export function SettingsScreen() {
     <View style={styles.container}>
       <ScreenHeader title="Impostazioni" onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content}>
+      <BackupCard />
       <View style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={{ flex: 1 }}>

@@ -3,6 +3,7 @@ import React from "react";
 import { CheckinScreen } from "../screens/CheckinScreen";
 import { FinanceScreen } from "../screens/FinanceScreen";
 import { GoalsScreen } from "../screens/GoalsScreen";
+import { LensScreen } from "../screens/LensScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { MedicationsScreen } from "../screens/MedicationsScreen";
 import { MissionsScreen } from "../screens/MissionsScreen";
@@ -20,6 +21,7 @@ export type MoreStackParamList = {
   Settings: undefined;
   Checkin: undefined;
   Finance: undefined;
+  Lens: undefined;
 };
 
 const Stack = createNativeStackNavigator<MoreStackParamList>();
@@ -36,6 +38,7 @@ export function MoreStack() {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Checkin" component={CheckinScreen} />
       <Stack.Screen name="Finance" component={FinanceScreen} />
+      <Stack.Screen name="Lens" component={LensScreen} />
     </Stack.Navigator>
   );
 }
