@@ -28,6 +28,7 @@ export interface ImportedActivity {
   end: string; // "HH:MM", may be earlier than start when it crosses midnight
   color?: string;
   days?: number[]; // 0 = Sunday ... 6 = Saturday; undefined = every day
+  steps?: { time: string; label: string }[]; // micro-actions supplied by the AI reader
 }
 
 export type ParseMethod = "text" | "chart" | "pie" | "ai" | "manual";

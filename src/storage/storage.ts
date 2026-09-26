@@ -11,6 +11,8 @@ import {
 } from "../types";
 import { EMPTY_FINANCE, FinanceData } from "../utils/finance";
 import { DEFAULT_LENS_SETTINGS, LensDay, LensSettings } from "../utils/lens";
+import { AiSettings, DEFAULT_AI_SETTINGS } from "../import/gemini";
+import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -23,6 +25,10 @@ const KEYS = {
   finance: "@wellness/finance",
   lens: "@wellness/lens",
   lensLog: "@wellness/lensLog",
+  timeline: "@wellness/timeline",
+  timelineLog: "@wellness/timelineLog",
+  timelineSettings: "@wellness/timelineSettings",
+  aiSettings: "@wellness/aiSettings",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -195,6 +201,32 @@ export async function saveLensLog(log: LensDay[]): Promise<void> {
   await AsyncStorage.setItem(KEYS.lensLog, JSON.stringify(log));
 }
 
+async function loadJson<T>(key: string, fallback: T): Promise<T> {
+  const raw = await AsyncStorage.getItem(key);
+  if (!raw) return fallback;
+  try {
+    const parsed = JSON.parse(raw);
+    return fallback && typeof fallback === "object" && !Array.isArray(fallback) ? { ...fallback, ...parsed } : parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+export interface TimelineSettings {
+  notifyEachStep: boolean;
+}
+
+export const DEFAULT_TIMELINE_SETTINGS: TimelineSettings = { notifyEachStep: false };
+
+export const loadTimelinePlan = () => loadJson<TimelinePlan>(KEYS.timeline, EMPTY_PLAN);
+export const saveTimelinePlan = (plan: TimelinePlan) => AsyncStorage.setItem(KEYS.timeline, JSON.stringify(plan));
+export const loadTimelineLog = () => loadJson<TimelineDayLog[]>(KEYS.timelineLog, []);
+export const saveTimelineLog = (log: TimelineDayLog[]) => AsyncStorage.setItem(KEYS.timelineLog, JSON.stringify(log));
+export const loadTimelineSettings = () => loadJson<TimelineSettings>(KEYS.timelineSettings, DEFAULT_TIMELINE_SETTINGS);
+export const saveTimelineSettings = (s: TimelineSettings) => AsyncStorage.setItem(KEYS.timelineSettings, JSON.stringify(s));
+export const loadAiSettings = () => loadJson<AiSettings>(KEYS.aiSettings, DEFAULT_AI_SETTINGS);
+export const saveAiSettings = (s: AiSettings) => AsyncStorage.setItem(KEYS.aiSettings, JSON.stringify(s));
+
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
     KEYS.entries,
@@ -207,5 +239,9 @@ export async function clearAllData(): Promise<void> {
     KEYS.finance,
     KEYS.lens,
     KEYS.lensLog,
+    KEYS.timeline,
+    KEYS.timelineLog,
+    KEYS.timelineSettings,
+    KEYS.aiSettings,
   ]);
 }

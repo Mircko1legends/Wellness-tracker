@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BackupCard } from "../components/BackupCard";
+import { NowCard } from "../components/NowCard";
 import { useLens } from "../context/LensContext";
 import { LensTonightCard } from "./LensScreen";
 import { ScreenHeader } from "../components/ScreenHeader";
@@ -76,6 +77,7 @@ export function DashboardScreen() {
         }
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <NowCard />
         <BackupCard compact />
         {(lens.settings.enabled || !!lens.settings.lensStartDate) && <LensTonightCard />}
         {!entry && (

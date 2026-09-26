@@ -3,7 +3,8 @@ import { DAY_MINUTES, formatHm, parseHm, roundTo } from "./time";
 import { ImportedActivity, PdfAnalysis, RoutineParseResult, TextItem } from "./types";
 
 const TIME = String.raw`\d{1,2}[:.]\d{2}`;
-const RANGE = new RegExp(`(${TIME})\\s*(?:-|–|—|->|→|alle|a)\\s*(${TIME})`, "i");
+// Separator may be a dash/"alle"/"a", or just whitespace (start and end in separate table columns).
+const RANGE = new RegExp(`(${TIME})(?:\\s*(?:-|–|—|->|→|alle|a)\\s*|\\s+)(${TIME})`, "i");
 const LEADING_TIME = new RegExp(`^\\s*(${TIME})(?!\\d)\\s*[-–—:|•]?\\s*(.+)$`);
 const ONLY_TIME = new RegExp(`^\\s*${TIME}\\s*$`);
 const EDGE_SEPARATORS = /^[\s\-–—:|•·,()]+|[\s\-–—:|•·,()]+$/g;

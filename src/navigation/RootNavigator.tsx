@@ -7,10 +7,12 @@ import { DietScreen } from "../screens/DietScreen";
 import { LogEntryScreen } from "../screens/LogEntryScreen";
 import { WorkoutScreen } from "../screens/WorkoutScreen";
 import { colors } from "../theme";
+import { DayStack } from "./DayStack";
 import { MoreStack } from "./MoreStack";
 
 export type TabParamList = {
   Dashboard: undefined;
+  DayTab: undefined;
   Log: undefined;
   Workout: undefined;
   Diet: undefined;
@@ -21,6 +23,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 const ICONS: Record<keyof TabParamList, React.ComponentProps<typeof Ionicons>["name"]> = {
   Dashboard: "home-outline",
+  DayTab: "time-outline",
   Log: "add-circle-outline",
   Workout: "barbell-outline",
   Diet: "restaurant-outline",
@@ -43,6 +46,7 @@ export function RootNavigator() {
         })}
       >
         <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: "Oggi" }} />
+        <Tab.Screen name="DayTab" component={DayStack} options={{ title: "Giornata" }} />
         <Tab.Screen name="Log" component={LogEntryScreen} options={{ title: "Registra" }} />
         <Tab.Screen name="Workout" component={WorkoutScreen} options={{ title: "Allenamento" }} />
         <Tab.Screen name="Diet" component={DietScreen} options={{ title: "Dieta" }} />

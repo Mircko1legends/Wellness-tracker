@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AppReloadContext } from "./src/backup/AppReload";
 import { useAutoBackup } from "./src/backup/useAutoBackup";
 import { LensProvider } from "./src/context/LensContext";
+import { TimelineProvider } from "./src/context/TimelineContext";
 import { WellnessProvider } from "./src/context/WellnessContext";
 import { RootNavigator } from "./src/navigation/RootNavigator";
 
@@ -17,8 +18,10 @@ export default function App() {
       <AppReloadContext.Provider value={reload}>
         <WellnessProvider key={reloadKey}>
           <LensProvider>
-            <RootNavigator />
-            <StatusBar style="light" />
+            <TimelineProvider>
+              <RootNavigator />
+              <StatusBar style="light" />
+            </TimelineProvider>
           </LensProvider>
         </WellnessProvider>
       </AppReloadContext.Provider>
