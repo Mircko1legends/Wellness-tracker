@@ -5,7 +5,7 @@ import { addDays, toDateKey } from "../date";
 function entryFor(date: string, overrides: Partial<WellnessEntry> = {}): WellnessEntry {
   return {
     date,
-    mood: 3,
+    mood: 0,
     sleepHours: 7,
     waterGlasses: 6,
     ...overrides,

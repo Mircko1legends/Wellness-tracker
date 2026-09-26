@@ -1,3 +1,4 @@
+import { isMoodStable } from "./mood";
 import { WellnessEntry, WellnessGoals, WorkoutLogEntry } from "../types";
 import { addDays, parseDateKey, toDateKey } from "./date";
 import { setsCompletedOnDate } from "./workout";
@@ -13,7 +14,7 @@ export function goalsMet(entry: WellnessEntry, goals: WellnessGoals, setsComplet
     entry.sleepHours >= goals.sleepHours &&
     entry.waterGlasses >= goals.waterGlasses &&
     setsCompletedToday >= goals.setsGoal &&
-    entry.mood >= goals.moodMin
+    isMoodStable(entry.mood, goals.moodRange)
   );
 }
 
@@ -22,7 +23,7 @@ export function goalsMetCount(entry: WellnessEntry, goals: WellnessGoals, setsCo
   if (entry.sleepHours >= goals.sleepHours) count++;
   if (entry.waterGlasses >= goals.waterGlasses) count++;
   if (setsCompletedToday >= goals.setsGoal) count++;
-  if (entry.mood >= goals.moodMin) count++;
+  if (isMoodStable(entry.mood, goals.moodRange)) count++;
   return count;
 }
 

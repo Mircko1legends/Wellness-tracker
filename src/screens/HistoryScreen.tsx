@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { formatMood } from "../utils/mood";
 import React, { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { ComparisonCard } from "../components/ComparisonCard";
@@ -40,7 +41,7 @@ export function HistoryScreen() {
           {met && <Text style={styles.metBadge}>Obiettivi raggiunti</Text>}
         </View>
         <Text style={styles.rowDetail}>
-          😴 {item.sleepHours}h · 💧 {item.waterGlasses} · 🏋️ {setsCompleted} serie · 🙂 {item.mood}/5
+          😴 {item.sleepHours}h · 💧 {item.waterGlasses} · 🏋️ {setsCompleted} serie · 🙂 umore {formatMood(item.mood)}
         </Text>
         {!!item.notes && <Text style={styles.rowNotes}>{item.notes}</Text>}
       </View>

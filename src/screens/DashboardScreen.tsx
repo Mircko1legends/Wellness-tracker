@@ -13,6 +13,7 @@ import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
 import { colors, metricColors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
+import { formatMood, isMoodStable } from "../utils/mood";
 import { computeWeeklyCheckin } from "../utils/weeklyCheckin";
 
 export function DashboardScreen() {
@@ -165,10 +166,10 @@ export function DashboardScreen() {
           <StatCard
             icon="happy-outline"
             label="Umore"
-            value={entry ? `${entry.mood}/5` : "—"}
-            goalLabel={`Minimo: ${goals.moodMin}/5`}
-            progress={entry ? entry.mood / 5 : 0}
-            met={!!entry && entry.mood >= goals.moodMin}
+            value={entry ? formatMood(entry.mood) : "—"}
+            goalLabel={`Zona stabile: ±${goals.moodRange}`}
+            progress={entry ? 1 - Math.abs(entry.mood) / 5 : 0}
+            met={!!entry && isMoodStable(entry.mood, goals.moodRange)}
             accentColor={metricColors.mood.fg}
             accentBg={metricColors.mood.bg}
           />

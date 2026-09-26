@@ -1,8 +1,9 @@
-export type MoodScore = 1 | 2 | 3 | 4 | 5;
+export type MoodScore = -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface WellnessEntry {
   date: string; // YYYY-MM-DD, one entry per day
-  mood: MoodScore;
+  mood: MoodScore; // -5 (molto giù) ... 0 (neutro) ... +5 (molto su)
+  moodScale?: 11; // set once migrated from the old 1-5 scale
   sleepHours: number;
   waterGlasses: number;
   notes?: string;
@@ -26,7 +27,7 @@ export interface WellnessGoals {
   sleepHours: number;
   waterGlasses: number;
   setsGoal: number; // target total workout sets completed per day
-  moodMin: MoodScore;
+  moodRange: number; // stable zone: -moodRange ... +moodRange
   startingWorkoutTier: number; // manual floor for tier progression, for skipping tiers already mastered
 }
 
@@ -95,7 +96,7 @@ export const DEFAULT_GOALS: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
   setsGoal: 12,
-  moodMin: 3,
+  moodRange: 2,
   startingWorkoutTier: 1,
 };
 

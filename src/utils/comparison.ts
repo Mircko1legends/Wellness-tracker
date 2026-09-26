@@ -37,8 +37,9 @@ export function computeWeeklyComparison(
 
   return {
     mood: {
-      current: average(entries, currentWeek, (e) => e.mood),
-      previous: average(entries, previousWeek, (e) => e.mood),
+      // Distance from neutral: closer to 0 means steadier, whichever direction.
+      current: average(entries, currentWeek, (e) => Math.abs(e.mood)),
+      previous: average(entries, previousWeek, (e) => Math.abs(e.mood)),
     },
     sleepHours: {
       current: average(entries, currentWeek, (e) => e.sleepHours),

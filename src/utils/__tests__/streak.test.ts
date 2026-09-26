@@ -6,14 +6,14 @@ const goals: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
   setsGoal: 12,
-  moodMin: 3,
+  moodRange: 2,
   startingWorkoutTier: 1,
 };
 
 function entryFor(date: string, overrides: Partial<WellnessEntry> = {}): WellnessEntry {
   return {
     date,
-    mood: 4,
+    mood: 1,
     sleepHours: 8,
     waterGlasses: 8,
     ...overrides,
@@ -46,7 +46,7 @@ describe("goalsMet", () => {
 describe("goalsMetCount", () => {
   it("counts how many of the four metrics were met", () => {
     expect(
-      goalsMetCount(entryFor("2026-01-01", { sleepHours: 5, mood: 2 }), goals, 15)
+      goalsMetCount(entryFor("2026-01-01", { sleepHours: 5, mood: -3 }), goals, 15)
     ).toBe(2);
   });
 });
@@ -120,7 +120,7 @@ describe("computeStreak", () => {
 
   it("does not grant a second grace day within the cooldown window", () => {
     const entries: WellnessEntry[] = [
-      entryFor(toDateKey(addDays(today, -6)), { mood: 2 }), // missed goal, too soon for another grace
+      entryFor(toDateKey(addDays(today, -6)), { mood: -3 }), // missed goal, too soon for another grace
       entryFor(toDateKey(addDays(today, -5))),
       entryFor(toDateKey(addDays(today, -4))),
       // day -3 has no entry: this is the one grace day used

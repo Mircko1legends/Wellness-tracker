@@ -7,7 +7,6 @@ import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
 import { MAX_WORKOUT_TIER, WORKOUT_TIERS_BY_LEVEL } from "../data/workoutProgram";
 import { colors, radii, spacing } from "../theme";
-import { MoodScore } from "../types";
 
 export function GoalsScreen() {
   const navigation = useNavigation();
@@ -16,12 +15,12 @@ export function GoalsScreen() {
   const [sleepHours, setSleepHours] = useState(goals.sleepHours);
   const [waterGlasses, setWaterGlasses] = useState(goals.waterGlasses);
   const [setsGoal, setSetsGoal] = useState(goals.setsGoal);
-  const [moodMin, setMoodMin] = useState<MoodScore>(goals.moodMin);
+  const [moodRange, setMoodRange] = useState(goals.moodRange);
   const [startingWorkoutTier, setStartingWorkoutTier] = useState(goals.startingWorkoutTier);
   const [saved, setSaved] = useState(false);
 
   const handleSave = async () => {
-    await updateGoals({ sleepHours, waterGlasses, setsGoal, moodMin, startingWorkoutTier });
+    await updateGoals({ sleepHours, waterGlasses, setsGoal, moodRange, startingWorkoutTier });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -57,12 +56,12 @@ export function GoalsScreen() {
           onChange={setSetsGoal}
         />
         <StepperInput
-          label="Umore minimo"
-          value={moodMin}
-          unit="/5"
+          label="Zona stabile dell'umore (da −N a +N)"
+          value={moodRange}
+          unit="±"
           min={1}
-          max={5}
-          onChange={(v) => setMoodMin(v as MoodScore)}
+          max={4}
+          onChange={setMoodRange}
         />
         <StepperInput
           label="Livello di partenza allenamento"

@@ -1,3 +1,4 @@
+import { isMoodStable } from "./mood";
 import { MISSIONS_BY_ID } from "../data/missions";
 import { MedicationLogEntry, WellnessEntry, WellnessGoals, WorkoutLogEntry } from "../types";
 import { setsCompletedOnDate } from "./workout";
@@ -44,7 +45,7 @@ export function xpForEntry(entry: WellnessEntry, goals: WellnessGoals, setsCompl
   if (entry.sleepHours >= goals.sleepHours) xp += MISSIONS_BY_ID.sleep.xpReward;
   if (entry.waterGlasses >= goals.waterGlasses) xp += MISSIONS_BY_ID.water.xpReward;
   if (setsCompletedOnEntryDate >= goals.setsGoal) xp += MISSIONS_BY_ID.activity.xpReward;
-  if (entry.mood >= goals.moodMin) xp += MISSIONS_BY_ID.mood.xpReward;
+  if (isMoodStable(entry.mood, goals.moodRange)) xp += MISSIONS_BY_ID.mood.xpReward;
   for (const id of entry.bonusMissions ?? []) {
     const mission = MISSIONS_BY_ID[id];
     if (mission) xp += mission.xpReward;

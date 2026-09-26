@@ -6,7 +6,7 @@ const goals: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
   setsGoal: 12,
-  moodMin: 3,
+  moodRange: 2,
   startingWorkoutTier: 1,
 };
 
@@ -15,7 +15,7 @@ const today = new Date("2026-01-10T12:00:00");
 function entryFor(daysAgo: number, overrides: Partial<WellnessEntry> = {}): WellnessEntry {
   return {
     date: toDateKey(addDays(today, -daysAgo)),
-    mood: 4,
+    mood: 0,
     sleepHours: 8,
     waterGlasses: 8,
     ...overrides,
@@ -57,10 +57,10 @@ describe("computeWeeklyCheckin", () => {
 
   it("counts days below the mood floor and flags after enough of them", () => {
     const entries = [
-      entryFor(0, { mood: 2 }),
-      entryFor(1, { mood: 2 }),
-      entryFor(2, { mood: 2 }),
-      entryFor(3, { mood: 4 }),
+      entryFor(0, { mood: -3 }),
+      entryFor(1, { mood: -3 }),
+      entryFor(2, { mood: -3 }),
+      entryFor(3, { mood: 0 }),
     ];
     const result = computeWeeklyCheckin(entries, goals, [], [], today);
     expect(result.moodLowDaysCount).toBe(3);
@@ -69,17 +69,38 @@ describe("computeWeeklyCheckin", () => {
 
   it("flags a downward mood trend compared to the previous week", () => {
     const entries = [
-      // previous week: mood 5 every day
-      entryFor(7, { mood: 5 }),
-      entryFor(8, { mood: 5 }),
-      entryFor(9, { mood: 5 }),
-      // current week: mood 3 every day
-      entryFor(0, { mood: 3 }),
-      entryFor(1, { mood: 3 }),
-      entryFor(2, { mood: 3 }),
+      // previous week: mood +2 every day
+      entryFor(7, { mood: 2 }),
+      entryFor(8, { mood: 2 }),
+      entryFor(9, { mood: 2 }),
+      // current week: mood -1 every day
+      entryFor(0, { mood: -1 }),
+      entryFor(1, { mood: -1 }),
+      entryFor(2, { mood: -1 }),
     ];
     const result = computeWeeklyCheckin(entries, goals, [], [], today);
     expect(result.moodTrendDown).toBe(true);
+    expect(result.hasConcerns).toBe(true);
+  });
+
+  it("treats days above the stable zone as a signal too", () => {
+    const entries = [entryFor(0, { mood: 4 }), entryFor(1, { mood: 3 }), entryFor(2, { mood: 5 }), entryFor(3, { mood: 1 })];
+    const result = computeWeeklyCheckin(entries, goals, [], [], today);
+    expect(result.moodHighDaysCount).toBe(3);
+    expect(result.moodLowDaysCount).toBe(0);
+    expect(result.moodConcern).toBe(true);
+  });
+
+  it("flags an upward mood trend compared to the previous week", () => {
+    const entries = [
+      entryFor(7, { mood: -1 }),
+      entryFor(8, { mood: -1 }),
+      entryFor(0, { mood: 2 }),
+      entryFor(1, { mood: 2 }),
+    ];
+    const result = computeWeeklyCheckin(entries, goals, [], [], today);
+    expect(result.moodTrendUp).toBe(true);
+    expect(result.moodTrendDown).toBe(false);
     expect(result.hasConcerns).toBe(true);
   });
 

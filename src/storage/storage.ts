@@ -3,6 +3,7 @@ import {
   DEFAULT_GOALS,
   DEFAULT_REMINDER_SETTINGS,
   Medication,
+  MoodScore,
   MedicationLogEntry,
   ReminderSettings,
   WellnessEntry,
@@ -10,6 +11,7 @@ import {
   WorkoutLogEntry,
 } from "../types";
 import { EMPTY_FINANCE, FinanceData } from "../utils/finance";
+import { migrateLegacyMood } from "../utils/mood";
 import { DEFAULT_LENS_SETTINGS, LensDay, LensSettings } from "../utils/lens";
 import { AiSettings, DEFAULT_AI_SETTINGS } from "../import/gemini";
 import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
@@ -44,10 +46,16 @@ export async function loadEntries(): Promise<WellnessEntry[]> {
   const raw = await AsyncStorage.getItem(KEYS.entries);
   if (!raw) return [];
   try {
-    return JSON.parse(raw) as WellnessEntry[];
+    return (JSON.parse(raw) as WellnessEntry[]).map(migrateEntryMood);
   } catch {
     return [];
   }
+}
+
+/** Entries written before the -5...+5 scale stored mood as 1...5. */
+export function migrateEntryMood(entry: WellnessEntry): WellnessEntry {
+  if (entry.moodScale === 11) return entry;
+  return { ...entry, mood: migrateLegacyMood(entry.mood) as MoodScore, moodScale: 11 };
 }
 
 export async function saveEntries(entries: WellnessEntry[]): Promise<void> {
@@ -56,11 +64,13 @@ export async function saveEntries(entries: WellnessEntry[]): Promise<void> {
 
 export async function upsertEntry(entry: WellnessEntry): Promise<WellnessEntry[]> {
   const entries = await loadEntries();
+  // Always stamp the scale: an unstamped -5...+5 value would be "migrated" again on the next load.
+  const stamped: WellnessEntry = { ...entry, moodScale: 11 };
   const index = entries.findIndex((e) => e.date === entry.date);
   if (index >= 0) {
-    entries[index] = entry;
+    entries[index] = stamped;
   } else {
-    entries.push(entry);
+    entries.push(stamped);
   }
   entries.sort((a, b) => a.date.localeCompare(b.date));
   await saveEntries(entries);

@@ -76,7 +76,7 @@ interface TimelineLog {
 export const WEEKLY_TABLE_HEADER = [
   "Data",
   "Giorno",
-  "Umore (1-5)",
+  "Umore (−5/+5)",
   "Sonno (h)",
   "Acqua (bicchieri)",
   "Serie allenamento",
@@ -117,7 +117,7 @@ export function buildWeeklyTableCsv(snapshot: StorageSnapshot, dateKey: string):
     return [
       key,
       DAY_NAMES[date.getDay()],
-      entry?.mood ?? "",
+      entry?.mood === undefined ? "" : entry.mood > 0 ? `+${entry.mood}` : String(entry.mood),
       entry?.sleepHours ?? "",
       Math.max(entry?.waterGlasses ?? 0, waterLog.find((w) => w.date === key)?.glasses ?? 0) || "",
       sets,

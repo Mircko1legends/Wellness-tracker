@@ -33,8 +33,8 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: "mood",
-    name: "Umore positivo",
-    description: "Mantieni l'umore sopra la soglia minima",
+    name: "Umore stabile",
+    description: "Resta nella tua zona stabile, vicino allo 0 (né troppo giù né troppo su)",
     icon: "happy-outline",
     difficulty: 1,
     xpReward: 10,

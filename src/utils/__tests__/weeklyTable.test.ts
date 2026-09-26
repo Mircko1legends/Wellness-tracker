@@ -49,7 +49,7 @@ describe("buildWeeklyTableCsv", () => {
   });
 
   it("fills a tracked day and quotes fields with commas", () => {
-    expect(lines[1]).toBe('2026-09-21,lunedì,4,7.5,8,4,1/2,sì,0,0,2,"ok, bene"');
+    expect(lines[1]).toBe('2026-09-21,lunedì,+4,7.5,8,4,1/2,sì,0,0,2,"ok, bene"');
   });
 
   it("shows untracked days with zero counts and lens not removed", () => {

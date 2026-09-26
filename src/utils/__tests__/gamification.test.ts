@@ -5,14 +5,14 @@ const goals: WellnessGoals = {
   sleepHours: 8,
   waterGlasses: 8,
   setsGoal: 30,
-  moodMin: 3,
+  moodRange: 2,
   startingWorkoutTier: 1,
 };
 
 function entryFor(overrides: Partial<WellnessEntry> = {}): WellnessEntry {
   return {
     date: "2026-01-01",
-    mood: 3,
+    mood: 0,
     sleepHours: 8,
     waterGlasses: 8,
     ...overrides,
@@ -27,7 +27,7 @@ describe("xpForEntry", () => {
   });
 
   it("awards partial xp when only some goals are met", () => {
-    expect(xpForEntry(entryFor({ sleepHours: 2, mood: 1 }), goals, setsMet)).toBe(10 + 20);
+    expect(xpForEntry(entryFor({ sleepHours: 2, mood: -4 }), goals, setsMet)).toBe(10 + 20);
   });
 
   it("adds xp for completed bonus missions", () => {

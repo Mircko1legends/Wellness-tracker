@@ -61,16 +61,18 @@ export function CheckinScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Umore</Text>
           <Text style={styles.cardValue}>
-            {checkin.moodLowDaysCount}/7 giorni sotto la soglia minima
+            {checkin.moodLowDaysCount}/7 giorni sotto la zona stabile · {checkin.moodHighDaysCount}/7 sopra
           </Text>
           <Text style={styles.cardBody}>
-            {checkin.moodTrendDown
+            {checkin.moodTrendUp
+              ? "L'umore medio è salito parecchio rispetto alla settimana scorsa. Anche un umore alto è un segnale: tienilo d'occhio insieme al sonno e parlane con chi ti segue."
+              : checkin.moodTrendDown
               ? "L'umore medio di questa settimana è sceso rispetto alla settimana scorsa."
               : checkin.moodConcern
-              ? "Diversi giorni sotto la soglia questa settimana: potrebbe valere la pena parlarne con chi ti segue."
-              : checkin.moodLowDaysCount > 0
-              ? "Qualche giorno più difficile, ma niente che indichi un pattern preoccupante."
-              : "Umore nella norma per tutta la settimana."}
+              ? "Diversi giorni fuori dalla tua zona stabile questa settimana: potrebbe valere la pena parlarne con chi ti segue."
+              : checkin.moodLowDaysCount + checkin.moodHighDaysCount > 0
+              ? "Qualche giorno fuori zona, ma niente che indichi un pattern preoccupante."
+              : "Umore nella tua zona stabile per tutta la settimana."}
           </Text>
         </View>
 

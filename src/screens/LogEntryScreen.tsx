@@ -21,7 +21,8 @@ import { MoodScore, WellnessEntry } from "../types";
 import { todayKey } from "../utils/date";
 
 const EMPTY_ENTRY: Omit<WellnessEntry, "date"> = {
-  mood: 3,
+  mood: 0,
+  moodScale: 11,
   sleepHours: 7,
   waterGlasses: 4,
   notes: "",
