@@ -13,6 +13,8 @@ import { EMPTY_FINANCE, FinanceData } from "../utils/finance";
 import { DEFAULT_LENS_SETTINGS, LensDay, LensSettings } from "../utils/lens";
 import { AiSettings, DEFAULT_AI_SETTINGS } from "../import/gemini";
 import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
+import { LifeGoal } from "../goals/goals";
+import { DEFAULT_WATER_SETTINGS, WaterDay, WaterSettings } from "../water/water";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -29,6 +31,11 @@ const KEYS = {
   timelineLog: "@wellness/timelineLog",
   timelineSettings: "@wellness/timelineSettings",
   aiSettings: "@wellness/aiSettings",
+  lifeGoals: "@wellness/lifeGoals",
+  water: "@wellness/water",
+  waterLog: "@wellness/waterLog",
+  dayMode: "@wellness/dayMode",
+  defaultPlanApplied: "@wellness/defaultPlanApplied",
 } as const;
 
 export const DEFAULT_BODYWEIGHT_KG = 70;
@@ -227,6 +234,21 @@ export const saveTimelineSettings = (s: TimelineSettings) => AsyncStorage.setIte
 export const loadAiSettings = () => loadJson<AiSettings>(KEYS.aiSettings, DEFAULT_AI_SETTINGS);
 export const saveAiSettings = (s: AiSettings) => AsyncStorage.setItem(KEYS.aiSettings, JSON.stringify(s));
 
+export const loadLifeGoals = () => loadJson<LifeGoal[]>(KEYS.lifeGoals, []);
+export const saveLifeGoals = (goals: LifeGoal[]) => AsyncStorage.setItem(KEYS.lifeGoals, JSON.stringify(goals));
+export const loadWaterSettings = () => loadJson<WaterSettings>(KEYS.water, DEFAULT_WATER_SETTINGS);
+export const saveWaterSettings = (s: WaterSettings) => AsyncStorage.setItem(KEYS.water, JSON.stringify(s));
+export const loadWaterLog = () => loadJson<WaterDay[]>(KEYS.waterLog, []);
+export const saveWaterLog = (log: WaterDay[]) => AsyncStorage.setItem(KEYS.waterLog, JSON.stringify(log));
+
+/** The date on which "giornata no" was switched on; it only applies to that day. */
+export const loadMinimalDay = async () => (await AsyncStorage.getItem(KEYS.dayMode)) ?? "";
+export const saveMinimalDay = (date: string) => AsyncStorage.setItem(KEYS.dayMode, date);
+
+/** The built-in plan is applied once; clearing it later must not bring it back on its own. */
+export const isDefaultPlanApplied = async () => (await AsyncStorage.getItem(KEYS.defaultPlanApplied)) === "1";
+export const markDefaultPlanApplied = () => AsyncStorage.setItem(KEYS.defaultPlanApplied, "1");
+
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
     KEYS.entries,
@@ -243,5 +265,10 @@ export async function clearAllData(): Promise<void> {
     KEYS.timelineLog,
     KEYS.timelineSettings,
     KEYS.aiSettings,
+    KEYS.lifeGoals,
+    KEYS.water,
+    KEYS.waterLog,
+    KEYS.dayMode,
+    KEYS.defaultPlanApplied,
   ]);
 }

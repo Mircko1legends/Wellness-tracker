@@ -4,10 +4,12 @@ import { DietMeal } from "../import/dietParser";
 import { ImportedActivity, ParseMethod } from "../import/types";
 import {
   DEFAULT_TIMELINE_SETTINGS,
+  isDefaultPlanApplied,
   loadAiSettings,
   loadTimelineLog,
   loadTimelinePlan,
   loadTimelineSettings,
+  markDefaultPlanApplied,
   saveAiSettings,
   saveTimelineLog,
   saveTimelinePlan,
@@ -15,7 +17,8 @@ import {
   TimelineSettings,
 } from "../storage/storage";
 import { syncTimelineNotifications } from "../timeline/notifications";
-import { buildMeals, buildRoutine, EMPTY_PLAN, TimelineDayLog, TimelinePlan, toggleDone } from "../timeline/plan";
+import { defaultPlanPack, PlanPack } from "../timeline/pack";
+import { buildMeals, buildRoutine, EMPTY_PLAN, setStepStatus, StepStatus, stepStatus, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 
 interface TimelineContextValue {
   loading: boolean;
@@ -25,10 +28,11 @@ interface TimelineContextValue {
   ai: AiSettings;
   saveRoutine: (activities: ImportedActivity[], fileName: string, method: ParseMethod) => Promise<void>;
   saveDiet: (meals: DietMeal[], fileName: string, method: ParseMethod) => Promise<void>;
+  applyPack: (pack: PlanPack, fileName: string) => Promise<void>;
   clearRoutine: () => Promise<void>;
   clearDiet: () => Promise<void>;
-  toggleStep: (date: string, stepId: string) => Promise<void>;
-  isDone: (date: string, stepId: string) => boolean;
+  setStep: (date: string, stepId: string, status: StepStatus) => Promise<void>;
+  statusOf: (date: string, stepId: string) => StepStatus;
   updateSettings: (next: TimelineSettings) => Promise<void>;
   updateAi: (next: AiSettings) => Promise<void>;
 }
@@ -44,7 +48,20 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const [p, l, s, a] = await Promise.all([loadTimelinePlan(), loadTimelineLog(), loadTimelineSettings(), loadAiSettings()]);
+      const [loaded, l, s, a, applied] = await Promise.all([
+        loadTimelinePlan(),
+        loadTimelineLog(),
+        loadTimelineSettings(),
+        loadAiSettings(),
+        isDefaultPlanApplied(),
+      ]);
+      let p = loaded;
+      if (!applied && p.routine.length === 0 && p.meals.length === 0) {
+        const pack = defaultPlanPack();
+        p = { routine: pack.routine, meals: pack.meals, routineSource: { name: pack.name, method: "pack", importedAt: Date.now() } };
+        await saveTimelinePlan(p);
+        await markDefaultPlanApplied();
+      }
       setPlan(p);
       setLog(l);
       setSettings(s);
@@ -66,8 +83,8 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
   const saveDiet = (meals: DietMeal[], fileName: string, method: ParseMethod) =>
     persistPlan({ ...plan, meals: buildMeals(meals), dietSource: { name: fileName, method, importedAt: Date.now() } });
 
-  const toggleStep = async (date: string, stepId: string) => {
-    const next = toggleDone(log, date, stepId);
+  const setStep = async (date: string, stepId: string, status: StepStatus) => {
+    const next = setStepStatus(log, date, stepId, status);
     setLog(next);
     await saveTimelineLog(next);
   };
@@ -93,10 +110,17 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
         ai,
         saveRoutine,
         saveDiet,
+        applyPack: (pack, fileName) =>
+          persistPlan({
+            routine: pack.routine,
+            meals: pack.meals,
+            routineSource: { name: fileName, method: "pack", importedAt: Date.now() },
+            ...(pack.meals.length ? { dietSource: { name: fileName, method: "pack", importedAt: Date.now() } } : {}),
+          }),
         clearRoutine: () => persistPlan({ ...plan, routine: [], routineSource: undefined }),
         clearDiet: () => persistPlan({ ...plan, meals: [], dietSource: undefined }),
-        toggleStep,
-        isDone: (date, stepId) => !!log.find((d) => d.date === date)?.doneIds.includes(stepId),
+        setStep,
+        statusOf: (date, stepId) => stepStatus(log, date, stepId),
         updateSettings,
         updateAi,
       }}

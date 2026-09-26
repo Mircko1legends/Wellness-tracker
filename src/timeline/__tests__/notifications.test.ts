@@ -24,4 +24,20 @@ describe("planNotifications", () => {
     expect(planned.length).toBe(2 + 3 + 3);
     expect(planned.some((p) => p.title === "06:40 · Sveglia e idratazione" && p.body === "Bevi un bicchiere d'acqua")).toBe(true);
   });
+
+  it("collapses odd/even-week variants into one weekly notification", () => {
+    const base = { start: "18:40", end: "19:25", kind: "routine" as const, days: [1], group: "Pesi 45'" };
+    const planned = planNotifications(
+      {
+        routine: [
+          { ...base, id: "a", title: "Pesi 45' · Scheda A", weeks: "odd", steps: [{ id: "a1", time: "18:40", label: "Squat" }] },
+          { ...base, id: "b", title: "Pesi 45' · Scheda B", weeks: "even", steps: [{ id: "b1", time: "18:40", label: "Pressa" }] },
+        ],
+        meals: [],
+      },
+      true
+    );
+    expect(planned).toHaveLength(1);
+    expect(planned[0].title).toBe("18:40 · Pesi 45'");
+  });
 });

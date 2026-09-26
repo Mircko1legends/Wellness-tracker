@@ -24,11 +24,17 @@ export function planNotifications(plan: TimelinePlan, eachStep: boolean): Planne
     byKey.set(key, entry);
   };
   for (let weekday = 0; weekday < 7; weekday++) {
+    // No week passed: odd/even-week variants are both included and share one notification via `group`.
     for (const activity of dayTimeline(plan, weekday)) {
       const [first, ...rest] = activity.steps;
+      const name = activity.group ?? activity.title;
+      if (activity.weeks) {
+        add(weekday, activity.start, `${activity.start} · ${name}`, "La scheda di questa settimana è nell'app.");
+        continue;
+      }
       const more = rest.length ? ` (+${rest.length} passi)` : "";
-      add(weekday, activity.start, `${activity.start} · ${activity.title}`, `${first?.label ?? "Inizia"}${more}`);
-      if (eachStep) rest.forEach((step) => add(weekday, step.time, `${step.time} · ${activity.title}`, step.label));
+      add(weekday, activity.start, `${activity.start} · ${name}`, `${first?.label ?? "Inizia"}${more}`);
+      if (eachStep) rest.forEach((step) => add(weekday, step.time, `${step.time} · ${name}`, step.label));
     }
   }
   return [...byKey.values()];

@@ -3,12 +3,18 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 import { PressableScale } from "../components/PressableScale";
+import { StepButtons } from "../components/StepButtons";
+import { StepperInput } from "../components/StepperInput";
+import { WaterCard } from "../components/WaterCard";
+import { useWater } from "../context/WaterContext";
+import { loadMinimalDay, saveMinimalDay } from "../storage/storage";
+import { isoWeekNumber } from "../utils/weeklyTable";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useTimeline } from "../context/TimelineContext";
 import { parseHm } from "../import/time";
 import type { DayStackParamList } from "../navigation/DayStack";
 import { colors, radii, spacing } from "../theme";
-import { currentActivity, dayTimeline, PlanActivity } from "../timeline/plan";
+import { currentActivity, dayTimeline, isEssential, PlanActivity } from "../timeline/plan";
 import { todayKey } from "../utils/date";
 
 type Props = NativeStackScreenProps<DayStackParamList, "Day">;
@@ -27,11 +33,12 @@ function useNowMinutes(): number {
 }
 
 function ActivityCard({ activity, current, past, date }: { activity: PlanActivity; current: boolean; past: boolean; date: string }) {
-  const { isDone, toggleStep } = useTimeline();
+  const { statusOf, setStep } = useTimeline();
   const [open, setOpen] = useState(current);
   useEffect(() => setOpen(current), [current]);
-  const done = activity.steps.filter((s) => isDone(date, s.id)).length;
-  const complete = done === activity.steps.length && done > 0;
+  const done = activity.steps.filter((s) => statusOf(date, s.id) === "done").length;
+  const handled = activity.steps.filter((s) => statusOf(date, s.id) !== null).length;
+  const complete = handled === activity.steps.length && handled > 0;
 
   return (
     <View style={[styles.activity, current && styles.activityCurrent, past && !current && styles.activityPast]}>
@@ -52,16 +59,47 @@ function ActivityCard({ activity, current, past, date }: { activity: PlanActivit
         </TouchableOpacity>
         {open &&
           activity.steps.map((step) => {
-            const checked = isDone(date, step.id);
+            const status = statusOf(date, step.id);
             return (
-              <TouchableOpacity key={step.id} style={styles.step} onPress={() => toggleStep(date, step.id)}>
-                <Ionicons name={checked ? "checkbox" : "square-outline"} size={20} color={checked ? colors.success : colors.textMuted} />
+              <View key={step.id} style={styles.step}>
                 <Text style={styles.stepTime}>{step.time}</Text>
-                <Text style={[styles.stepLabel, checked && styles.stepDone]}>{step.label}</Text>
-              </TouchableOpacity>
+                <Text style={[styles.stepLabel, status !== null && styles.stepDone]}>{step.label}</Text>
+                <StepButtons status={status} onChange={(s) => setStep(date, step.id, s)} />
+              </View>
             );
           })}
       </View>
+    </View>
+  );
+}
+
+function WaterSettingsCard() {
+  const { settings, updateSettings } = useWater();
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={styles.card}>
+      <View style={styles.switchRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.cardTitle}>Promemoria acqua tutto il giorno</Text>
+          <Text style={styles.hint}>
+            Ogni {settings.intervalMin}′ dalle {settings.start} alle {settings.end}
+          </Text>
+        </View>
+        <Switch
+          value={settings.enabled}
+          onValueChange={(enabled) => updateSettings({ ...settings, enabled })}
+          trackColor={{ true: colors.primary, false: colors.border }}
+        />
+      </View>
+      <TouchableOpacity onPress={() => setOpen(!open)}>
+        <Text style={styles.link}>{open ? "Chiudi" : "Cambia frequenza e obiettivo"}</Text>
+      </TouchableOpacity>
+      {open && (
+        <>
+          <StepperInput label="Ogni" value={settings.intervalMin} unit="min" min={30} max={180} step={15} onChange={(intervalMin) => updateSettings({ ...settings, intervalMin })} />
+          <StepperInput label="Obiettivo" value={settings.targetMl} unit="ml" min={1500} max={4500} step={250} onChange={(targetMl) => updateSettings({ ...settings, targetMl })} />
+        </>
+      )}
     </View>
   );
 }
@@ -71,10 +109,23 @@ export function DayScreen({ navigation }: Props) {
   const now = useNowMinutes();
   const date = todayKey();
   const weekday = new Date().getDay();
-  const timeline = useMemo(() => dayTimeline(plan, weekday), [plan, weekday]);
+  const week = isoWeekNumber(date);
+  const [minimalDate, setMinimalDate] = useState("");
+  useEffect(() => {
+    loadMinimalDay().then(setMinimalDate);
+  }, []);
+  const minimal = minimalDate === date;
+  const fullTimeline = useMemo(() => dayTimeline(plan, weekday, week), [plan, weekday, week]);
+  const timeline = minimal ? fullTimeline.filter(isEssential) : fullTimeline;
   const current = currentActivity(timeline, now);
   const empty = plan.routine.length === 0 && plan.meals.length === 0;
   const subtitle = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
+
+  const setMinimal = async (on: boolean) => {
+    const value = on ? date : "";
+    setMinimalDate(value);
+    await saveMinimalDay(value);
+  };
 
   if (loading) return <View style={styles.container} />;
 
@@ -82,15 +133,31 @@ export function DayScreen({ navigation }: Props) {
     <View style={styles.container}>
       <ScreenHeader title="La mia giornata" subtitle={subtitle} />
       <ScrollView contentContainerStyle={styles.content}>
+        <WaterCard />
+
         {empty ? (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Carica la tua routine</Text>
             <Text style={styles.hint}>
-              Scegli il PDF (o una foto, o un file di testo) della tua routine: l'app la legge, la divide in piccole
-              azioni con l'orario esatto e ti avvisa quando è il momento. Poi fai lo stesso con la dieta.
+              Scegli il PDF (o una foto, un file di testo o il file del piano) della tua routine: l'app la legge, la divide
+              in piccole azioni con l'orario esatto e ti avvisa quando è il momento. Poi fai lo stesso con la dieta.
             </Text>
           </View>
         ) : null}
+
+        {!empty && (
+          <View style={[styles.card, styles.switchRow, minimal && styles.minimalOn]}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardTitle}>Giornata no</Text>
+              <Text style={styles.hint}>
+                {minimal
+                  ? "Oggi solo l'essenziale: pasti, igiene, scuola e sonno. Il resto torna domani, senza recuperare niente."
+                  : "Se oggi è pesante, tieni solo l'essenziale. Vale solo per oggi."}
+              </Text>
+            </View>
+            <Switch value={minimal} onValueChange={setMinimal} trackColor={{ true: colors.primary, false: colors.border }} />
+          </View>
+        )}
 
         <View style={styles.row}>
           <PressableScale style={[styles.button, { flex: 1 }]} onPress={() => navigation.navigate("Import", { kind: "routine" })}>
@@ -112,6 +179,8 @@ export function DayScreen({ navigation }: Props) {
             past={(parseHm(activity.end) ?? 0) <= now && (parseHm(activity.end) ?? 0) > (parseHm(activity.start) ?? 0)}
           />
         ))}
+
+        <WaterSettingsCard />
 
         {!empty && (
           <View style={[styles.card, styles.switchRow]}>
@@ -169,5 +238,7 @@ const styles = StyleSheet.create({
   stepTime: { fontSize: 12, fontWeight: "700", color: colors.primary, width: 42, marginTop: 2 },
   stepLabel: { flex: 1, fontSize: 13, color: colors.text, lineHeight: 18 },
   stepDone: { color: colors.textMuted, textDecorationLine: "line-through" },
-  switchRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginTop: spacing.sm },
+  switchRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+  minimalOn: { borderColor: colors.primary },
+  link: { color: colors.primary, fontSize: 13, fontWeight: "600", marginTop: spacing.sm },
 });

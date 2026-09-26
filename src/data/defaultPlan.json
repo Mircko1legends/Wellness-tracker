@@ -1,0 +1,3179 @@
+{
+ "app": "wellness-tracker-plan",
+ "version": 1,
+ "name": "Routine annuale 2026–27 + dieta",
+ "routine": [
+  {
+   "id": "a1",
+   "title": "Igiene mattina",
+   "start": "06:30",
+   "end": "06:50",
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a1-s0",
+     "time": "06:30",
+     "label": "Denti 2′ (spazzolino + lingua)"
+    },
+    {
+     "id": "a1-s1",
+     "time": "06:33",
+     "label": "Viso: detergente delicato"
+    },
+    {
+     "id": "a1-s2",
+     "time": "06:35",
+     "label": "Idratante"
+    },
+    {
+     "id": "a1-s3",
+     "time": "06:37",
+     "label": "Protezione solare SPF 30+"
+    },
+    {
+     "id": "a1-s4",
+     "time": "06:39",
+     "label": "Deodorante"
+    },
+    {
+     "id": "a1-s5",
+     "time": "06:41",
+     "label": "Capelli"
+    },
+    {
+     "id": "a1-s6",
+     "time": "06:44",
+     "label": "Lenti a contatto: mani lavate e asciutte, poi mettile"
+    },
+    {
+     "id": "a1-s7",
+     "time": "06:48",
+     "label": "Controllo generale: unghie, barba se serve"
+    }
+   ]
+  },
+  {
+   "id": "a2",
+   "title": "Igiene mattina + pesata",
+   "start": "06:30",
+   "end": "06:50",
+   "days": [
+    0
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a2-s0",
+     "time": "06:30",
+     "label": "Pesati: appena sveglio, dopo il bagno, prima di bere. Annota il peso"
+    },
+    {
+     "id": "a2-s1",
+     "time": "06:33",
+     "label": "Denti 2′ (spazzolino + lingua)"
+    },
+    {
+     "id": "a2-s2",
+     "time": "06:36",
+     "label": "Viso: detergente, idratante, SPF"
+    },
+    {
+     "id": "a2-s3",
+     "time": "06:40",
+     "label": "Deodorante e capelli"
+    },
+    {
+     "id": "a2-s4",
+     "time": "06:44",
+     "label": "Lenti a contatto: mani lavate e asciutte, poi mettile"
+    }
+   ]
+  },
+  {
+   "id": "a3",
+   "title": "Vestiti, zaino",
+   "start": "07:05",
+   "end": "07:15",
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "color": "#f2c27b",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a3-s0",
+     "time": "07:05",
+     "label": "Vestiti (preparati ieri sera)"
+    },
+    {
+     "id": "a3-s1",
+     "time": "07:09",
+     "label": "Controllo zaino e borsa sport"
+    },
+    {
+     "id": "a3-s2",
+     "time": "07:12",
+     "label": "Borraccia da 1 L piena nello zaino"
+    }
+   ]
+  },
+  {
+   "id": "a4",
+   "title": "Bus · inglese",
+   "start": "07:15",
+   "end": "08:00",
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a4-s0",
+     "time": "07:15",
+     "label": "15′ grammatica: esercizi sull'argomento della settimana"
+    },
+    {
+     "id": "a4-s1",
+     "time": "07:30",
+     "label": "15′ vocaboli in flashcard"
+    },
+    {
+     "id": "a4-s2",
+     "time": "07:45",
+     "label": "15′ flashcard della maturità"
+    }
+   ]
+  },
+  {
+   "id": "a5",
+   "title": "Scuola",
+   "start": "08:00",
+   "end": "14:00",
+   "days": [
+    1
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a5-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti"
+    },
+    {
+     "id": "a5-s1",
+     "time": "11:00",
+     "label": "Pasto 2: panino con 100 g pane + 80 g tonno al naturale + 1 mela"
+    },
+    {
+     "id": "a5-s2",
+     "time": "11:05",
+     "label": "Riempi la borraccia"
+    },
+    {
+     "id": "a5-s3",
+     "time": "13:50",
+     "label": "Annota compiti, verifiche e interrogazioni"
+    }
+   ]
+  },
+  {
+   "id": "a6",
+   "title": "Scuola",
+   "start": "08:00",
+   "end": "14:00",
+   "days": [
+    2
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a6-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti"
+    },
+    {
+     "id": "a6-s1",
+     "time": "11:00",
+     "label": "Pasto 2: panino con 100 g pane + 2 uova sode + 1 mela"
+    },
+    {
+     "id": "a6-s2",
+     "time": "11:05",
+     "label": "Riempi la borraccia"
+    },
+    {
+     "id": "a6-s3",
+     "time": "13:50",
+     "label": "Annota compiti, verifiche e interrogazioni"
+    }
+   ]
+  },
+  {
+   "id": "a7",
+   "title": "Scuola",
+   "start": "08:00",
+   "end": "14:00",
+   "days": [
+    3
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a7-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti"
+    },
+    {
+     "id": "a7-s1",
+     "time": "11:00",
+     "label": "Pasto 2: panino con 100 g pane + 100 g sgombro + 1 mela"
+    },
+    {
+     "id": "a7-s2",
+     "time": "11:05",
+     "label": "Riempi la borraccia"
+    },
+    {
+     "id": "a7-s3",
+     "time": "13:50",
+     "label": "Annota compiti, verifiche e interrogazioni"
+    }
+   ]
+  },
+  {
+   "id": "a8",
+   "title": "Scuola",
+   "start": "08:00",
+   "end": "16:00",
+   "days": [
+    4
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a8-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti"
+    },
+    {
+     "id": "a8-s1",
+     "time": "11:00",
+     "label": "Pasto 2 (doppio, oggi 8 ore): 150 g pane + 80 g tonno + 2 uova sode + 2 frutti"
+    },
+    {
+     "id": "a8-s2",
+     "time": "11:05",
+     "label": "Riempi la borraccia"
+    },
+    {
+     "id": "a8-s3",
+     "time": "15:50",
+     "label": "Annota compiti, verifiche e interrogazioni"
+    }
+   ]
+  },
+  {
+   "id": "a9",
+   "title": "Scuola",
+   "start": "08:00",
+   "end": "14:00",
+   "days": [
+    5
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a9-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti"
+    },
+    {
+     "id": "a9-s1",
+     "time": "11:00",
+     "label": "Pasto 2: panino con 100 g pane + 80 g tonno + 1 mela"
+    },
+    {
+     "id": "a9-s2",
+     "time": "11:05",
+     "label": "Riempi la borraccia"
+    },
+    {
+     "id": "a9-s3",
+     "time": "13:50",
+     "label": "Annota compiti, verifiche e interrogazioni"
+    }
+   ]
+  },
+  {
+   "id": "a10",
+   "title": "Bus · ascolto",
+   "start": "14:00",
+   "end": "14:45",
+   "days": [
+    1,
+    2,
+    3,
+    5
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a10-s0",
+     "time": "14:00",
+     "label": "Podcast o video in inglese B2–C1 (20–25′)"
+    },
+    {
+     "id": "a10-s1",
+     "time": "14:25",
+     "label": "Stacco mentale"
+    }
+   ]
+  },
+  {
+   "id": "a11",
+   "title": "Bus · ascolto",
+   "start": "16:00",
+   "end": "16:45",
+   "days": [
+    4
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a11-s0",
+     "time": "16:00",
+     "label": "Podcast o video in inglese (20–25′)"
+    },
+    {
+     "id": "a11-s1",
+     "time": "16:25",
+     "label": "Stacco mentale"
+    }
+   ]
+  },
+  {
+   "id": "a12",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a12-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: overnight oats (preparati la sera prima): 100 g avena + 300 ml latte + 1 banana + 20 g burro d'arachidi"
+    },
+    {
+     "id": "a12-s1",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a13",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a13-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: 250 g yogurt bianco + 80 g avena + 1 banana + 20 g burro d'arachidi"
+    },
+    {
+     "id": "a13-s1",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a14",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    6,
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a14-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: 3 uova strapazzate (fuoco basso)"
+    },
+    {
+     "id": "a14-s1",
+     "time": "06:57",
+     "label": "Prepara/pesa: 100 g pane + 1 frutto + 200 ml latte"
+    },
+    {
+     "id": "a14-s2",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a15",
+   "title": "Pranzo",
+   "start": "14:45",
+   "end": "15:00",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a15-s0",
+     "time": "14:45",
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 120 g riso (crudo) + 200 g verdure + 10 g olio"
+    },
+    {
+     "id": "a15-s1",
+     "time": "14:58",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a16",
+   "title": "Pranzo",
+   "start": "14:45",
+   "end": "15:00",
+   "days": [
+    2
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a16-s0",
+     "time": "14:45",
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 400 g patate + 200 g verdure + 10 g olio + 60 g pane"
+    },
+    {
+     "id": "a16-s1",
+     "time": "14:58",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a17",
+   "title": "Pranzo",
+   "start": "14:45",
+   "end": "15:00",
+   "days": [
+    3
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a17-s0",
+     "time": "14:45",
+     "label": "Prepara/pesa: dal contenitore: pasta e ceci (100 g pasta + 150 g ceci + pelati + 10 g olio)"
+    },
+    {
+     "id": "a17-s1",
+     "time": "14:58",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a18",
+   "title": "Pranzo tardivo",
+   "start": "16:45",
+   "end": "17:00",
+   "days": [
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a18-s0",
+     "time": "16:45",
+     "label": "Prepara/pesa: dal contenitore: 120 g riso + 160 g tonno + 200 g verdure + 10 g olio (buono anche freddo)"
+    },
+    {
+     "id": "a18-s1",
+     "time": "16:58",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a19",
+   "title": "Denti + stacco",
+   "start": "15:00",
+   "end": "15:15",
+   "days": [
+    1,
+    2,
+    3,
+    5
+   ],
+   "color": "#86cfc2",
+   "steps": [
+    {
+     "id": "a19-s0",
+     "time": "15:00",
+     "label": "Denti (o almeno risciacquo) + filo se serve"
+    },
+    {
+     "id": "a19-s1",
+     "time": "15:05",
+     "label": "10′ senza schermo"
+    }
+   ]
+  },
+  {
+   "id": "a20",
+   "title": "Denti + stacco",
+   "start": "17:00",
+   "end": "17:15",
+   "days": [
+    4
+   ],
+   "color": "#86cfc2",
+   "steps": [
+    {
+     "id": "a20-s0",
+     "time": "17:00",
+     "label": "Denti + filo se serve"
+    },
+    {
+     "id": "a20-s1",
+     "time": "17:05",
+     "label": "10′ senza schermo"
+    }
+   ]
+  },
+  {
+   "id": "a21",
+   "title": "Studio 75′ · Maturità",
+   "start": "15:15",
+   "end": "16:30",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a21-s0",
+     "time": "15:15",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a21-s1",
+     "time": "15:17",
+     "label": "compiti + consolidamento di quanto spiegato oggi"
+    },
+    {
+     "id": "a21-s2",
+     "time": "15:53",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a21-s3",
+     "time": "16:28",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a22",
+   "title": "Borsa sport",
+   "start": "16:30",
+   "end": "16:40",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a22-s0",
+     "time": "16:30",
+     "label": "Bende pulite"
+    },
+    {
+     "id": "a22-s1",
+     "time": "16:31",
+     "label": "Guantoni"
+    },
+    {
+     "id": "a22-s2",
+     "time": "16:32",
+     "label": "Paradenti nella custodia"
+    },
+    {
+     "id": "a22-s3",
+     "time": "16:33",
+     "label": "Asciugamano e ciabatte"
+    },
+    {
+     "id": "a22-s4",
+     "time": "16:35",
+     "label": "Cambio"
+    },
+    {
+     "id": "a22-s5",
+     "time": "16:37",
+     "label": "Snack (Pasto 4) e borraccia"
+    }
+   ]
+  },
+  {
+   "id": "a23",
+   "title": "Tragitto palestra",
+   "start": "16:40",
+   "end": "17:00",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a23-s0",
+     "time": "16:40",
+     "label": "Parti"
+    },
+    {
+     "id": "a23-s1",
+     "time": "16:42",
+     "label": "Flashcard sul bus"
+    }
+   ]
+  },
+  {
+   "id": "a24",
+   "title": "Cambio",
+   "start": "17:00",
+   "end": "17:10",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#e07a5f",
+   "steps": [
+    {
+     "id": "a24-s0",
+     "time": "17:00",
+     "label": "Spogliatoio"
+    },
+    {
+     "id": "a24-s1",
+     "time": "17:04",
+     "label": "Bendaggio mani"
+    }
+   ]
+  },
+  {
+   "id": "a25",
+   "title": "Muay Thai 90′",
+   "start": "17:10",
+   "end": "18:40",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a25-s0",
+     "time": "17:10",
+     "label": "Lezione: tecnica prima dei pesi, da fresco"
+    },
+    {
+     "id": "a25-s1",
+     "time": "17:55",
+     "label": "Bevi durante la sessione"
+    },
+    {
+     "id": "a25-s2",
+     "time": "18:35",
+     "label": "Paradenti sciacquato subito e nella custodia"
+    }
+   ]
+  },
+  {
+   "id": "a26",
+   "title": "Pesi 45′ · Scheda A",
+   "start": "18:40",
+   "end": "19:25",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "weeks": "odd",
+   "group": "Pesi 45′",
+   "steps": [
+    {
+     "id": "a26-s0",
+     "time": "18:40",
+     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
+    },
+    {
+     "id": "a26-s1",
+     "time": "18:42",
+     "label": "Squat (o goblet squat) 3 × 6–10"
+    },
+    {
+     "id": "a26-s2",
+     "time": "18:50",
+     "label": "Panca piana con manubri 3 × 8–12"
+    },
+    {
+     "id": "a26-s3",
+     "time": "18:58",
+     "label": "Rematore con manubrio o al cavo 3 × 8–12"
+    },
+    {
+     "id": "a26-s4",
+     "time": "19:06",
+     "label": "Stacco rumeno 2 × 8–10"
+    },
+    {
+     "id": "a26-s5",
+     "time": "19:14",
+     "label": "Plank / core anti-rotazione 2 serie"
+    },
+    {
+     "id": "a26-s6",
+     "time": "19:23",
+     "label": "Annota carichi e ripetizioni nel registro"
+    }
+   ]
+  },
+  {
+   "id": "a27",
+   "title": "Pesi 45′ · Scheda B",
+   "start": "18:40",
+   "end": "19:25",
+   "days": [
+    3
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "weeks": "odd",
+   "group": "Pesi 45′",
+   "steps": [
+    {
+     "id": "a27-s0",
+     "time": "18:40",
+     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
+    },
+    {
+     "id": "a27-s1",
+     "time": "18:42",
+     "label": "Pressa o affondi 3 × 8–12"
+    },
+    {
+     "id": "a27-s2",
+     "time": "18:50",
+     "label": "Military press con manubri 3 × 8–10"
+    },
+    {
+     "id": "a27-s3",
+     "time": "18:58",
+     "label": "Lat machine o trazioni 3 × 6–12"
+    },
+    {
+     "id": "a27-s4",
+     "time": "19:06",
+     "label": "Hip thrust o leg curl 2 × 10–12"
+    },
+    {
+     "id": "a27-s5",
+     "time": "19:14",
+     "label": "Addominali + isometrie del collo leggere (con l'ok del maestro) 2 serie"
+    },
+    {
+     "id": "a27-s6",
+     "time": "19:23",
+     "label": "Annota carichi e ripetizioni nel registro"
+    }
+   ]
+  },
+  {
+   "id": "a28",
+   "title": "Pesi 45′ · Scheda B",
+   "start": "18:40",
+   "end": "19:25",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "weeks": "even",
+   "group": "Pesi 45′",
+   "steps": [
+    {
+     "id": "a28-s0",
+     "time": "18:40",
+     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
+    },
+    {
+     "id": "a28-s1",
+     "time": "18:42",
+     "label": "Pressa o affondi 3 × 8–12"
+    },
+    {
+     "id": "a28-s2",
+     "time": "18:50",
+     "label": "Military press con manubri 3 × 8–10"
+    },
+    {
+     "id": "a28-s3",
+     "time": "18:58",
+     "label": "Lat machine o trazioni 3 × 6–12"
+    },
+    {
+     "id": "a28-s4",
+     "time": "19:06",
+     "label": "Hip thrust o leg curl 2 × 10–12"
+    },
+    {
+     "id": "a28-s5",
+     "time": "19:14",
+     "label": "Addominali + isometrie del collo leggere (con l'ok del maestro) 2 serie"
+    },
+    {
+     "id": "a28-s6",
+     "time": "19:23",
+     "label": "Annota carichi e ripetizioni nel registro"
+    }
+   ]
+  },
+  {
+   "id": "a29",
+   "title": "Pesi 45′ · Scheda A",
+   "start": "18:40",
+   "end": "19:25",
+   "days": [
+    3
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "weeks": "even",
+   "group": "Pesi 45′",
+   "steps": [
+    {
+     "id": "a29-s0",
+     "time": "18:40",
+     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
+    },
+    {
+     "id": "a29-s1",
+     "time": "18:42",
+     "label": "Squat (o goblet squat) 3 × 6–10"
+    },
+    {
+     "id": "a29-s2",
+     "time": "18:50",
+     "label": "Panca piana con manubri 3 × 8–12"
+    },
+    {
+     "id": "a29-s3",
+     "time": "18:58",
+     "label": "Rematore con manubrio o al cavo 3 × 8–12"
+    },
+    {
+     "id": "a29-s4",
+     "time": "19:06",
+     "label": "Stacco rumeno 2 × 8–10"
+    },
+    {
+     "id": "a29-s5",
+     "time": "19:14",
+     "label": "Plank / core anti-rotazione 2 serie"
+    },
+    {
+     "id": "a29-s6",
+     "time": "19:23",
+     "label": "Annota carichi e ripetizioni nel registro"
+    }
+   ]
+  },
+  {
+   "id": "a30",
+   "title": "Doccia post",
+   "start": "19:25",
+   "end": "19:45",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#86cfc2",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a30-s0",
+     "time": "19:25",
+     "label": "Doccia completa con ciabatte"
+    },
+    {
+     "id": "a30-s1",
+     "time": "19:33",
+     "label": "Capelli"
+    },
+    {
+     "id": "a30-s2",
+     "time": "19:36",
+     "label": "Asciuga bene tra le dita dei piedi"
+    },
+    {
+     "id": "a30-s3",
+     "time": "19:39",
+     "label": "Deodorante e biancheria pulita"
+    },
+    {
+     "id": "a30-s4",
+     "time": "19:42",
+     "label": "Crema viso idratante"
+    }
+   ]
+  },
+  {
+   "id": "a31",
+   "title": "Ritorno + snack",
+   "start": "19:45",
+   "end": "20:05",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a31-s0",
+     "time": "19:45",
+     "label": "Pasto 4: 1 banana + 30 g pane"
+    },
+    {
+     "id": "a31-s1",
+     "time": "19:50",
+     "label": "Ascolto leggero sul bus"
+    }
+   ]
+  },
+  {
+   "id": "a32",
+   "title": "Cena",
+   "start": "20:05",
+   "end": "20:20",
+   "days": [
+    1
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a32-s0",
+     "time": "20:05",
+     "label": "Prepara/pesa: frittata di patate e cipolla (3 uova)"
+    },
+    {
+     "id": "a32-s1",
+     "time": "20:09",
+     "label": "Prepara/pesa: 100 g pane + insalata"
+    },
+    {
+     "id": "a32-s2",
+     "time": "20:14",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a32-s3",
+     "time": "20:18",
+     "label": "Più tardi, se hai fame: 250 ml latte"
+    }
+   ]
+  },
+  {
+   "id": "a33",
+   "title": "Cena",
+   "start": "20:05",
+   "end": "20:20",
+   "days": [
+    3
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a33-s0",
+     "time": "20:05",
+     "label": "Prepara/pesa: pasta al tonno: 100 g pasta + 120 g tonno + pelati + 10 g olio + verdura"
+    },
+    {
+     "id": "a33-s1",
+     "time": "20:12",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a33-s2",
+     "time": "20:18",
+     "label": "Più tardi, se hai fame: 150 g yogurt bianco"
+    }
+   ]
+  },
+  {
+   "id": "a34",
+   "title": "Cena",
+   "start": "20:05",
+   "end": "20:20",
+   "days": [
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a34-s0",
+     "time": "20:05",
+     "label": "Prepara/pesa: riso saltato: riso avanzato + 3 uova + 200 g verdure surgelate + salsa di soia"
+    },
+    {
+     "id": "a34-s1",
+     "time": "20:12",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a34-s2",
+     "time": "20:18",
+     "label": "Più tardi, se hai fame: 250 ml latte o 150 g yogurt"
+    }
+   ]
+  },
+  {
+   "id": "a35",
+   "title": "Libero",
+   "start": "20:20",
+   "end": "21:00",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a35-s0",
+     "time": "20:20",
+     "label": "Guantoni aperti ad asciugare, bende a lavare"
+    },
+    {
+     "id": "a35-s1",
+     "time": "20:25",
+     "label": "Tempo per te: recupero, famiglia"
+    },
+    {
+     "id": "a35-s2",
+     "time": "20:50",
+     "label": "Prepara zaino, borsa e vestiti per domani"
+    }
+   ]
+  },
+  {
+   "id": "a36",
+   "title": "Studio 90′ · Matematica",
+   "start": "15:15",
+   "end": "16:45",
+   "days": [
+    2
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a36-s0",
+     "time": "15:15",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a36-s1",
+     "time": "15:17",
+     "label": "45′: teoria + 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a36-s2",
+     "time": "16:02",
+     "label": "Pausa 5′ in piedi"
+    },
+    {
+     "id": "a36-s3",
+     "time": "16:07",
+     "label": "40′: teoria + 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a36-s4",
+     "time": "16:43",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a37",
+   "title": "Pausa",
+   "start": "16:45",
+   "end": "17:00",
+   "days": [
+    2
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a37-s0",
+     "time": "16:45",
+     "label": "Alzati, bevi acqua, niente social"
+    }
+   ]
+  },
+  {
+   "id": "a38",
+   "title": "Studio 75′ · Fisica",
+   "start": "17:00",
+   "end": "18:15",
+   "days": [
+    2
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a38-s0",
+     "time": "17:00",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Fisica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a38-s1",
+     "time": "17:02",
+     "label": "problemi; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a38-s2",
+     "time": "17:38",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a38-s3",
+     "time": "18:13",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a39",
+   "title": "Spuntino",
+   "start": "18:15",
+   "end": "18:30",
+   "days": [
+    2
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a39-s0",
+     "time": "18:15",
+     "label": "Prepara/pesa: 1 banana + 30 g pane"
+    },
+    {
+     "id": "a39-s1",
+     "time": "18:28",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a40",
+   "title": "Studio 60′ · Maturità",
+   "start": "18:30",
+   "end": "19:30",
+   "days": [
+    2
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a40-s0",
+     "time": "18:30",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a40-s1",
+     "time": "18:32",
+     "label": "materie di indirizzo, studio attivo: ripeti a voce, schemi, flashcard (mai solo rileggere)"
+    },
+    {
+     "id": "a40-s2",
+     "time": "19:00",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a40-s3",
+     "time": "19:28",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a41",
+   "title": "Shadow + mobilità",
+   "start": "19:30",
+   "end": "19:45",
+   "days": [
+    2
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a41-s0",
+     "time": "19:30",
+     "label": "3 round di shadow boxing da 3′ sul tema dell'ultima lezione"
+    },
+    {
+     "id": "a41-s1",
+     "time": "19:40",
+     "label": "Mobilità anche e caviglie"
+    }
+   ]
+  },
+  {
+   "id": "a42",
+   "title": "Cena",
+   "start": "19:45",
+   "end": "20:00",
+   "days": [
+    2
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a42-s0",
+     "time": "19:45",
+     "label": "Prepara/pesa: 125 g sgombro in scatola + 400 g patate lesse + 200 g verdure + 10 g olio"
+    },
+    {
+     "id": "a42-s1",
+     "time": "19:52",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a42-s2",
+     "time": "19:58",
+     "label": "Prima di sederti: seconda teglia (pollo e riso) in forno — cuoce mentre ceni"
+    }
+   ]
+  },
+  {
+   "id": "a43",
+   "title": "Libero",
+   "start": "20:00",
+   "end": "20:30",
+   "days": [
+    2
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a43-s0",
+     "time": "20:00",
+     "label": "Recupero"
+    },
+    {
+     "id": "a43-s1",
+     "time": "20:20",
+     "label": "Togli la teglia: riempi 2 contenitori (pranzo di giovedì in frigo, venerdì in freezer)"
+    }
+   ]
+  },
+  {
+   "id": "a44",
+   "title": "Studio 90′ · Matematica",
+   "start": "17:15",
+   "end": "18:45",
+   "days": [
+    4
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a44-s0",
+     "time": "17:15",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a44-s1",
+     "time": "17:17",
+     "label": "45′: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a44-s2",
+     "time": "18:02",
+     "label": "Pausa 5′ in piedi"
+    },
+    {
+     "id": "a44-s3",
+     "time": "18:07",
+     "label": "40′: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a44-s4",
+     "time": "18:43",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a45",
+   "title": "Spuntino",
+   "start": "18:45",
+   "end": "19:00",
+   "days": [
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a45-s0",
+     "time": "18:45",
+     "label": "Prepara/pesa: 1 banana (leggero: la cena è vicina)"
+    },
+    {
+     "id": "a45-s1",
+     "time": "18:58",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a46",
+   "title": "Studio 40′ · Inglese",
+   "start": "19:00",
+   "end": "19:40",
+   "days": [
+    4
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a46-s0",
+     "time": "19:00",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Inglese) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a46-s1",
+     "time": "19:02",
+     "label": "grammatica: teoria dell'argomento della settimana + esercizi scritti"
+    },
+    {
+     "id": "a46-s2",
+     "time": "19:38",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a47",
+   "title": "Shadow + mobilità",
+   "start": "19:40",
+   "end": "19:55",
+   "days": [
+    4
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a47-s0",
+     "time": "19:40",
+     "label": "3 round di shadow boxing"
+    },
+    {
+     "id": "a47-s1",
+     "time": "19:50",
+     "label": "Stretching"
+    }
+   ]
+  },
+  {
+   "id": "a48",
+   "title": "Cena",
+   "start": "19:55",
+   "end": "20:10",
+   "days": [
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a48-s0",
+     "time": "19:55",
+     "label": "Prepara/pesa: 3 uova strapazzate + 100 g pane"
+    },
+    {
+     "id": "a48-s1",
+     "time": "19:59",
+     "label": "Prepara/pesa: verdure saltate + 10 g olio"
+    },
+    {
+     "id": "a48-s2",
+     "time": "20:04",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a48-s3",
+     "time": "20:08",
+     "label": "Più tardi, se hai fame: 250 ml latte"
+    }
+   ]
+  },
+  {
+   "id": "a49",
+   "title": "Libero",
+   "start": "20:10",
+   "end": "20:30",
+   "days": [
+    4
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a49-s0",
+     "time": "20:10",
+     "label": "Giornata lunga: stacca davvero"
+    }
+   ]
+  },
+  {
+   "id": "a50",
+   "title": "Doccia + capelli",
+   "start": "20:30",
+   "end": "21:00",
+   "days": [
+    2,
+    4,
+    6,
+    0
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a50-s0",
+     "time": "20:30",
+     "label": "Doccia completa"
+    },
+    {
+     "id": "a50-s1",
+     "time": "20:45",
+     "label": "Capelli"
+    },
+    {
+     "id": "a50-s2",
+     "time": "20:52",
+     "label": "Cura del corpo"
+    }
+   ]
+  },
+  {
+   "id": "a51",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a51-s0",
+     "time": "21:00",
+     "label": "Filo interdentale + denti 2′"
+    },
+    {
+     "id": "a51-s1",
+     "time": "21:05",
+     "label": "Detergente viso"
+    },
+    {
+     "id": "a51-s2",
+     "time": "21:08",
+     "label": "Idratante"
+    },
+    {
+     "id": "a51-s3",
+     "time": "21:10",
+     "label": "Antitraspirante (funziona meglio la sera)"
+    },
+    {
+     "id": "a51-s4",
+     "time": "21:13",
+     "label": "Paradenti lavato con acqua fredda e sapone"
+    },
+    {
+     "id": "a51-s5",
+     "time": "21:15",
+     "label": "Prepara vestiti di domani"
+    },
+    {
+     "id": "a51-s6",
+     "time": "21:18",
+     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+    },
+    {
+     "id": "a51-s7",
+     "time": "21:21",
+     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+    },
+    {
+     "id": "a51-s8",
+     "time": "21:25",
+     "label": "Luci basse, telefono fuori dalla camera"
+    }
+   ]
+  },
+  {
+   "id": "a52",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    2
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a52-s0",
+     "time": "21:00",
+     "label": "Filo interdentale + denti 2′"
+    },
+    {
+     "id": "a52-s1",
+     "time": "21:05",
+     "label": "Detergente viso"
+    },
+    {
+     "id": "a52-s2",
+     "time": "21:08",
+     "label": "Idratante"
+    },
+    {
+     "id": "a52-s3",
+     "time": "21:10",
+     "label": "Antitraspirante (funziona meglio la sera)"
+    },
+    {
+     "id": "a52-s4",
+     "time": "21:13",
+     "label": "Prepara zaino e vestiti di domani"
+    },
+    {
+     "id": "a52-s5",
+     "time": "21:18",
+     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+    },
+    {
+     "id": "a52-s6",
+     "time": "21:21",
+     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+    },
+    {
+     "id": "a52-s7",
+     "time": "21:25",
+     "label": "Luci basse, telefono fuori dalla camera"
+    }
+   ]
+  },
+  {
+   "id": "a53",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    4
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a53-s0",
+     "time": "21:00",
+     "label": "Filo interdentale + denti 2′"
+    },
+    {
+     "id": "a53-s1",
+     "time": "21:05",
+     "label": "Detergente viso"
+    },
+    {
+     "id": "a53-s2",
+     "time": "21:08",
+     "label": "Idratante"
+    },
+    {
+     "id": "a53-s3",
+     "time": "21:10",
+     "label": "Antitraspirante (funziona meglio la sera)"
+    },
+    {
+     "id": "a53-s4",
+     "time": "21:13",
+     "label": "Prepara la borsa sport per venerdì"
+    },
+    {
+     "id": "a53-s5",
+     "time": "21:18",
+     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+    },
+    {
+     "id": "a53-s6",
+     "time": "21:21",
+     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+    },
+    {
+     "id": "a53-s7",
+     "time": "21:25",
+     "label": "Luci basse, telefono fuori dalla camera"
+    }
+   ]
+  },
+  {
+   "id": "a54",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    6
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a54-s0",
+     "time": "21:00",
+     "label": "Filo interdentale + denti 2′"
+    },
+    {
+     "id": "a54-s1",
+     "time": "21:05",
+     "label": "Detergente viso"
+    },
+    {
+     "id": "a54-s2",
+     "time": "21:08",
+     "label": "Idratante"
+    },
+    {
+     "id": "a54-s3",
+     "time": "21:10",
+     "label": "Antitraspirante (funziona meglio la sera)"
+    },
+    {
+     "id": "a54-s4",
+     "time": "21:13",
+     "label": "Prepara la domenica"
+    },
+    {
+     "id": "a54-s5",
+     "time": "21:18",
+     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+    },
+    {
+     "id": "a54-s6",
+     "time": "21:21",
+     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+    },
+    {
+     "id": "a54-s7",
+     "time": "21:25",
+     "label": "Luci basse, telefono fuori dalla camera"
+    }
+   ]
+  },
+  {
+   "id": "a55",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    0
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a55-s0",
+     "time": "21:00",
+     "label": "Filo interdentale + denti 2′"
+    },
+    {
+     "id": "a55-s1",
+     "time": "21:05",
+     "label": "Detergente viso"
+    },
+    {
+     "id": "a55-s2",
+     "time": "21:08",
+     "label": "Idratante"
+    },
+    {
+     "id": "a55-s3",
+     "time": "21:10",
+     "label": "Antitraspirante (funziona meglio la sera)"
+    },
+    {
+     "id": "a55-s4",
+     "time": "21:13",
+     "label": "Tutto pronto per lunedì?"
+    },
+    {
+     "id": "a55-s5",
+     "time": "21:18",
+     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+    },
+    {
+     "id": "a55-s6",
+     "time": "21:21",
+     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+    },
+    {
+     "id": "a55-s7",
+     "time": "21:25",
+     "label": "Luci basse, telefono fuori dalla camera"
+    }
+   ]
+  },
+  {
+   "id": "a56",
+   "title": "Sonno",
+   "start": "21:30",
+   "end": "06:30",
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    0
+   ],
+   "color": "#c9d1e3",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a56-s0",
+     "time": "21:30",
+     "label": "Spegni: 9 ore piene, telefono fuori dalla camera o in modalità aereo"
+    },
+    {
+     "id": "a56-s1",
+     "time": "06:29",
+     "label": "Sveglia alle 06:30, anche nel weekend"
+    }
+   ]
+  },
+  {
+   "id": "a57",
+   "title": "Risveglio lento",
+   "start": "07:05",
+   "end": "07:40",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a57-s0",
+     "time": "07:05",
+     "label": "Lettura leggera o musica, niente social"
+    }
+   ]
+  },
+  {
+   "id": "a58",
+   "title": "Luce + piano",
+   "start": "07:40",
+   "end": "08:00",
+   "days": [
+    6
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a58-s0",
+     "time": "07:40",
+     "label": "5′ fuori o alla finestra"
+    },
+    {
+     "id": "a58-s1",
+     "time": "07:46",
+     "label": "Scrivi i 5 obiettivi dei blocchi di oggi"
+    }
+   ]
+  },
+  {
+   "id": "a59",
+   "title": "Studio 90′ · Matematica",
+   "start": "08:00",
+   "end": "09:30",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a59-s0",
+     "time": "08:00",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a59-s1",
+     "time": "08:02",
+     "label": "45′: blocco più difficile a mente fresca: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a59-s2",
+     "time": "08:47",
+     "label": "Pausa 5′ in piedi"
+    },
+    {
+     "id": "a59-s3",
+     "time": "08:52",
+     "label": "40′: blocco più difficile a mente fresca: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a59-s4",
+     "time": "09:28",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a60",
+   "title": "Pausa",
+   "start": "09:30",
+   "end": "09:45",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a60-s0",
+     "time": "09:30",
+     "label": "Alzati, acqua, niente social"
+    }
+   ]
+  },
+  {
+   "id": "a61",
+   "title": "Studio 90′ · Fisica",
+   "start": "09:45",
+   "end": "11:15",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a61-s0",
+     "time": "09:45",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Fisica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a61-s1",
+     "time": "09:47",
+     "label": "45′: problemi; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a61-s2",
+     "time": "10:32",
+     "label": "Pausa 5′ in piedi"
+    },
+    {
+     "id": "a61-s3",
+     "time": "10:37",
+     "label": "40′: problemi; ogni errore nel quaderno degli errori"
+    },
+    {
+     "id": "a61-s4",
+     "time": "11:13",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a62",
+   "title": "Spuntino",
+   "start": "11:15",
+   "end": "11:30",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a62-s0",
+     "time": "11:15",
+     "label": "Prepara/pesa: 150 g yogurt bianco o 250 ml latte (la dieta il sabato non lo prevede: tienilo leggero)"
+    },
+    {
+     "id": "a62-s1",
+     "time": "11:28",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a63",
+   "title": "Studio 75′ · Sant'Anna / TOLC-I",
+   "start": "11:30",
+   "end": "12:45",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a63-s0",
+     "time": "11:30",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Sant'Anna / TOLC-I) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a63-s1",
+     "time": "11:32",
+     "label": "problem solving: problemi di logica ed esercizi non standard"
+    },
+    {
+     "id": "a63-s2",
+     "time": "12:08",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a63-s3",
+     "time": "12:43",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a64",
+   "title": "Pausa",
+   "start": "12:45",
+   "end": "13:00",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a64-s0",
+     "time": "12:45",
+     "label": "Alzati, acqua"
+    }
+   ]
+  },
+  {
+   "id": "a65",
+   "title": "Pranzo",
+   "start": "13:00",
+   "end": "13:15",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a65-s0",
+     "time": "13:00",
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 400 g patate + 200 g verdure + 100 g pane"
+    },
+    {
+     "id": "a65-s1",
+     "time": "13:13",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a66",
+   "title": "Pausa lunga",
+   "start": "13:15",
+   "end": "14:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a66-s0",
+     "time": "13:15",
+     "label": "Riposo vero: niente studio"
+    }
+   ]
+  },
+  {
+   "id": "a67",
+   "title": "Studio 75′ · Maturità",
+   "start": "14:30",
+   "end": "15:45",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a67-s0",
+     "time": "14:30",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a67-s1",
+     "time": "14:32",
+     "label": "studio attivo: ripeti a voce, schemi, flashcard (mai solo rileggere)"
+    },
+    {
+     "id": "a67-s2",
+     "time": "15:08",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a67-s3",
+     "time": "15:43",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a68",
+   "title": "Pausa",
+   "start": "15:45",
+   "end": "16:00",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a68-s0",
+     "time": "15:45",
+     "label": "Alzati, acqua"
+    }
+   ]
+  },
+  {
+   "id": "a69",
+   "title": "Studio 60′ · Inglese",
+   "start": "16:00",
+   "end": "17:00",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a69-s0",
+     "time": "16:00",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Inglese) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a69-s1",
+     "time": "16:02",
+     "label": "test di ripasso + 1 testo scritto (email o saggio breve) corretto con le regole studiate"
+    },
+    {
+     "id": "a69-s2",
+     "time": "16:30",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a69-s3",
+     "time": "16:58",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a70",
+   "title": "Spuntino",
+   "start": "17:00",
+   "end": "17:15",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a70-s0",
+     "time": "17:00",
+     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 30 g pane (anche in piedi)"
+    },
+    {
+     "id": "a70-s1",
+     "time": "17:13",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a71",
+   "title": "Tecnica a casa 45′",
+   "start": "17:15",
+   "end": "18:00",
+   "days": [
+    6
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a71-s0",
+     "time": "17:15",
+     "label": "Shadow a tema (ultima lezione)"
+    },
+    {
+     "id": "a71-s1",
+     "time": "17:30",
+     "label": "Lavoro di piedi"
+    },
+    {
+     "id": "a71-s2",
+     "time": "17:42",
+     "label": "Mobilità anche e caviglie"
+    },
+    {
+     "id": "a71-s3",
+     "time": "17:52",
+     "label": "Core"
+    }
+   ]
+  },
+  {
+   "id": "a72",
+   "title": "Cucina 30′",
+   "start": "18:00",
+   "end": "18:30",
+   "days": [
+    6
+   ],
+   "color": "#f2c27b",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a72-s0",
+     "time": "18:00",
+     "label": "Pentola di fagioli (cena di oggi + pranzo di domani)"
+    },
+    {
+     "id": "a72-s1",
+     "time": "18:08",
+     "label": "400 g di riso"
+    },
+    {
+     "id": "a72-s2",
+     "time": "18:15",
+     "label": "4 uova sode"
+    }
+   ]
+  },
+  {
+   "id": "a73",
+   "title": "Libero",
+   "start": "18:30",
+   "end": "19:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a73-s0",
+     "time": "18:30",
+     "label": "Uscite, amici, hobby"
+    }
+   ]
+  },
+  {
+   "id": "a74",
+   "title": "Cena",
+   "start": "19:30",
+   "end": "19:45",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a74-s0",
+     "time": "19:30",
+     "label": "Prepara/pesa: pasta e fagioli: 100 g pasta + 240 g fagioli + pelati + 10 g olio + verdura"
+    },
+    {
+     "id": "a74-s1",
+     "time": "19:37",
+     "label": "Mangia seduto, senza telefono"
+    },
+    {
+     "id": "a74-s2",
+     "time": "19:43",
+     "label": "Più tardi, se hai fame: 250 ml latte"
+    }
+   ]
+  },
+  {
+   "id": "a75",
+   "title": "Libero",
+   "start": "19:45",
+   "end": "20:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a75-s0",
+     "time": "19:45",
+     "label": "Tempo libero"
+    }
+   ]
+  },
+  {
+   "id": "a76",
+   "title": "Libero",
+   "start": "07:05",
+   "end": "08:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a76-s0",
+     "time": "07:05",
+     "label": "Colazione con calma, passeggiata"
+    }
+   ]
+  },
+  {
+   "id": "a77",
+   "title": "Studio 90′ · Errori mate/fisica",
+   "start": "08:30",
+   "end": "10:00",
+   "days": [
+    0
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a77-s0",
+     "time": "08:30",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Errori mate/fisica) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a77-s1",
+     "time": "08:32",
+     "label": "45′: quaderno degli errori: rifai gli esercizi sbagliati in settimana"
+    },
+    {
+     "id": "a77-s2",
+     "time": "09:17",
+     "label": "Pausa 5′ in piedi"
+    },
+    {
+     "id": "a77-s3",
+     "time": "09:22",
+     "label": "40′: quaderno degli errori: rifai gli esercizi sbagliati in settimana"
+    },
+    {
+     "id": "a77-s4",
+     "time": "09:58",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a78",
+   "title": "Spuntino",
+   "start": "10:00",
+   "end": "10:15",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a78-s0",
+     "time": "10:00",
+     "label": "Prepara/pesa: 150 g yogurt bianco o 250 ml latte (la dieta la domenica non lo prevede: tienilo leggero)"
+    },
+    {
+     "id": "a78-s1",
+     "time": "10:13",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a79",
+   "title": "Studio 60′ · Maturità",
+   "start": "10:15",
+   "end": "11:15",
+   "days": [
+    0
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a79-s0",
+     "time": "10:15",
+     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
+    },
+    {
+     "id": "a79-s1",
+     "time": "10:17",
+     "label": "flashcard della maturità + esercizi misti"
+    },
+    {
+     "id": "a79-s2",
+     "time": "10:45",
+     "label": "Metà blocco: ripeti a voce senza guardare"
+    },
+    {
+     "id": "a79-s3",
+     "time": "11:13",
+     "label": "Segna le ore nella scheda settimanale"
+    }
+   ]
+  },
+  {
+   "id": "a80",
+   "title": "Libero",
+   "start": "11:15",
+   "end": "13:00",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a80-s0",
+     "time": "11:15",
+     "label": "Tempo libero"
+    }
+   ]
+  },
+  {
+   "id": "a81",
+   "title": "Pranzo",
+   "start": "13:00",
+   "end": "13:15",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a81-s0",
+     "time": "13:00",
+     "label": "Prepara/pesa: zero cottura, 5′: 120 g tonno + 240 g fagioli + pomodorini + 10 g olio + 100 g pane"
+    },
+    {
+     "id": "a81-s1",
+     "time": "13:13",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a82",
+   "title": "Riposo",
+   "start": "13:15",
+   "end": "16:00",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a82-s0",
+     "time": "13:15",
+     "label": "Famiglia, uscite, riposo"
+    }
+   ]
+  },
+  {
+   "id": "a83",
+   "title": "Spuntino",
+   "start": "16:00",
+   "end": "16:15",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a83-s0",
+     "time": "16:00",
+     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 40 g avena"
+    },
+    {
+     "id": "a83-s1",
+     "time": "16:13",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a84",
+   "title": "Revisione settimanale",
+   "start": "16:15",
+   "end": "17:00",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a84-s0",
+     "time": "16:15",
+     "label": "Ore di studio, allenamenti e sonno della settimana segnati?"
+    },
+    {
+     "id": "a84-s1",
+     "time": "16:19",
+     "label": "Quali blocchi sono saltati e perché? Sposta o accorcia un blocco"
+    },
+    {
+     "id": "a84-s2",
+     "time": "16:23",
+     "label": "Voti e verifiche: c'è una materia della maturità in calo?"
+    },
+    {
+     "id": "a84-s3",
+     "time": "16:27",
+     "label": "Quaderno degli errori: rifatti tutti?"
+    },
+    {
+     "id": "a84-s4",
+     "time": "16:31",
+     "label": "In linea con il mese del calendario (mate, fisica, Sant'Anna)?"
+    },
+    {
+     "id": "a84-s5",
+     "time": "16:35",
+     "label": "Pesi: carichi saliti su almeno 2 esercizi nelle ultime 2 settimane?"
+    },
+    {
+     "id": "a84-s6",
+     "time": "16:39",
+     "label": "Peso medio: sale di 0,25–0,5% a settimana? Se no, correggi la dieta (+/- 200 kcal)"
+    },
+    {
+     "id": "a84-s7",
+     "time": "16:43",
+     "label": "Sonno: quante sere hai spento dopo le 21:30? Cosa l'ha causato?"
+    },
+    {
+     "id": "a84-s8",
+     "time": "16:47",
+     "label": "Budget: spese della settimana registrate e dentro le quote?"
+    },
+    {
+     "id": "a84-s9",
+     "time": "16:51",
+     "label": "Verifiche e scadenze della prossima settimana (TOLC, bando, interrogazioni)"
+    },
+    {
+     "id": "a84-s10",
+     "time": "16:55",
+     "label": "Borsa sport lavata e pronta, zaino pronto, vestiti del lunedì scelti?"
+    }
+   ]
+  },
+  {
+   "id": "a85",
+   "title": "Cura settimanale",
+   "start": "17:00",
+   "end": "17:45",
+   "days": [
+    0
+   ],
+   "color": "#86cfc2",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a85-s0",
+     "time": "17:00",
+     "label": "Unghie di mani e piedi corte (obbligatorio per sparring e clinch)"
+    },
+    {
+     "id": "a85-s1",
+     "time": "17:12",
+     "label": "Scrub corpo leggero"
+    },
+    {
+     "id": "a85-s2",
+     "time": "17:22",
+     "label": "Pulizia di rasoio e pettini"
+    },
+    {
+     "id": "a85-s3",
+     "time": "17:30",
+     "label": "Lava bende, borsa e borraccia"
+    },
+    {
+     "id": "a85-s4",
+     "time": "17:40",
+     "label": "Guantoni aperti ad asciugare e arieggiare"
+    }
+   ]
+  },
+  {
+   "id": "a86",
+   "title": "Libero",
+   "start": "17:45",
+   "end": "18:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a86-s0",
+     "time": "17:45",
+     "label": "Tempo libero"
+    }
+   ]
+  },
+  {
+   "id": "a87",
+   "title": "Cucina 60′",
+   "start": "18:30",
+   "end": "19:30",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a87-s0",
+     "time": "18:30",
+     "label": "Teglia pollo e patate in forno: 1 kg cosce + 1 kg patate a cubi, olio, paprika, rosmarino · 200 °C per 30–35′ (3 porzioni)"
+    },
+    {
+     "id": "a87-s1",
+     "time": "18:35",
+     "label": "Mentre cuoce: 500 g di riso"
+    },
+    {
+     "id": "a87-s2",
+     "time": "18:45",
+     "label": "6 uova sode"
+    },
+    {
+     "id": "a87-s3",
+     "time": "18:55",
+     "label": "Pentola di ceci per il pranzo di mercoledì"
+    },
+    {
+     "id": "a87-s4",
+     "time": "19:10",
+     "label": "3 barattoli di overnight oats (lun, mer, ven)"
+    },
+    {
+     "id": "a87-s5",
+     "time": "19:25",
+     "label": "Dividi la teglia: cena di stasera + contenitori di lunedì e martedì"
+    }
+   ]
+  },
+  {
+   "id": "a88",
+   "title": "Cena",
+   "start": "19:30",
+   "end": "19:45",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a88-s0",
+     "time": "19:30",
+     "label": "Prepara/pesa: dalla teglia appena fatta: 150 g pollo + 350 g patate + 200 g verdure + 10 g olio + 60 g pane"
+    },
+    {
+     "id": "a88-s1",
+     "time": "19:43",
+     "label": "Mangia seduto, senza telefono"
+    }
+   ]
+  },
+  {
+   "id": "a89",
+   "title": "Prepara lunedì",
+   "start": "19:45",
+   "end": "20:00",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a89-s0",
+     "time": "19:45",
+     "label": "Zaino"
+    },
+    {
+     "id": "a89-s1",
+     "time": "19:50",
+     "label": "Borsa sport"
+    },
+    {
+     "id": "a89-s2",
+     "time": "19:55",
+     "label": "Vestiti"
+    }
+   ]
+  },
+  {
+   "id": "a90",
+   "title": "Libero",
+   "start": "20:00",
+   "end": "20:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a90-s0",
+     "time": "20:00",
+     "label": "Tempo libero"
+    }
+   ]
+  }
+ ],
+ "meals": [],
+ "goals": [
+  {
+   "id": "goal1",
+   "title": "100 alla maturità",
+   "priority": 1,
+   "target": "100/100 all'esame di giugno 2027",
+   "milestones": [
+    {
+     "id": "goal1-m0",
+     "due": "2026-10",
+     "title": "Nessuna insufficienza nel primo mese"
+    },
+    {
+     "id": "goal1-m1",
+     "due": "2026-12",
+     "title": "Pagella del primo periodo con media ≥ 9"
+    },
+    {
+     "id": "goal1-m2",
+     "due": "2027-01",
+     "title": "Materie della seconda prova uscite: piano delle simulazioni pronto"
+    },
+    {
+     "id": "goal1-m3",
+     "due": "2027-02",
+     "title": "Media ≥ 9 e nessuna insufficienza (obiettivo intermedio)"
+    },
+    {
+     "id": "goal1-m4",
+     "due": "2027-02",
+     "title": "Prima simulazione di seconda prova (poi una ogni 2 settimane)"
+    },
+    {
+     "id": "goal1-m5",
+     "due": "2027-02",
+     "title": "Primo testo completo di prima prova corretto dal docente"
+    },
+    {
+     "id": "goal1-m6",
+     "due": "2027-03",
+     "title": "Mappa dei collegamenti per ogni materia del colloquio"
+    },
+    {
+     "id": "goal1-m7",
+     "due": "2027-04",
+     "title": "Due mesi di simulazioni scritte con regolarità"
+    },
+    {
+     "id": "goal1-m8",
+     "due": "2027-05",
+     "title": "Simulazioni del colloquio ad alta voce, registrandoti la domenica"
+    },
+    {
+     "id": "goal1-m9",
+     "due": "2027-06",
+     "title": "Ripasso globale con sonno invariato, anche la notte prima"
+    },
+    {
+     "id": "goal1-m10",
+     "due": "2027-06",
+     "title": "Esame: 100/100"
+    }
+   ]
+  },
+  {
+   "id": "goal2",
+   "title": "Ammissione al Sant'Anna · Ingegneria",
+   "priority": 2,
+   "target": "TOLC-I sopra soglia e prove scritte a fine agosto 2027",
+   "milestones": [
+    {
+     "id": "goal2-m0",
+     "due": "2026-10",
+     "title": "Test diagnostico di matematica e fisica"
+    },
+    {
+     "id": "goal2-m1",
+     "due": "2026-10",
+     "title": "Mate: algebra, equazioni e disequazioni (fratte, modulo), sistemi"
+    },
+    {
+     "id": "goal2-m2",
+     "due": "2026-10",
+     "title": "Fisica: grandezze, vettori, cinematica 1D"
+    },
+    {
+     "id": "goal2-m3",
+     "due": "2026-11",
+     "title": "Mate: funzioni, esponenziali e logaritmi"
+    },
+    {
+     "id": "goal2-m4",
+     "due": "2026-11",
+     "title": "Fisica: cinematica 2D e principi della dinamica"
+    },
+    {
+     "id": "goal2-m5",
+     "due": "2026-11",
+     "title": "Leggere 2 prove passate del Sant'Anna"
+    },
+    {
+     "id": "goal2-m6",
+     "due": "2026-12",
+     "title": "Mate: goniometria e trigonometria"
+    },
+    {
+     "id": "goal2-m7",
+     "due": "2026-12",
+     "title": "Fisica: lavoro, energia, conservazione"
+    },
+    {
+     "id": "goal2-m8",
+     "due": "2027-01",
+     "title": "Mate: geometria analitica (retta e coniche)"
+    },
+    {
+     "id": "goal2-m9",
+     "due": "2027-01",
+     "title": "Fisica: quantità di moto e urti"
+    },
+    {
+     "id": "goal2-m10",
+     "due": "2027-01",
+     "title": "Primi esercizi TOLC-I"
+    },
+    {
+     "id": "goal2-m11",
+     "due": "2027-02",
+     "title": "Mate: successioni, limiti, continuità"
+    },
+    {
+     "id": "goal2-m12",
+     "due": "2027-02",
+     "title": "Fisica: moto rotatorio e gravitazione · meccanica completata"
+    },
+    {
+     "id": "goal2-m13",
+     "due": "2027-02",
+     "title": "Prime 3 prove passate lette e tentate"
+    },
+    {
+     "id": "goal2-m14",
+     "due": "2027-03",
+     "title": "Mate: derivate e studio di funzione"
+    },
+    {
+     "id": "goal2-m15",
+     "due": "2027-03",
+     "title": "Fisica: fluidi e termodinamica"
+    },
+    {
+     "id": "goal2-m16",
+     "due": "2027-03",
+     "title": "Leggere il bando 2027 (requisiti, date TOLC, soglia)"
+    },
+    {
+     "id": "goal2-m17",
+     "due": "2027-04",
+     "title": "Mate: integrali, geometria euclidea e solida"
+    },
+    {
+     "id": "goal2-m18",
+     "due": "2027-04",
+     "title": "Fisica: onde ed elettrostatica"
+    },
+    {
+     "id": "goal2-m19",
+     "due": "2027-04",
+     "title": "Iscrizione e primo TOLC-I"
+    },
+    {
+     "id": "goal2-m20",
+     "due": "2027-05",
+     "title": "Mate: combinatoria, probabilità, problemi misti"
+    },
+    {
+     "id": "goal2-m21",
+     "due": "2027-05",
+     "title": "Fisica: circuiti, magnetismo, induzione"
+    },
+    {
+     "id": "goal2-m22",
+     "due": "2027-05",
+     "title": "Secondo TOLC-I, se serve"
+    },
+    {
+     "id": "goal2-m23",
+     "due": "2027-06",
+     "title": "TOLC-I sopra soglia e 10+ prove passate provate"
+    },
+    {
+     "id": "goal2-m24",
+     "due": "2027-07",
+     "title": "Iscrizione al concorso entro la scadenza del bando"
+    },
+    {
+     "id": "goal2-m25",
+     "due": "2027-08",
+     "title": "Prove scritte a Pisa"
+    },
+    {
+     "id": "goal2-m26",
+     "due": "2027-09",
+     "title": "Orale"
+    }
+   ]
+  },
+  {
+   "id": "goal3",
+   "title": "Muay Thai e autodifesa concreta",
+   "priority": 3,
+   "target": "Sparring tecnico regolare e valutazione positiva del maestro",
+   "milestones": [
+    {
+     "id": "goal3-m0",
+     "due": "2026-10",
+     "title": "Iscrizione, orari definitivi del corso, certificato medico se richiesto"
+    },
+    {
+     "id": "goal3-m1",
+     "due": "2026-10",
+     "title": "Attrezzatura: guantoni, 2 paia di bende, paradenti, parastinchi, conchiglia"
+    },
+    {
+     "id": "goal3-m2",
+     "due": "2026-11",
+     "title": "Combinazioni base pulite al sacco e ai colpitori"
+    },
+    {
+     "id": "goal3-m3",
+     "due": "2027-01",
+     "title": "Combinazioni da 3–4 colpi e contrattacchi"
+    },
+    {
+     "id": "goal3-m4",
+     "due": "2027-02",
+     "title": "3 round da 3′ al sacco a ritmo costante"
+    },
+    {
+     "id": "goal3-m5",
+     "due": "2027-02",
+     "title": "Clinch di base e condizionamento"
+    },
+    {
+     "id": "goal3-m6",
+     "due": "2027-03",
+     "title": "Primi sparring tecnici (solo con l'ok del maestro)"
+    },
+    {
+     "id": "goal3-m7",
+     "due": "2027-04",
+     "title": "Lezioni su situazioni di difesa realistiche (chiedi al maestro)"
+    },
+    {
+     "id": "goal3-m8",
+     "due": "2027-05",
+     "title": "Sparring leggero regolare"
+    },
+    {
+     "id": "goal3-m9",
+     "due": "2027-06",
+     "title": "Valutazione positiva del maestro"
+    }
+   ]
+  },
+  {
+   "id": "goal4",
+   "title": "Fisico e massa muscolare",
+   "priority": 4,
+   "target": "Carichi dei fondamentali in crescita, peso in aumento controllato (0,25–0,5% a settimana)",
+   "milestones": [
+    {
+     "id": "goal4-m0",
+     "due": "2026-10",
+     "title": "Prime 2 settimane: carichi leggeri e tecnica con l'istruttore"
+    },
+    {
+     "id": "goal4-m1",
+     "due": "2026-10",
+     "title": "Registro di carichi e ripetizioni a ogni seduta"
+    },
+    {
+     "id": "goal4-m2",
+     "due": "2026-10",
+     "title": "Pesata della domenica mattina ogni settimana"
+    },
+    {
+     "id": "goal4-m3",
+     "due": "2026-11",
+     "title": "5 pasti con proteine ogni giorno per 4 settimane"
+    },
+    {
+     "id": "goal4-m4",
+     "due": "2026-12",
+     "title": "Settimana di scarico a Natale"
+    },
+    {
+     "id": "goal4-m5",
+     "due": "2027-02",
+     "title": "Carichi aumentati su tutti gli esercizi rispetto a ottobre"
+    },
+    {
+     "id": "goal4-m6",
+     "due": "2027-03",
+     "title": "Peso medio in salita regolare da 3 mesi"
+    },
+    {
+     "id": "goal4-m7",
+     "due": "2027-04",
+     "title": "Settimana di scarico a Pasqua"
+    },
+    {
+     "id": "goal4-m8",
+     "due": "2027-06",
+     "title": "Carichi dei fondamentali in crescita costante"
+    }
+   ]
+  },
+  {
+   "id": "goal5",
+   "title": "Inglese da B1 verso C1",
+   "priority": 5,
+   "target": "B2 solido entro giugno 2027, C1 pieno nel 2027–28",
+   "milestones": [
+    {
+     "id": "goal5-m0",
+     "due": "2026-10",
+     "title": "Test di livello gratuito (punto di partenza)"
+    },
+    {
+     "id": "goal5-m1",
+     "due": "2026-10",
+     "title": "Inglese sul bus 5 giorni su 5 per 4 settimane"
+    },
+    {
+     "id": "goal5-m2",
+     "due": "2027-01",
+     "title": "Grammatica intermedia: tempi verbali, condizionali, passivo, discorso indiretto"
+    },
+    {
+     "id": "goal5-m3",
+     "due": "2027-02",
+     "title": "Test di livello intermedio e passaggio alla grammatica avanzata"
+    },
+    {
+     "id": "goal5-m4",
+     "due": "2027-04",
+     "title": "Un testo scritto corretto ogni sabato per 8 settimane"
+    },
+    {
+     "id": "goal5-m5",
+     "due": "2027-05",
+     "title": "Test di livello finale"
+    },
+    {
+     "id": "goal5-m6",
+     "due": "2027-06",
+     "title": "B2 solido in grammatica"
+    },
+    {
+     "id": "goal5-m7",
+     "due": "2028-06",
+     "title": "C1 pieno"
+    }
+   ]
+  },
+  {
+   "id": "goal6",
+   "title": "Attrattività: da 4,5 a 7",
+   "priority": 6,
+   "target": "Pelle, igiene, cura e fisico curati con costanza: la parte che dipende da te",
+   "milestones": [
+    {
+     "id": "goal6-m0",
+     "due": "2026-10",
+     "title": "Skincare livello 1 ogni giorno: detergente, idratante, SPF"
+    },
+    {
+     "id": "goal6-m1",
+     "due": "2026-10",
+     "title": "Igiene mattina e sera completa 6 giorni su 7 per 4 settimane"
+    },
+    {
+     "id": "goal6-m2",
+     "due": "2026-11",
+     "title": "Cura della domenica per 4 settimane di fila (unghie, scrub, rasoio)"
+    },
+    {
+     "id": "goal6-m3",
+     "due": "2026-11",
+     "title": "Federa del cuscino cambiata 2 volte a settimana"
+    },
+    {
+     "id": "goal6-m4",
+     "due": "2026-12",
+     "title": "Skincare livello 2, se il budget lo consente (un prodotto alla volta, 2 settimane di prova)"
+    },
+    {
+     "id": "goal6-m5",
+     "due": "2027-01",
+     "title": "Se l'acne persiste: visita dal dermatologo"
+    },
+    {
+     "id": "goal6-m6",
+     "due": "2027-02",
+     "title": "Postura: shadow e mobilità regolari per 8 settimane"
+    },
+    {
+     "id": "goal6-m7",
+     "due": "2027-06",
+     "title": "Fisico in crescita (vedi obiettivo 4)"
+    }
+   ]
+  }
+ ],
+ "water": {
+  "start": "06:30",
+  "end": "21:30",
+  "intervalMin": 60
+ }
+}

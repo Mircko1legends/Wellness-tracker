@@ -16,7 +16,7 @@ function toBase64(buffer: ArrayBuffer): string {
 
 export async function pickFile(): Promise<PickedFile | null> {
   const result = await DocumentPicker.getDocumentAsync({
-    type: ["application/pdf", "image/*", "text/plain", "text/csv"],
+    type: ["application/pdf", "image/*", "text/plain", "text/csv", "application/json", "*/*"],
     copyToCacheDirectory: true,
   });
   if (result.canceled || !result.assets?.length) return null;

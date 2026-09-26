@@ -15,6 +15,9 @@ export interface PlanActivity {
   end: string;
   color?: string;
   days?: number[]; // 0 = Sunday; undefined = every day
+  weeks?: "odd" | "even"; // ISO week parity, e.g. alternating gym programmes A/B
+  essential?: boolean; // kept on a "giornata no"
+  group?: string; // shared name for variants (used in notifications), e.g. "Pesi 45'"
   kind: "routine" | "meal";
   steps: PlanStep[];
 }
@@ -31,7 +34,10 @@ export const EMPTY_PLAN: TimelinePlan = { routine: [], meals: [] };
 export interface TimelineDayLog {
   date: string;
   doneIds: string[]; // step ids
+  skippedIds?: string[];
 }
+
+export type StepStatus = "done" | "skipped" | null;
 
 type Template = { match: RegExp; steps: (ctx: TemplateContext) => string[] };
 interface TemplateContext {
@@ -121,27 +127,38 @@ function overlaps(a: PlanActivity, b: PlanActivity): boolean {
   return as < be && bs < ae;
 }
 
-export function isActiveOn(activity: PlanActivity, weekday: number): boolean {
-  return !activity.days || activity.days.includes(weekday);
+export function isActiveOn(activity: PlanActivity, weekday: number, isoWeek?: number): boolean {
+  if (activity.days && !activity.days.includes(weekday)) return false;
+  if (activity.weeks && isoWeek !== undefined && (isoWeek % 2 === 1 ? "odd" : "even") !== activity.weeks) return false;
+  return true;
+}
+
+const ESSENTIAL_WORDS = /sonno|igiene|routine serale|colazione|pranzo|cena|scuola|farmac|litio|lenti/i;
+
+/** On a "giornata no" only these stay: explicit flag, or meals/sleep/hygiene/school by default. */
+export function isEssential(activity: PlanActivity): boolean {
+  return activity.essential ?? (activity.kind === "meal" || ESSENTIAL_WORDS.test(activity.title));
 }
 
 /**
  * The day's timeline: routine activities for that weekday, with diet meals merged into the routine's
  * meal slots (the meal's food steps replace the generic ones) and any other meals added on their own.
  */
-export function dayTimeline(plan: TimelinePlan, weekday: number): PlanActivity[] {
-  const routine = plan.routine.filter((a) => isActiveOn(a, weekday));
+export function dayTimeline(plan: TimelinePlan, weekday: number, isoWeek?: number): PlanActivity[] {
+  const routine = plan.routine.filter((a) => isActiveOn(a, weekday, isoWeek));
   const usedMeals = new Set<string>();
   const merged = routine.map((activity) => {
     if (!MEAL_WORDS.test(activity.title)) return activity;
-    const meal = plan.meals.find((m) => !usedMeals.has(m.id) && (overlaps(activity, m) || m.title.toLowerCase() === activity.title.toLowerCase()));
+    const meal = plan.meals.find(
+      (m) => !usedMeals.has(m.id) && isActiveOn(m, weekday, isoWeek) && (overlaps(activity, m) || m.title.toLowerCase() === activity.title.toLowerCase())
+    );
     if (!meal) return activity;
     usedMeals.add(meal.id);
     const minutes = durationMinutes(activity.start, activity.end);
     const labels = meal.steps.map((s) => s.label);
     return { ...activity, kind: "meal" as const, steps: scheduleSteps(activity.id, activity.start, minutes, labels) };
   });
-  const extraMeals = plan.meals.filter((m) => !usedMeals.has(m.id) && isActiveOn(m, weekday));
+  const extraMeals = plan.meals.filter((m) => !usedMeals.has(m.id) && isActiveOn(m, weekday, isoWeek));
   return [...merged, ...extraMeals].sort((a, b) => a.start.localeCompare(b.start));
 }
 
@@ -161,8 +178,21 @@ export function nextActivity(timeline: PlanActivity[], minutes: number): PlanAct
   return upcoming[0] ?? timeline[0] ?? null;
 }
 
-export function toggleDone(log: TimelineDayLog[], date: string, stepId: string): TimelineDayLog[] {
-  const day = log.find((d) => d.date === date) ?? { date, doneIds: [] };
-  const doneIds = day.doneIds.includes(stepId) ? day.doneIds.filter((id) => id !== stepId) : [...day.doneIds, stepId];
-  return [...log.filter((d) => d.date !== date), { date, doneIds }].sort((a, b) => a.date.localeCompare(b.date));
+export function stepStatus(log: TimelineDayLog[], date: string, stepId: string): StepStatus {
+  const day = log.find((d) => d.date === date);
+  if (day?.doneIds.includes(stepId)) return "done";
+  if (day?.skippedIds?.includes(stepId)) return "skipped";
+  return null;
+}
+
+/** Sets a step to done/skipped; setting the same status again clears it. */
+export function setStepStatus(log: TimelineDayLog[], date: string, stepId: string, status: StepStatus): TimelineDayLog[] {
+  const day = log.find((d) => d.date === date) ?? { date, doneIds: [], skippedIds: [] };
+  const current = stepStatus(log, date, stepId);
+  const next = current === status ? null : status;
+  const doneIds = day.doneIds.filter((id) => id !== stepId);
+  const skippedIds = (day.skippedIds ?? []).filter((id) => id !== stepId);
+  if (next === "done") doneIds.push(stepId);
+  if (next === "skipped") skippedIds.push(stepId);
+  return [...log.filter((d) => d.date !== date), { date, doneIds, skippedIds }].sort((a, b) => a.date.localeCompare(b.date));
 }

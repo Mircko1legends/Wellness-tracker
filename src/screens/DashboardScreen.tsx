@@ -4,6 +4,8 @@ import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BackupCard } from "../components/BackupCard";
 import { NowCard } from "../components/NowCard";
+import { WaterCard } from "../components/WaterCard";
+import { NextGoalCard } from "../components/NextGoalCard";
 import { useLens } from "../context/LensContext";
 import { LensTonightCard } from "./LensScreen";
 import { ScreenHeader } from "../components/ScreenHeader";
@@ -78,6 +80,8 @@ export function DashboardScreen() {
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <NowCard />
+        <WaterCard />
+        <NextGoalCard />
         <BackupCard compact />
         {(lens.settings.enabled || !!lens.settings.lensStartDate) && <LensTonightCard />}
         {!entry && (

@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
+import { useGoals } from "../context/GoalsContext";
 import { useTimeline } from "../context/TimelineContext";
+import { useWater } from "../context/WaterContext";
+import { defaultPlanPack, parsePlanPack, PlanPack } from "../timeline/pack";
 import { DietMeal, parseDietItem } from "../import/dietParser";
-import { importFile, ImportOutcome } from "../import/importFile";
+import { decodeUtf8Base64, importFile, ImportOutcome } from "../import/importFile";
 import { PickedFile, pickFile } from "../import/pickFile";
 import { formatHm, parseHm } from "../import/time";
 import { ImportedActivity } from "../import/types";
@@ -24,7 +27,43 @@ const METHOD_LABELS: Record<string, string> = {
   pie: "letto dal telefono (grafico a torta)",
   ai: "letto con l'IA",
   manual: "inserimento manuale",
+  pack: "file del piano",
 };
+
+function PackCard({ pack, fileName, onApplied }: { pack: PlanPack; fileName: string; onApplied: () => void }) {
+  const { applyPack } = useTimeline();
+  const { importGoals } = useGoals();
+  const water = useWater();
+  const steps = pack.routine.reduce((n, a) => n + a.steps.length, 0);
+  const milestones = pack.goals.reduce((n, g) => n + g.milestones.length, 0);
+  const apply = async () => {
+    await applyPack(pack, fileName);
+    if (pack.goals.length) await importGoals(pack.goals);
+    if (pack.water) await water.updateSettings({ ...water.settings, ...pack.water, enabled: true });
+    onApplied();
+  };
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{pack.name}</Text>
+      <Text style={styles.hint}>• {pack.routine.length} attività con {steps} micro-azioni</Text>
+      {pack.meals.length > 0 && <Text style={styles.hint}>• {pack.meals.length} pasti</Text>}
+      {pack.goals.length > 0 && (
+        <Text style={styles.hint}>
+          • {pack.goals.length} obiettivi con {milestones} tappe (le tappe già segnate restano)
+        </Text>
+      )}
+      {pack.water && (
+        <Text style={styles.hint}>
+          • Promemoria acqua ogni {pack.water.intervalMin}′ dalle {pack.water.start} alle {pack.water.end}
+        </Text>
+      )}
+      <Text style={[styles.hint, { marginTop: spacing.sm }]}>Sostituisce la routine e la dieta attuali della Giornata.</Text>
+      <PressableScale style={[styles.button, { marginTop: spacing.md }]} onPress={apply}>
+        <Text style={styles.buttonText}>Usa questo piano</Text>
+      </PressableScale>
+    </View>
+  );
+}
 
 function normalizeTime(text: string): string | null {
   const m = parseHm(text.trim().replace(".", ":"));
@@ -142,6 +181,7 @@ export function ImportScreen({ navigation, route }: Props) {
   const [outcome, setOutcome] = useState<ImportOutcome | null>(null);
   const [activities, setActivities] = useState<ImportedActivity[]>([]);
   const [meals, setMeals] = useState<DraftMeal[]>([]);
+  const [pack, setPack] = useState<PlanPack | null>(null);
 
   const read = async (picked: PickedFile, forceAi = false) => {
     setBusy(true);
@@ -160,6 +200,15 @@ export function ImportScreen({ navigation, route }: Props) {
     const picked = await pickFile();
     if (!picked) return;
     setFile(picked);
+    setPack(null);
+    if (picked.name.toLowerCase().endsWith(".json") || picked.mimeType === "application/json") {
+      const parsed = parsePlanPack(decodeUtf8Base64(picked.base64));
+      if (parsed) {
+        setOutcome(null);
+        setPack(parsed);
+        return;
+      }
+    }
     await read(picked);
   };
 
@@ -189,7 +238,7 @@ export function ImportScreen({ navigation, route }: Props) {
   };
 
   const title = kind === "routine" ? "Importa la routine" : "Importa la dieta";
-  const showEditor = outcome !== null || activities.length > 0 || meals.length > 0;
+  const showEditor = !pack && (outcome !== null || activities.length > 0 || meals.length > 0);
 
   return (
     <View style={styles.container}>
@@ -216,6 +265,14 @@ export function ImportScreen({ navigation, route }: Props) {
             </PressableScale>
           )}
         </View>
+
+        {!pack && !showEditor && kind === "routine" && (
+          <PressableScale style={[styles.ghost, { marginBottom: spacing.md }]} onPress={() => setPack(defaultPlanPack())}>
+            <Text style={styles.ghostText}>Usa la routine annuale 2026–27 (già inclusa nell'app)</Text>
+          </PressableScale>
+        )}
+
+        {pack && <PackCard pack={pack} fileName={file?.name ?? pack.name} onApplied={() => navigation.goBack()} />}
 
         {busy && (
           <View style={[styles.card, styles.rowBetween]}>

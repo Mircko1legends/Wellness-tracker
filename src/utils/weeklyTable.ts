@@ -11,13 +11,22 @@ export function weekStartKey(dateKey: string): string {
   return toDateKey(addDays(date, -offsetFromMonday));
 }
 
-/** ISO-8601 week label, e.g. "2026-W39". */
-export function isoWeekLabel(dateKey: string): string {
+function isoWeek(dateKey: string): { year: number; week: number } {
   const date = parseDateKey(dateKey);
   const thursday = addDays(date, 3 - ((date.getDay() + 6) % 7));
   const yearStart = new Date(thursday.getFullYear(), 0, 1);
   const week = Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-  return `${thursday.getFullYear()}-W${String(week).padStart(2, "0")}`;
+  return { year: thursday.getFullYear(), week };
+}
+
+export function isoWeekNumber(dateKey: string): number {
+  return isoWeek(dateKey).week;
+}
+
+/** ISO-8601 week label, e.g. "2026-W39". */
+export function isoWeekLabel(dateKey: string): string {
+  const { year, week } = isoWeek(dateKey);
+  return `${year}-W${String(week).padStart(2, "0")}`;
 }
 
 function parseArray<T>(snapshot: StorageSnapshot, key: string): T[] {
@@ -61,6 +70,7 @@ interface LensLog {
 interface TimelineLog {
   date: string;
   doneIds: string[];
+  skippedIds?: string[];
 }
 
 export const WEEKLY_TABLE_HEADER = [
@@ -73,6 +83,7 @@ export const WEEKLY_TABLE_HEADER = [
   "Farmaci presi",
   "Lenti tolte",
   "Azioni routine fatte",
+  "Azioni saltate",
   "Missioni extra",
   "Note",
 ];
@@ -86,6 +97,7 @@ export function buildWeeklyTableCsv(snapshot: StorageSnapshot, dateKey: string):
   const lensLogs = parseArray<LensLog>(snapshot, "@wellness/lensLog");
   const timelineLogs = parseArray<TimelineLog>(snapshot, "@wellness/timelineLog");
   const lensTracked = "@wellness/lens" in snapshot;
+  const waterLog = parseArray<{ date: string; glasses: number }>(snapshot, "@wellness/waterLog");
 
   const monday = parseDateKey(weekStartKey(dateKey));
   const rows = Array.from({ length: 7 }, (_, i) => {
@@ -98,18 +110,21 @@ export function buildWeeklyTableCsv(snapshot: StorageSnapshot, dateKey: string):
     const medsTaken = medicationLogs.filter(
       (l) => l.date === key && medications.some((m) => m.id === l.medicationId)
     ).length;
-    const routineDone = timelineLogs.find((l) => l.date === key)?.doneIds.length ?? 0;
+    const timelineDay = timelineLogs.find((l) => l.date === key);
+    const routineDone = timelineDay?.doneIds.length ?? 0;
+    const routineSkipped = timelineDay?.skippedIds?.length ?? 0;
 
     return [
       key,
       DAY_NAMES[date.getDay()],
       entry?.mood ?? "",
       entry?.sleepHours ?? "",
-      entry?.waterGlasses ?? "",
+      Math.max(entry?.waterGlasses ?? 0, waterLog.find((w) => w.date === key)?.glasses ?? 0) || "",
       sets,
       medications.length > 0 ? `${medsTaken}/${medications.length}` : "",
       lensTracked ? (lensLogs.some((l) => l.date === key && l.removedAt) ? "sì" : "no") : "",
       routineDone,
+      routineSkipped,
       (entry?.bonusMissions ?? []).length,
       entry?.notes ?? "",
     ]

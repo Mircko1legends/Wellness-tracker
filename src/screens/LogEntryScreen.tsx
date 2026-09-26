@@ -14,6 +14,7 @@ import { MoodPicker } from "../components/MoodPicker";
 import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StepperInput } from "../components/StepperInput";
+import { useWater } from "../context/WaterContext";
 import { useWellness } from "../context/WellnessContext";
 import { colors, radii, spacing } from "../theme";
 import { MoodScore, WellnessEntry } from "../types";
@@ -35,8 +36,10 @@ export function LogEntryScreen() {
 
   const [mood, setMood] = useState<MoodScore>(existing?.mood ?? EMPTY_ENTRY.mood);
   const [sleepHours, setSleepHours] = useState(existing?.sleepHours ?? EMPTY_ENTRY.sleepHours);
+  const water = useWater();
+  // Glasses counted with the quick "+1" during the day prefill the log.
   const [waterGlasses, setWaterGlasses] = useState(
-    existing?.waterGlasses ?? EMPTY_ENTRY.waterGlasses
+    existing?.waterGlasses ?? (water.todayGlasses || EMPTY_ENTRY.waterGlasses)
   );
   const [notes, setNotes] = useState(existing?.notes ?? EMPTY_ENTRY.notes ?? "");
   const [bonusMissions, setBonusMissions] = useState<string[]>(existing?.bonusMissions ?? []);

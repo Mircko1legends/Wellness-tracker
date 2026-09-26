@@ -3,37 +3,39 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTimeline } from "../context/TimelineContext";
+import { StepButtons } from "./StepButtons";
 import { colors, radii, spacing } from "../theme";
 import { currentActivity, dayTimeline, nextActivity } from "../timeline/plan";
 import { todayKey } from "../utils/date";
+import { isoWeekNumber } from "../utils/weeklyTable";
 
 /** "Adesso" on the dashboard: the running activity and its next unchecked micro-action. */
 export function NowCard() {
   const navigation = useNavigation<any>();
-  const { plan, isDone, toggleStep } = useTimeline();
+  const { plan, statusOf, setStep } = useTimeline();
   const now = new Date();
   const minutes = now.getHours() * 60 + now.getMinutes();
-  const timeline = useMemo(() => dayTimeline(plan, now.getDay()), [plan, now.getDay()]);
+  const date = todayKey();
+  const timeline = useMemo(() => dayTimeline(plan, now.getDay(), isoWeekNumber(date)), [plan, date]);
   if (timeline.length === 0) return null;
 
-  const date = todayKey();
   const current = currentActivity(timeline, minutes);
   const next = nextActivity(timeline, minutes);
-  const step = current?.steps.find((s) => !isDone(date, s.id));
+  const step = current?.steps.find((s) => statusOf(date, s.id) === null);
 
   return (
     <TouchableOpacity style={styles.card} activeOpacity={0.85} onPress={() => navigation.navigate("DayTab")}>
       <Text style={styles.eyebrow}>{current ? `ADESSO · ${current.start}–${current.end}` : "TEMPO LIBERO"}</Text>
       <Text style={styles.title}>{current?.title ?? "Nessuna attività in corso"}</Text>
       {current && step && (
-        <TouchableOpacity style={styles.step} onPress={() => toggleStep(date, step.id)}>
-          <Ionicons name="square-outline" size={20} color={colors.primary} />
+        <View style={styles.step}>
           <Text style={styles.stepText}>
             {step.time} {step.label}
           </Text>
-        </TouchableOpacity>
+          <StepButtons status={null} onChange={(s) => setStep(date, step.id, s)} />
+        </View>
       )}
-      {current && !step && <Text style={styles.done}>Tutte le azioni fatte ✓</Text>}
+      {current && !step && <Text style={styles.done}>Tutte le azioni segnate ✓</Text>}
       {next && next.id !== current?.id && (
         <View style={styles.nextRow}>
           <Text style={styles.next}>

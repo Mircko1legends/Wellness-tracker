@@ -1,7 +1,7 @@
 import { loadFixture } from "../../import/__fixtures__/load";
 import { parseDiet } from "../../import/dietParser";
 import { parseRoutine } from "../../import/routineParser";
-import { buildMeals, buildRoutine, currentActivity, dayTimeline, microStepsFor, nextActivity, toggleDone } from "../plan";
+import { buildMeals, buildRoutine, currentActivity, dayTimeline, isEssential, microStepsFor, nextActivity, PlanActivity, setStepStatus, stepStatus } from "../plan";
 
 describe("microStepsFor", () => {
   it("spreads template steps across the activity with exact times", () => {
@@ -58,10 +58,31 @@ describe("dayTimeline", () => {
   });
 });
 
-describe("toggleDone", () => {
-  it("toggles a step for one day", () => {
-    const once = toggleDone([], "2026-09-26", "x");
-    expect(once).toEqual([{ date: "2026-09-26", doneIds: ["x"] }]);
-    expect(toggleDone(once, "2026-09-26", "x")).toEqual([{ date: "2026-09-26", doneIds: [] }]);
+describe("setStepStatus", () => {
+  it("marks done or skipped, switches between them and clears on repeat", () => {
+    let log = setStepStatus([], "d", "x", "done");
+    expect(stepStatus(log, "d", "x")).toBe("done");
+    log = setStepStatus(log, "d", "x", "skipped");
+    expect(stepStatus(log, "d", "x")).toBe("skipped");
+    expect(log[0].doneIds).toEqual([]);
+    log = setStepStatus(log, "d", "x", "skipped");
+    expect(stepStatus(log, "d", "x")).toBeNull();
+  });
+});
+
+describe("week parity and essentials", () => {
+  const act = (patch: Partial<PlanActivity>): PlanActivity => ({ id: "a", title: "Pesi", start: "18:40", end: "19:25", kind: "routine", steps: [], ...patch });
+
+  it("shows odd/even-week variants only in their weeks", () => {
+    const plan = { routine: [act({ id: "a", title: "Pesi A", weeks: "odd" }), act({ id: "b", title: "Pesi B", weeks: "even" })], meals: [] };
+    expect(dayTimeline(plan, 1, 41).map((a) => a.title)).toEqual(["Pesi A"]);
+    expect(dayTimeline(plan, 1, 40).map((a) => a.title)).toEqual(["Pesi B"]);
+  });
+
+  it("treats meals, sleep, hygiene and school as essential unless told otherwise", () => {
+    expect(isEssential(act({ title: "Igiene mattina" }))).toBe(true);
+    expect(isEssential(act({ title: "Studio 90'" }))).toBe(false);
+    expect(isEssential(act({ title: "Studio 90'", essential: true }))).toBe(true);
+    expect(isEssential(act({ title: "Pranzo", kind: "meal" }))).toBe(true);
   });
 });

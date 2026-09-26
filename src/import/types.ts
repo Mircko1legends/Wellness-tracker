@@ -31,7 +31,7 @@ export interface ImportedActivity {
   steps?: { time: string; label: string }[]; // micro-actions supplied by the AI reader
 }
 
-export type ParseMethod = "text" | "chart" | "pie" | "ai" | "manual";
+export type ParseMethod = "text" | "chart" | "pie" | "ai" | "manual" | "pack";
 
 export interface RoutineParseResult {
   method: ParseMethod;
