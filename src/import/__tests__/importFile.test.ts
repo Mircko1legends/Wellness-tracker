@@ -1,5 +1,5 @@
 import { loadFixture } from "../__fixtures__/load";
-import { importFile, textToAnalysis } from "../importFile";
+import { decodeUtf8Base64, importFile, textToAnalysis } from "../importFile";
 import { parseRoutine } from "../routineParser";
 
 const noAi = { geminiApiKey: "", model: "gemini-2.5-flash" };
@@ -35,5 +35,12 @@ describe("importFile", () => {
 
   it("textToAnalysis keeps one line per row", () => {
     expect(parseRoutine(textToAnalysis("06:30 - 07:00 Sveglia\n07:00 - 07:30 Colazione\n07:30 - 08:00 Doccia"))?.activities).toHaveLength(3);
+  });
+});
+
+describe("decodeUtf8Base64", () => {
+  it("decodes accents, emoji and strips a BOM", () => {
+    const text = "\uFEFFAttività: caffè ☕ e più 🏋️";
+    expect(decodeUtf8Base64(Buffer.from(text, "utf8").toString("base64"))).toBe("Attività: caffè ☕ e più 🏋️");
   });
 });

@@ -18,11 +18,24 @@ export interface ImportOutcome {
 
 const MIN_CONFIDENCE = 0.6;
 
-function decodeText(base64: string): string {
+/** UTF-8 decode by hand: TextDecoder isn't guaranteed in every React Native JS engine. */
+export function decodeUtf8Base64(base64: string): string {
   const bin = atob(base64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder("utf-8").decode(bytes);
+  let out = "";
+  for (let i = 0; i < bin.length; ) {
+    const b = bin.charCodeAt(i);
+    let code: number;
+    let extra: number;
+    if (b < 0x80) [code, extra] = [b, 0];
+    else if (b >= 0xf0) [code, extra] = [b & 0x07, 3];
+    else if (b >= 0xe0) [code, extra] = [b & 0x0f, 2];
+    else if (b >= 0xc0) [code, extra] = [b & 0x1f, 1];
+    else [code, extra] = [0xfffd, 0];
+    for (let k = 1; k <= extra; k++) code = (code << 6) | (bin.charCodeAt(i + k) & 0x3f);
+    out += String.fromCodePoint(code);
+    i += extra + 1;
+  }
+  return out.replace(/^\uFEFF/, "");
 }
 
 /** A plain-text file becomes a one-column "page" so the same line parsers apply. */
@@ -81,7 +94,7 @@ export async function importFile(
       notes.push("Il telefono non è riuscito ad aprire il PDF.");
     }
   } else if (isText) {
-    local = parseLocally(kind, textToAnalysis(decodeText(file.base64)));
+    local = parseLocally(kind, textToAnalysis(decodeUtf8Base64(file.base64)));
   } else {
     notes.push("È un'immagine: senza IA il telefono non può leggere il testo.");
   }

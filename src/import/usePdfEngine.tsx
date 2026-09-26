@@ -6,6 +6,7 @@ import { loadPdfjsSources } from "./pdfjsSources";
 import { PdfAnalysis } from "./types";
 
 const TIMEOUT_MS = 60_000;
+const READY_TIMEOUT_MS = 20_000;
 
 type Pending = { resolve: (a: PdfAnalysis) => void; reject: (e: Error) => void };
 
@@ -22,10 +23,28 @@ export function usePdfEngine() {
       let resolve!: () => void;
       const promise = new Promise<void>((r) => (resolve = r));
       ready.current = { promise, resolve };
-      const { pdf, worker } = await loadPdfjsSources();
-      setHtml(buildEngineHtml(pdf, worker));
+      try {
+        const { pdf, worker } = await loadPdfjsSources();
+        setHtml(buildEngineHtml(pdf, worker));
+      } catch (e) {
+        ready.current = null;
+        throw e;
+      }
     }
-    await ready.current.promise;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error("Il lettore PDF non si è avviato")), READY_TIMEOUT_MS);
+    });
+    try {
+      await Promise.race([ready.current.promise, timeout]);
+    } catch (e) {
+      // Start from scratch next time instead of waiting on a WebView that never came up.
+      ready.current = null;
+      setHtml(null);
+      throw e;
+    } finally {
+      clearTimeout(timer);
+    }
   }, []);
 
   const onMessage = useCallback((event: WebViewMessageEvent) => {
