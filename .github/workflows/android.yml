@@ -1,0 +1,93 @@
+name: Android APK
+
+on:
+  push:
+    branches: [claude/app-completion-r2cqgl]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: npm ci
+      - run: npx jest --ci
+      - run: npx tsc --noEmit
+
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --no-install --clean
+
+      - name: Configure release signing
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::warning::ANDROID_KEYSTORE_BASE64 secret missing: building a compile-check APK only, not publishing it."
+            echo "SIGNED=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          echo "$KEYSTORE_B64" | base64 -d > android/app/release.keystore
+          cat >> android/app/build.gradle <<'GRADLE'
+
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file('release.keystore')
+                      storePassword System.getenv('KEYSTORE_PASSWORD')
+                      keyAlias 'wellness'
+                      keyPassword System.getenv('KEYSTORE_PASSWORD')
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                  }
+              }
+          }
+          GRADLE
+          echo "SIGNED=true" >> "$GITHUB_ENV"
+
+      - name: Build APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload compile-check APK
+        if: env.SIGNED != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-check-DO-NOT-INSTALL
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 3
+
+      - name: Publish signed APK as release
+        if: env.SIGNED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk wellness-tracker.apk
+          gh release delete android-latest --yes --cleanup-tag || true
+          gh release create android-latest wellness-tracker.apk \
+            --title "App Android (ultima versione)" \
+            --notes "Build ${GITHUB_RUN_NUMBER} dal commit ${GITHUB_SHA::7}. Installa sopra la versione precedente: i dati restano." \
+            --target "$GITHUB_SHA"
