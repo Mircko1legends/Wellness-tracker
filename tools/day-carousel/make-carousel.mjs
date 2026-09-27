@@ -8,11 +8,16 @@
  *
  * Slides, in order: "day N" and the day's numbers → every action in order of time with ✅ (fatta) or
  * ❌ (saltata / non segnata) → the day's balance (sleep, mood, water, training, meds, gym sets, meals,
- * first-month missions, notes) → "Avrei voluto fare" → "Non avrei voluto fare" → closing.
+ * first-month missions, notes) → "Avrei voluto fare" → "Non avrei voluto fare" → Thorfinn's face, with the
+ * expression that matches how the day went.
  * Next to the images: didascalia.txt with the caption, the hashtags and the soundtrack for that day.
  *
- * Backgrounds: your images in backgrounds/ (jpg/png/webp, e.g. Vinland Saga screenshots), in alphabetical
- * order; without them the original landscapes of make-landscapes.py are used (generated/).
+ * Images (jpg/png/webp), all frames from the anime:
+ *   backgrounds/  landscapes behind the lists, one per slide in alphabetical order
+ *   faces/        Thorfinn's face for the last slide, named after the kind of day:
+ *                 guerriero, forte, costante, meta, ripartenza (e.g. forte.jpg, forte-2.jpg; forte@30.jpg
+ *                 when the face is at 30% of the width)
+ * Without them, placeholder landscapes from make-landscapes.py are used, only to check the layout.
  * --pubblico leaves out mood, weight, medicine names and notes.
  */
 import { spawnSync } from "node:child_process";
@@ -42,7 +47,7 @@ function parseArgs(argv) {
     out: path.join(HERE, "out"),
     only: null,
     dayOne: config.dayOne ?? null,
-    credit: config.credit ?? "Sfondi: Vinland Saga © Makoto Yukimura / Kodansha",
+    credit: config.credit ?? "Immagini: Vinland Saga © Makoto Yukimura / Kodansha",
     hashtags: config.hashtags ?? ["#vinlandsaga", "#thorfinn", "#selfimprovement", "#discipline"],
     public: false,
   };
@@ -88,19 +93,22 @@ function dayNumber(date, dayOne) {
   return Math.round((utcDay(date) - utcDay(dayOne)) / 86400000) + 1;
 }
 
-// ---------- soundtrack ----------
+// ---------- how the day went: face and soundtrack ----------
 
-/** Openings and endings of Vinland Saga, from the most epic to the calmest: search them in the app's sounds. */
-const SOUNDTRACKS = [
-  { min: 0.9, mood: "giornata da guerriero", song: "Dark Crow — MAN WITH A MISSION", alt: "MUKANJYO — Survive Said The Prophet" },
-  { min: 0.75, mood: "giornata forte", song: "MUKANJYO — Survive Said The Prophet", alt: "Paradox — Survive Said The Prophet" },
-  { min: 0.6, mood: "giornata costante", song: "River — Anonymouz", alt: "Ember — haju:harmonics" },
-  { min: 0.4, mood: "giornata a metà", song: "Torches — Aimer", alt: "Drown — milet" },
-  { min: 0, mood: "giornata di ripartenza", song: "Without Love — LMYK", alt: "Torches — Aimer" },
+/**
+ * From the share of actions done. `face` is what to look for in faces/;
+ * the songs are Vinland Saga openings and endings, from the most epic to the calmest.
+ */
+const TIERS = [
+  { id: "guerriero", min: 0.9, mood: "giornata da guerriero", face: "sguardo deciso, da battaglia", song: "Dark Crow — MAN WITH A MISSION", alt: "MUKANJYO — Survive Said The Prophet" },
+  { id: "forte", min: 0.75, mood: "giornata forte", face: "sorriso sicuro", song: "MUKANJYO — Survive Said The Prophet", alt: "Paradox — Survive Said The Prophet" },
+  { id: "costante", min: 0.6, mood: "giornata costante", face: "sereno, guarda lontano", song: "River — Anonymouz", alt: "Ember — haju:harmonics" },
+  { id: "meta", min: 0.4, mood: "giornata a metà", face: "stanco, pensieroso", song: "Torches — Aimer", alt: "Drown — milet" },
+  { id: "ripartenza", min: 0, mood: "giornata di ripartenza", face: "triste, ma ancora in piedi", song: "Without Love — LMYK", alt: "Torches — Aimer" },
 ];
 
-function soundtrackFor(share) {
-  return SOUNDTRACKS.find((s) => share >= s.min) ?? SOUNDTRACKS[SOUNDTRACKS.length - 1];
+function tierFor(share) {
+  return TIERS.find((t) => share >= t.min) ?? TIERS[TIERS.length - 1];
 }
 
 // ---------- backgrounds ----------
@@ -115,6 +123,12 @@ function listImages(dir) {
     .filter((f) => IMAGE.test(f))
     .sort()
     .map((f) => path.join(dir, f));
+}
+
+/** faces/<tier>*.jpg; several per tier are used in turn, day after day. */
+function facesByTier() {
+  const all = listImages(path.join(HERE, "faces"));
+  return Object.fromEntries(TIERS.map((t) => [t.id, all.filter((f) => path.basename(f).toLowerCase().startsWith(t.id))]));
 }
 
 function backgrounds() {
@@ -287,6 +301,10 @@ body { font-family: Inter, 'DejaVu Sans', 'Noto Color Emoji', sans-serif; color:
 .bar i { display: block; height: 100%; background: #F1CF86; border-radius: 14px; }
 .quote { font: 700 56px Cinzel, 'DejaVu Serif', serif; line-height: 1.3; }
 .quote-sub { font: 600 34px Inter, sans-serif; margin-top: 36px; line-height: 1.4; }
+.bg.face { filter: none; }
+.shade-face { position: absolute; left: 0; right: 0; bottom: 0; height: 760px; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.82)); }
+.face-text { position: absolute; left: 64px; right: 64px; bottom: 190px; text-align: center; }
+.tier { font: 800 76px Cinzel, 'DejaVu Serif', serif; line-height: 1.1; margin-top: 18px; }
 .dense .b { font-size: 29px; } .dense .e { font-size: 36px; line-height: 38px; width: 42px; } .dense .r { padding: 8px 0; }
 .dense .hx { font-size: 34px; } .dense .t { font-size: 26px; } .dense .s { font-size: 24px; }
 `;
@@ -340,6 +358,20 @@ function outroSlide(ctx, bg) {
     </div>
     ${ctx.credit ? `<div class="credit">${esc(ctx.credit)}</div>` : ""}`,
   );
+}
+
+/** The last slide: Thorfinn's face, full screen, with the expression of the day. */
+function faceSlide(ctx, face) {
+  const s = ctx.day.summary;
+  const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
+  return `<div class="bg face" style="background-image:url('${face.url}');background-position:${face.pos}% 35%"></div>
+    <div class="shade-face"></div>
+    <div class="face-text">
+      <div class="sub" style="margin-top:0">${esc(ctx.dayLabel)} · ${pct}%</div>
+      <div class="tier">${esc(cap(ctx.tier.mood))}</div>
+      <div class="quote-sub" style="margin-top:22px">${esc(ctx.closing)}</div>
+    </div>
+    ${ctx.credit ? `<div class="credit" style="bottom:90px">${esc(ctx.credit)}</div>` : ""}`;
 }
 
 function closingLine(share) {
@@ -405,7 +437,7 @@ function pickBackground(bgs, n) {
   return { url: dataUrl(file), pos };
 }
 
-async function renderDay(page, ctx, bgs, bgOffset, dir) {
+async function renderDay(page, ctx, bgs, bgOffset, face, dir) {
   let blocks = [];
   for (const dense of [false, true]) {
     ctx.dense = dense;
@@ -436,11 +468,11 @@ async function renderDay(page, ctx, bgs, bgOffset, dir) {
       await shoot(listSlide(ctx, pickBackground(bgs, n++), block.name, items.map(itemHtml).join(""), index, total));
     }
   }
-  await shoot(outroSlide(ctx, pickBackground(bgs, n++)));
+  await shoot(face ? faceSlide(ctx, face) : outroSlide(ctx, pickBackground(bgs, n++)));
   return files;
 }
 
-function caption(ctx, number, track, hashtags) {
+function caption(ctx, number, track, hashtags, hasFace) {
   const s = ctx.day.summary;
   const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
   return [
@@ -453,6 +485,7 @@ function caption(ctx, number, track, hashtags) {
     `🎵 Colonna sonora (${track.mood}): ${track.song}`,
     `   in alternativa: ${track.alt}`,
     "   Nel post: tocca \"Aggiungi suono\" e cerca il titolo.",
+    hasFace ? "" : `🙂 Manca il volto per "${track.id}" (${track.face}): mettilo in faces/${track.id}.jpg`,
     "",
   ].join("\n");
 }
@@ -486,7 +519,9 @@ async function main() {
   fs.mkdirSync(outDir, { recursive: true });
 
   const bg = backgrounds();
-  if (!bg.own) console.log("Attenzione: sto usando paesaggi di prova. Metti gli screenshot di Vinland Saga in backgrounds/.");
+  if (!bg.own) console.log("Attenzione: paesaggi di prova. Metti i fotogrammi di Vinland Saga in backgrounds/.");
+  const faces = facesByTier();
+  const used = Object.fromEntries(TIERS.map((t) => [t.id, 0]));
 
   const browser = await chromium.launch({ executablePath: findChromium() });
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
@@ -498,20 +533,25 @@ async function main() {
       const day = args.public ? publicDay(week.days[d]) : week.days[d];
       const number = dayNumber(day.date, dayOne);
       const share = day.summary.total ? day.summary.done / day.summary.total : 0;
+      const tier = tierFor(share);
       const ctx = {
         day,
+        tier,
         dayLabel: `day ${numberWords(Math.max(0, number))}`,
-        credit: bg.own ? args.credit : "",
+        credit: bg.own || faces[tier.id].length ? args.credit : "",
         closing: closingLine(share),
         dense: false,
       };
+      const faceFile = faces[tier.id].length ? faces[tier.id][used[tier.id]++ % faces[tier.id].length] : null;
+      // "forte@30.jpg": the face is at 30% of the width (the slide is narrower than a screenshot)
+      const face = faceFile ? { url: dataUrl(faceFile), pos: Number(path.basename(faceFile).match(/@(\d{1,3})/)?.[1] ?? 50) } : null;
+      if (!face) console.log(`  manca il volto "${tier.id}" (${tier.face}) in faces/: uso la chiusura senza volto`);
       const dir = path.join(outDir, `${d + 1}-${slug(day.label)}`);
       fs.rmSync(dir, { recursive: true, force: true });
       fs.mkdirSync(dir, { recursive: true });
-      const files = await renderDay(page, ctx, bg.files, d * 5, dir);
-      const track = soundtrackFor(share);
-      fs.writeFileSync(path.join(dir, "didascalia.txt"), caption(ctx, number, track, args.hashtags));
-      console.log(`${path.relative(process.cwd(), dir)}  ·  ${ctx.dayLabel}  ·  ${files.length} immagini  ·  🎵 ${track.song}`);
+      const files = await renderDay(page, ctx, bg.files, d * 5, face, dir);
+      fs.writeFileSync(path.join(dir, "didascalia.txt"), caption(ctx, number, tier, args.hashtags, !!face));
+      console.log(`${path.relative(process.cwd(), dir)}  ·  ${ctx.dayLabel}  ·  ${files.length} immagini  ·  ${tier.id}  ·  🎵 ${tier.song}`);
     }
   } finally {
     await browser.close();

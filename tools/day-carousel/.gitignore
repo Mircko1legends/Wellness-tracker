@@ -1,5 +1,7 @@
 node_modules/
 backgrounds/*
 !backgrounds/LEGGIMI.txt
+faces/*
+!faces/LEGGIMI.txt
 generated/
 out/

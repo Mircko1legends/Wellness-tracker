@@ -1,0 +1,11 @@
+Qui il volto di Thorfinn per l'ultima immagine, preso dall'anime. Il nome del file dice che giornata rappresenta:
+
+  guerriero   (90% e più di azioni fatte)   sguardo deciso, da battaglia
+  forte       (75–89%)                      sorriso sicuro
+  costante    (60–74%)                      sereno, guarda lontano
+  meta        (40–59%)                      stanco, pensieroso
+  ripartenza  (meno del 40%)                triste, ma ancora in piedi
+
+Esempi: forte.jpg, forte-2.png (se ce ne sono più di uno si alternano giorno dopo giorno).
+Se il volto non è al centro del fotogramma: forte@30.jpg vuol dire "il volto è al 30% della larghezza".
+Non vengono caricati su GitHub.
