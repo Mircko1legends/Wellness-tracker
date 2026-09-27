@@ -1,0 +1,5 @@
+node_modules/
+backgrounds/*
+!backgrounds/LEGGIMI.txt
+generated/
+out/

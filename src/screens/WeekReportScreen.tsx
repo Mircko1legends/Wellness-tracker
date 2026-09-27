@@ -16,7 +16,8 @@ import { WeightEntry } from "../nutrition/weight";
 import { ProgressPhoto } from "../progress/photos";
 import { loadGymLog, loadMealLog, loadProgressPhotos, loadWeightLog } from "../storage/storage";
 import { colors, radii, spacing } from "../theme";
-import { todayKey } from "../utils/date";
+import { toDateKey, todayKey } from "../utils/date";
+import { saveWeekExport } from "../report/saveExport";
 import { formatMood } from "../utils/mood";
 
 type Props = NativeStackScreenProps<MoreStackParamList, "WeekReport">;
@@ -47,6 +48,18 @@ export function WeekReportScreen({ navigation }: Props) {
     [plan, log, water, waterSettings, entries, wellnessGoals.moodRange, gymLog, goals, mealLog, weightLog, progressPhotos]
   );
   const text = reportText(report);
+
+  const [exported, setExported] = useState("");
+  const exportWeek = async (offsetDays: number) => {
+    try {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      const name = await saveWeekExport(toDateKey(d));
+      setExported(`Pronto: ${name}. Salvalo o mandalo nella chat.`);
+    } catch {
+      setExported("Non sono riuscito a creare il file, riprova.");
+    }
+  };
 
   const share = async () => {
     if (Platform.OS === "web") {
@@ -122,6 +135,23 @@ export function WeekReportScreen({ navigation }: Props) {
         {copied ? <Text style={styles.hint}>{copied}</Text> : null}
 
         <View style={[styles.card, { marginTop: spacing.md }]}>
+          <Text style={styles.cardTitle}>File completo della settimana (per i video)</Text>
+          <Text style={styles.hint}>
+            Ogni giorno, azione per azione, con quello che hai fatto ✅ e non fatto ❌, i controlli della giornata, pasti, palestra,
+            missioni e le cose che avresti voluto e non avresti voluto fare. Mandamelo e ne faccio un video per giorno.
+          </Text>
+          <View style={styles.exportRow}>
+            <PressableScale style={[styles.exportBtn, { flex: 1 }]} onPress={() => exportWeek(-7)}>
+              <Text style={styles.exportText}>Settimana scorsa</Text>
+            </PressableScale>
+            <PressableScale style={[styles.exportBtn, { flex: 1 }]} onPress={() => exportWeek(0)}>
+              <Text style={styles.exportText}>Questa settimana</Text>
+            </PressableScale>
+          </View>
+          {exported ? <Text style={styles.hint}>{exported}</Text> : null}
+        </View>
+
+        <View style={[styles.card, { marginTop: spacing.md }]}>
           <Text selectable style={styles.mono}>
             {text}
           </Text>
@@ -151,5 +181,8 @@ const styles = StyleSheet.create({
   line: { fontSize: 13, color: colors.text, lineHeight: 20 },
   button: { backgroundColor: colors.primary, borderRadius: radii.md, paddingVertical: spacing.md, alignItems: "center" },
   buttonText: { color: colors.onPrimary, fontWeight: "800", fontSize: 14 },
+  exportRow: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.sm },
+  exportBtn: { borderRadius: radii.md, borderWidth: 1, borderColor: colors.primary, paddingVertical: spacing.sm, alignItems: "center" },
+  exportText: { color: colors.primary, fontWeight: "800", fontSize: 13 },
   mono: { fontSize: 12, color: colors.textMuted, lineHeight: 18 },
 });

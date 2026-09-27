@@ -8,6 +8,8 @@ export interface WellnessEntry {
   waterBottles: number;
   trainingHours?: number; // hours of training (weights + MMA), in half hours; when missing it comes from the Giornata
   notes?: string;
+  wished?: string; // things you would have liked to do (one per line)
+  unwanted?: string; // things you would rather not have done (one per line)
   bonusMissions?: string[]; // bonus missions ticked by hand (most are ticked automatically from the Giornata)
 }
 

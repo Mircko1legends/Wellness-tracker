@@ -1,0 +1,2 @@
+Metti qui le tue immagini (jpg, png, webp): vengono usate in ordine alfabetico come sfondi che scorrono.
+Non vengono caricate su GitHub.

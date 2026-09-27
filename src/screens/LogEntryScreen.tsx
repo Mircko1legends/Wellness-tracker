@@ -51,6 +51,8 @@ export function LogEntryScreen() {
   // Training hours come from the Giornata; typing a number here overrides them for today.
   const [trainingHours, setTrainingHours] = useState<number | undefined>(existing?.trainingHours);
   const [notes, setNotes] = useState(existing?.notes ?? EMPTY_ENTRY.notes ?? "");
+  const [wished, setWished] = useState(existing?.wished ?? "");
+  const [unwanted, setUnwanted] = useState(existing?.unwanted ?? "");
   const [bonusMissions, setBonusMissions] = useState<string[]>(existing?.bonusMissions ?? []);
   const [saved, setSaved] = useState(false);
   const [health, setHealth] = useState<HealthDay | null>(null);
@@ -68,7 +70,7 @@ export function LogEntryScreen() {
 
   useEffect(() => {
     setSaved(false);
-  }, [mood, sleepHours, waterBottles, notes, bonusMissions, trainingHours]);
+  }, [mood, sleepHours, waterBottles, notes, wished, unwanted, bonusMissions, trainingHours]);
 
   const toggleBonusMission = (id: string) => {
     setBonusMissions((prev) => (prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]));
@@ -83,6 +85,8 @@ export function LogEntryScreen() {
       waterBottles,
       ...(trainingHours !== undefined ? { trainingHours } : {}),
       notes,
+      wished,
+      unwanted,
       bonusMissions,
     });
     setSaved(true);
@@ -163,6 +167,28 @@ export function LogEntryScreen() {
           );
         })}
 
+        <Text style={styles.sectionLabel}>Cosa avrei voluto fare (e non ho fatto)</Text>
+        <TextInput
+          style={styles.notes}
+          placeholder={"Una cosa per riga, es.\nfinire gli esercizi di fisica\nchiamare il nonno"}
+          placeholderTextColor={colors.textMuted}
+          multiline
+          value={wished}
+          onChangeText={setWished}
+          accessibilityLabel="Cosa avrei voluto fare e non ho fatto"
+        />
+        <Text style={styles.sectionLabel}>Cosa non avrei voluto fare (e ho fatto)</Text>
+        <TextInput
+          style={styles.notes}
+          placeholder={"Una cosa per riga, es.\n40′ di social prima di dormire"}
+          placeholderTextColor={colors.textMuted}
+          multiline
+          value={unwanted}
+          onChangeText={setUnwanted}
+          accessibilityLabel="Cosa non avrei voluto fare e ho fatto"
+        />
+        <Text style={styles.hint}>Finiscono nel resoconto della settimana e nei video di ogni giorno. Nessun giudizio: servono a capire.</Text>
+
         <Text style={styles.sectionLabel}>Note (opzionale)</Text>
         <TextInput
           style={styles.notes}
@@ -192,6 +218,7 @@ export function LogEntryScreen() {
 }
 
 const styles = StyleSheet.create({
+  hint: { fontSize: 12, color: colors.textMuted, lineHeight: 17, marginTop: 4 },
   mission: {
     flexDirection: "row",
     alignItems: "center",
