@@ -5,7 +5,7 @@ import { scalePlanForWeight } from "../timeline/scaling";
 import { addDays, isoWeekLabel, parseDateKey, toDateKey } from "../utils/date";
 import { formatMood, moodLevel } from "../utils/mood";
 
-/** A whole week, day by day and action by action: the file the daily videos are made from. */
+/** A whole week, day by day and action by action: the file the daily carousels ("day N") are made from. */
 export interface WeekExport {
   app: "wellness-tracker-week";
   version: 1;

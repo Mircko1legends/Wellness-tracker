@@ -1,14 +1,13 @@
 {
-  "name": "weekly-video",
+  "name": "day-carousel",
   "private": true,
   "type": "module",
-  "description": "One video per day from the week file exported by the app",
+  "description": "One carousel of images per day from the week file exported by the app",
   "scripts": {
     "landscapes": "python3 make-landscapes.py generated 12",
-    "videos": "node make-videos.mjs"
+    "carousel": "node make-carousel.mjs"
   },
   "dependencies": {
-    "ffmpeg-static": "5.3.0",
     "playwright-core": "1.56.1"
   }
 }

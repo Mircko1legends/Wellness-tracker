@@ -135,10 +135,10 @@ export function WeekReportScreen({ navigation }: Props) {
         {copied ? <Text style={styles.hint}>{copied}</Text> : null}
 
         <View style={[styles.card, { marginTop: spacing.md }]}>
-          <Text style={styles.cardTitle}>File completo della settimana (per i video)</Text>
+          <Text style={styles.cardTitle}>File completo della settimana (per i "day")</Text>
           <Text style={styles.hint}>
             Ogni giorno, azione per azione, con quello che hai fatto ✅ e non fatto ❌, i controlli della giornata, pasti, palestra,
-            missioni e le cose che avresti voluto e non avresti voluto fare. Mandamelo e ne faccio un video per giorno.
+            missioni e le cose che avresti voluto e non avresti voluto fare. Mandamelo e per ogni giorno ti preparo le immagini da scorrere, con la colonna sonora.
           </Text>
           <View style={styles.exportRow}>
             <PressableScale style={[styles.exportBtn, { flex: 1 }]} onPress={() => exportWeek(-7)}>

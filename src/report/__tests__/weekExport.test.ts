@@ -5,7 +5,7 @@ import { buildWeekExport } from "../weekExport";
 const pack = defaultPlanPack();
 const plan = { routine: pack.routine, meals: pack.meals };
 
-describe("week export for the videos", () => {
+describe("week export for the daily carousels", () => {
   it("lists every action of each day with its status, plus wishes and regrets", () => {
     const mon = "2026-12-07";
     const acts = dayTimeline(plan, 1, undefined, mon);

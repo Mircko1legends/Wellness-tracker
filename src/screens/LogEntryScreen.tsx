@@ -187,7 +187,7 @@ export function LogEntryScreen() {
           onChangeText={setUnwanted}
           accessibilityLabel="Cosa non avrei voluto fare e ho fatto"
         />
-        <Text style={styles.hint}>Finiscono nel resoconto della settimana e nei video di ogni giorno. Nessun giudizio: servono a capire.</Text>
+        <Text style={styles.hint}>Finiscono nel resoconto della settimana e nelle immagini di ogni giorno. Nessun giudizio: servono a capire.</Text>
 
         <Text style={styles.sectionLabel}>Note (opzionale)</Text>
         <TextInput
