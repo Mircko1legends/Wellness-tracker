@@ -49,17 +49,27 @@ export function toggleMilestone(goals: LifeGoal[], goalId: string, milestoneId: 
   );
 }
 
-/** Keeps "done" marks when a new version of the same goals is imported. */
+/** Keeps "done" marks when a new version of the goals is imported (matched by id, or by the same milestone text). */
 export function mergeGoals(existing: LifeGoal[], incoming: LifeGoal[]): LifeGoal[] {
-  return incoming.map((goal) => {
-    const old = existing.find((g) => g.id === goal.id);
-    if (!old) return goal;
-    return {
-      ...goal,
-      milestones: goal.milestones.map((m) => {
-        const prev = old.milestones.find((p) => p.id === m.id);
-        return prev?.done ? { ...m, done: true, doneAt: prev.doneAt } : m;
-      }),
-    };
-  });
+  const doneByTitle = new Map<string, number | undefined>();
+  const doneById = new Map<string, { title: string; doneAt?: number }>();
+  for (const g of existing) {
+    for (const m of g.milestones) {
+      if (!m.done) continue;
+      doneByTitle.set(m.title.trim().toLowerCase(), m.doneAt);
+      doneById.set(m.id, { title: m.title, doneAt: m.doneAt });
+    }
+  }
+  return incoming.map((goal) => ({
+    ...goal,
+    milestones: goal.milestones.map((m) => {
+      const key = m.title.trim().toLowerCase();
+      if (doneByTitle.has(key)) return { ...m, done: true, doneAt: doneByTitle.get(key) };
+      const sameId = doneById.get(m.id);
+      // Same id but the text changed a lot: it's a different milestone now, so it starts undone.
+      return sameId && sameId.title.slice(0, 12).toLowerCase() === m.title.slice(0, 12).toLowerCase()
+        ? { ...m, done: true, doneAt: sameId.doneAt }
+        : m;
+    }),
+  }));
 }

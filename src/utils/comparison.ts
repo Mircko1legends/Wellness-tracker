@@ -1,6 +1,5 @@
-import { WellnessEntry, WorkoutLogEntry } from "../types";
+import { WellnessEntry } from "../types";
 import { addDays, lastNDateKeys } from "./date";
-import { setsCompletedOnDate } from "./workout";
 
 export interface MetricAverage {
   current: number | null;
@@ -10,8 +9,8 @@ export interface MetricAverage {
 export interface WeeklyComparison {
   mood: MetricAverage;
   sleepHours: MetricAverage;
-  waterGlasses: MetricAverage;
-  setsCompleted: MetricAverage;
+  waterBottles: MetricAverage;
+  trainingHours: MetricAverage;
 }
 
 function average(entries: WellnessEntry[], dateKeys: string[], pick: (e: WellnessEntry) => number): number | null {
@@ -22,14 +21,13 @@ function average(entries: WellnessEntry[], dateKeys: string[], pick: (e: Wellnes
   return sum / matches.length;
 }
 
-function averageSetsPerDay(logs: WorkoutLogEntry[], dateKeys: string[]): number {
-  const total = dateKeys.reduce((sum, d) => sum + setsCompletedOnDate(logs, d), 0);
-  return total / dateKeys.length;
+function weekTotal(dateKeys: string[], hoursOn: (date: string) => number): number {
+  return dateKeys.reduce((sum, d) => sum + hoursOn(d), 0);
 }
 
 export function computeWeeklyComparison(
   entries: WellnessEntry[],
-  workoutLogs: WorkoutLogEntry[],
+  trainingHoursOn: (date: string) => number,
   today: Date = new Date()
 ): WeeklyComparison {
   const currentWeek = lastNDateKeys(7, today);
@@ -45,13 +43,13 @@ export function computeWeeklyComparison(
       current: average(entries, currentWeek, (e) => e.sleepHours),
       previous: average(entries, previousWeek, (e) => e.sleepHours),
     },
-    waterGlasses: {
-      current: average(entries, currentWeek, (e) => e.waterGlasses),
-      previous: average(entries, previousWeek, (e) => e.waterGlasses),
+    waterBottles: {
+      current: average(entries, currentWeek, (e) => e.waterBottles),
+      previous: average(entries, previousWeek, (e) => e.waterBottles),
     },
-    setsCompleted: {
-      current: averageSetsPerDay(workoutLogs, currentWeek),
-      previous: averageSetsPerDay(workoutLogs, previousWeek),
+    trainingHours: {
+      current: weekTotal(currentWeek, trainingHoursOn),
+      previous: weekTotal(previousWeek, trainingHoursOn),
     },
   };
 }

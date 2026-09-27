@@ -1,33 +1,24 @@
 import * as Notifications from "expo-notifications";
 import { Platform, Vibration } from "react-native";
+import { channelId, ensureSoundChannels, soundContent } from "../notificationChannels";
 import { isNotificationsSupported, requestNotificationPermission } from "../notifications";
 
 export const REST_PREFIX = "rest-";
 const ID = `${REST_PREFIX}timer`;
-const CHANNEL = "rest-timer";
-
-let channelReady = false;
-
-async function ensureChannel() {
-  if (channelReady || Platform.OS !== "android") return;
-  await Notifications.setNotificationChannelAsync(CHANNEL, {
-    name: "Timer di recupero",
-    importance: Notifications.AndroidImportance.HIGH,
-    sound: "default",
-    vibrationPattern: [0, 400, 200, 400],
-  });
-  channelReady = true;
-}
 
 /** Alarm that rings even with the screen off or the app in the background. */
 export async function scheduleRestAlarm(seconds: number, exercise: string): Promise<void> {
   await cancelRestAlarm();
   if (!isNotificationsSupported || !(await requestNotificationPermission())) return;
-  await ensureChannel().catch(() => {});
+  await ensureSoundChannels().catch(() => {});
   await Notifications.scheduleNotificationAsync({
     identifier: ID,
-    content: { title: "Recupero finito", body: `Prossima serie: ${exercise}`, sound: "default" },
-    trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: Math.max(1, Math.round(seconds)), channelId: CHANNEL },
+    content: { title: "Recupero finito", body: `Prossima serie: ${exercise}`, ...soundContent("rest") },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: Math.max(1, Math.round(seconds)),
+      channelId: channelId("rest"),
+    },
   });
 }
 

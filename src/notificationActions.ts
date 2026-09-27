@@ -15,7 +15,7 @@ export async function registerNotificationActions(): Promise<void> {
     { identifier: "skip", buttonTitle: "Salta", options: { opensAppToForeground: true } },
   ]);
   await Notifications.setNotificationCategoryAsync(WATER_CATEGORY, [
-    { identifier: "glass", buttonTitle: "+1 bicchiere", options: { opensAppToForeground: true } },
+    { identifier: "glass", buttonTitle: "+1 bottiglietta finita", options: { opensAppToForeground: true } },
   ]);
 }
 

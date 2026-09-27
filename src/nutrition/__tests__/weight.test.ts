@@ -3,7 +3,7 @@ import { bulkAdvice, upsertWeight, weightTrend } from "../weight";
 describe("weight trend", () => {
   it("needs a few weigh-ins over at least 10 days", () => {
     expect(weightTrend([{ date: "2026-10-01", kg: 70 }, { date: "2026-10-03", kg: 70.2 }], "2026-10-05")).toBeNull();
-    expect(bulkAdvice(null)).toContain("2–3 volte");
+    expect(bulkAdvice(null)).toContain("domenica");
   });
 
   it("measures the weekly rate through daily noise", () => {
@@ -15,11 +15,12 @@ describe("weight trend", () => {
     const t = weightTrend(log, "2026-10-15")!;
     expect(t.kgPerWeek).toBeGreaterThan(0.1);
     expect(t.kgPerWeek).toBeLessThan(0.35);
-    expect(bulkAdvice(t)).toContain("Ritmo ideale");
+    expect(bulkAdvice(t)).toContain(t.kgPerWeek >= 0.2 ? "Ritmo giusto" : "aggiungi 200 kcal");
   });
 
   it("suggests small changes when stuck or too fast", () => {
-    expect(bulkAdvice({ kgPerWeek: 0, pctPerWeek: 0, current: 70, weighIns: 5 })).toContain("150 kcal");
-    expect(bulkAdvice({ kgPerWeek: 0.7, pctPerWeek: 1, current: 70, weighIns: 5 })).toContain("togliere");
+    expect(bulkAdvice({ kgPerWeek: 0, pctPerWeek: 0, current: 70, weighIns: 5 })).toContain("aggiungi 200 kcal");
+    expect(bulkAdvice({ kgPerWeek: 0.3, pctPerWeek: 0.5, current: 70, weighIns: 5 })).toContain("Ritmo giusto");
+    expect(bulkAdvice({ kgPerWeek: 0.7, pctPerWeek: 1, current: 70, weighIns: 5 })).toContain("togli 200 kcal");
   });
 });

@@ -41,13 +41,15 @@ export function weightTrend(log: WeightEntry[], today: string): WeightTrend | nu
   };
 }
 
-/** Lean bulk: roughly +0.2–0.6% of body weight per week. Advice in small, reversible steps. */
+/**
+ * Adjustment rule of the Nutrition system (section 04): weigh once a week, look at the 4-week trend.
+ * Less than +0.2 kg a week → +200 kcal; more than +0.5 kg a week → −200 kcal. Growing faster only adds fat.
+ */
 export function bulkAdvice(trend: WeightTrend | null): string {
-  if (!trend) return "Pesati 2–3 volte a settimana, al mattino dopo il bagno e prima di colazione. Dopo 10 giorni l'app ti dice come sta andando.";
-  const p = trend.pctPerWeek;
-  if (p < -0.1) return "Stai perdendo peso. Se non è voluto, aggiungi circa 200–300 kcal al giorno (per esempio 60 g di avena con 250 ml di latte).";
-  if (p < 0.1) return "Il peso è quasi fermo. Per crescere prova ad aggiungere circa 150 kcal al giorno (per esempio 40 g di avena o una banana in più) e ricontrolla tra 2 settimane.";
-  if (p < 0.2) return "Sali piano: va bene. Se tra 2 settimane è ancora così, aggiungi circa 100–150 kcal al giorno.";
-  if (p <= 0.6) return "Ritmo ideale per mettere massa limitando il grasso. Continua così.";
-  return "Sali in fretta: una parte potrebbe essere grasso. Prova a togliere circa 150 kcal al giorno (per esempio meno condimento o uno snack più leggero).";
+  if (!trend) return "Pesati la domenica appena sveglio, dopo il bagno e prima di bere. Dopo 3 pesate (circa 2 settimane) l'app ti dice come sta andando.";
+  const k = trend.kgPerWeek;
+  if (k < -0.1) return "Stai perdendo peso. Se non è voluto, aggiungi 200 kcal al giorno: 50 g di pasta o riso crudi in più, oppure 30 g di burro d'arachidi.";
+  if (k < 0.2) return "Sali meno di 0,2 kg a settimana: aggiungi 200 kcal al giorno (50 g di pasta o riso crudi, oppure 30 g di burro d'arachidi) e ricontrolla tra 2 settimane.";
+  if (k <= 0.5) return "Ritmo giusto (tra 0,2 e 0,5 kg a settimana): massa con poco grasso. Continua così.";
+  return "Sali più di 0,5 kg a settimana: togli 200 kcal al giorno (50 g di pasta o riso crudi in meno). Crescere più in fretta significa solo crescere più grasso.";
 }

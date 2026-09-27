@@ -1,33 +1,34 @@
 import { formatRest, youtubeId, GymSession, lastSessionWith, PROGRAMS, programFromTitles, sessionVolume, suggestNext, upsertSession, formatSets } from "../gym";
 
-const squat = PROGRAMS.A[0]; // 3 × 6–10, +2.5
+const squat = PROGRAMS.LA[0]; // 4 × 5–8, +5 kg (PDF)
 
 describe("gym log", () => {
   it("reads the programme from the timeline titles", () => {
-    expect(programFromTitles(["Colazione", "Pesi 45′ · Scheda B"])).toBe("B");
-    expect(programFromTitles(["Muay Thai 90′"])).toBeNull();
+    expect(programFromTitles(["Colazione", "Pesi 75′ · Upper A", "MMA"])).toEqual({ program: "UA", beforeMma: true });
+    expect(programFromTitles(["Pesi 80′ · Lower B"])).toEqual({ program: "LB", beforeMma: false });
+    expect(programFromTitles(["MMA"])).toBeNull();
   });
 
   it("starts from the default weight the first time", () => {
     const s = suggestNext(squat, undefined);
-    expect(s.kg).toBe(squat.startKg);
-    expect(s.reps).toEqual([6, 6, 6]);
+    expect(s.kg).toBe(30);
+    expect(s.reps).toEqual([5, 5, 5, 5]);
   });
 
   it("adds a rep at the same weight until the top of the range", () => {
-    const s = suggestNext(squat, [{ kg: 40, reps: 8 }, { kg: 40, reps: 7 }, { kg: 40, reps: 10 }]);
+    const s = suggestNext(squat, [{ kg: 40, reps: 6 }, { kg: 40, reps: 5 }, { kg: 40, reps: 8 }, { kg: 40, reps: 7 }]);
     expect(s.kg).toBe(40);
-    expect(s.reps).toEqual([9, 8, 10]);
+    expect(s.reps).toEqual([7, 6, 8, 8]);
   });
 
   it("adds weight once every set hits the top", () => {
-    const s = suggestNext(squat, [{ kg: 40, reps: 10 }, { kg: 40, reps: 10 }, { kg: 40, reps: 11 }]);
-    expect(s.kg).toBe(42.5);
-    expect(s.reps).toEqual([6, 6, 6]);
+    const s = suggestNext(squat, [{ kg: 40, reps: 8 }, { kg: 40, reps: 8 }, { kg: 40, reps: 8 }, { kg: 40, reps: 9 }]);
+    expect(s.kg).toBe(45);
+    expect(s.reps).toEqual([5, 5, 5, 5]);
   });
 
   it("finds the previous session and replaces same-day saves", () => {
-    const a: GymSession = { date: "2026-10-05", program: "A", exercises: { squat: [{ kg: 40, reps: 8 }] }, savedAt: 1 };
+    const a: GymSession = { date: "2026-10-05", program: "LA", exercises: { squat: [{ kg: 40, reps: 8 }] }, savedAt: 1 };
     const b: GymSession = { ...a, date: "2026-10-09", exercises: { squat: [{ kg: 40, reps: 9 }] } };
     let log = upsertSession(upsertSession([], a), b);
     log = upsertSession(log, { ...b, exercises: { squat: [{ kg: 40, reps: 10 }] } });

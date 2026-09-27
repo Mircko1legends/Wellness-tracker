@@ -16,7 +16,7 @@ describe("weekly report", () => {
     const monday = dayTimeline(plan, 1, 41);
     const gym = monday.find((a) => /Pesi/.test(a.title))!;
     const meal = monday.find((a) => a.title === "Pranzo")!;
-    const skin = monday.flatMap((a) => a.steps).find((s) => /detergente/i.test(s.label))!;
+    const skin = monday.flatMap((a) => a.steps).find((s) => /face wash/i.test(s.label))!;
     let log: TimelineDayLog[] = [];
     log = setStepStatus(log, "2026-10-05", gym.steps[0].id, "done");
     log = setStepStatus(log, "2026-10-05", gym.steps[1].id, "skipped");
@@ -26,11 +26,11 @@ describe("weekly report", () => {
       {
         plan,
         timelineLog: log,
-        water: [{ date: "2026-10-05", glasses: 11 }],
+        water: [{ date: "2026-10-05", bottles: 10 }],
         waterSettings: DEFAULT_WATER_SETTINGS,
-        entries: [{ date: "2026-10-05", mood: -3, sleepHours: 8, waterGlasses: 0 }],
+        entries: [{ date: "2026-10-05", mood: -3, sleepHours: 8, waterBottles: 0 }],
         moodRange: 2,
-        gymLog: [{ date: "2026-10-05", program: "A", exercises: { squat: [{ kg: 40, reps: 8 }] }, savedAt: 1 }],
+        gymLog: [{ date: "2026-10-05", program: "LA", exercises: { squat: [{ kg: 40, reps: 8 }] }, savedAt: 1 }],
         goals: pack.goals ?? [],
       },
       "2026-10-05"
@@ -44,7 +44,7 @@ describe("weekly report", () => {
     const text = reportText(r);
     expect(text).toContain("2026-W41");
     expect(text).toContain("Umore: −3");
-    expect(text).toContain("Squat 40 kg");
+    expect(text).toContain("Squat con bilanciere 40 kg");
   });
 
   it("never schedules the brainstorm before the first agreed Sunday", () => {

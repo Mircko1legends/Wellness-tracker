@@ -43,6 +43,17 @@ class LensGuardModule : Module() {
       "nextDeadlineAt" to store.nextDeadlineAt.toDouble(),
       "exactAlarmsAllowed" to LensGuardScheduler.canScheduleExact(context),
       "smsPermission" to LensGuardAlerts.hasSmsPermission(context),
+      "smsAppOpAllowed" to LensGuardAlerts.smsAppOpAllowed(context),
+      "phoneStatePermission" to LensGuardAlerts.hasPhoneStatePermission(context),
+      "defaultSmsSubscription" to LensGuardAlerts.defaultSmsSubscription(),
+      "activeSims" to LensGuardAlerts.activeSimCount(context),
+      "androidVersion" to Build.VERSION.SDK_INT,
+      "lastSmsQueuedAt" to store.lastSmsQueuedAt.toDouble(),
+      "lastSmsResultAt" to store.lastSmsResultAt.toDouble(),
+      "lastSmsResultCode" to store.lastSmsResultCode,
+      "lastSmsDeliveredAt" to store.lastSmsDeliveredAt.toDouble(),
+      "lastSmsError" to store.lastSmsError,
+      "lastSmsSubscription" to store.lastSmsSubscription,
       "ignoringBatteryOptimizations" to power.isIgnoringBatteryOptimizations(context.packageName)
     )
   }
@@ -89,6 +100,10 @@ class LensGuardModule : Module() {
 
     Function("openBatterySettings") {
       openSettings(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS, false)
+    }
+
+    Function("openAppSettings") {
+      openSettings(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, true)
     }
 
     Function("sendTestSms") { phone: String, message: String ->

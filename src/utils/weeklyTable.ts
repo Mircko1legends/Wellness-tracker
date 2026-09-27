@@ -1,4 +1,7 @@
-import { addDays, parseDateKey, toDateKey } from "./date";
+import { addDays, isoWeekLabel, isoWeekNumber, parseDateKey, toDateKey } from "./date";
+
+export { isoWeekLabel, isoWeekNumber };
+import { progressDataFromSnapshot, toHalfHours, trainingMinutes } from "../progress/lifeProgress";
 
 /** Raw AsyncStorage values keyed by storage key, as they appear in a backup. */
 export type StorageSnapshot = Record<string, string>;
@@ -11,22 +14,10 @@ export function weekStartKey(dateKey: string): string {
   return toDateKey(addDays(date, -offsetFromMonday));
 }
 
-function isoWeek(dateKey: string): { year: number; week: number } {
-  const date = parseDateKey(dateKey);
-  const thursday = addDays(date, 3 - ((date.getDay() + 6) % 7));
-  const yearStart = new Date(thursday.getFullYear(), 0, 1);
-  const week = Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-  return { year: thursday.getFullYear(), week };
-}
-
-export function isoWeekNumber(dateKey: string): number {
-  return isoWeek(dateKey).week;
-}
-
-/** ISO-8601 week label, e.g. "2026-W39". */
-export function isoWeekLabel(dateKey: string): string {
-  const { year, week } = isoWeek(dateKey);
-  return `${year}-W${String(week).padStart(2, "0")}`;
+/** Water days saved before bottles counted 250 ml glasses. */
+function bottlesOf(day?: { bottles?: number; glasses?: number }): number {
+  if (!day) return 0;
+  return day.bottles ?? Math.round((day.glasses ?? 0) / 2);
 }
 
 function parseArray<T>(snapshot: StorageSnapshot, key: string): T[] {
@@ -47,13 +38,14 @@ interface Entry {
   date: string;
   mood?: number;
   sleepHours?: number;
-  waterGlasses?: number;
+  waterBottles?: number;
+  trainingHours?: number;
   bonusMissions?: string[];
   notes?: string;
 }
-interface WorkoutLog {
+interface GymLog {
   date: string;
-  exerciseSets?: { repsPerSet: number[] }[];
+  exercises?: Record<string, unknown[]>;
 }
 interface Medication {
   id: string;
@@ -78,8 +70,9 @@ export const WEEKLY_TABLE_HEADER = [
   "Giorno",
   "Umore (−5/+5)",
   "Sonno (h)",
-  "Acqua (bicchieri)",
-  "Serie allenamento",
+  "Acqua (bottigliette 0,5 L)",
+  "Allenamento (h)",
+  "Serie in palestra",
   "Farmaci presi",
   "Lenti tolte",
   "Azioni routine fatte",
@@ -91,22 +84,24 @@ export const WEEKLY_TABLE_HEADER = [
 /** One CSV row per day of the week that contains `dateKey`, Monday to Sunday. */
 export function buildWeeklyTableCsv(snapshot: StorageSnapshot, dateKey: string): string {
   const entries = parseArray<Entry>(snapshot, "@wellness/entries");
-  const workouts = parseArray<WorkoutLog>(snapshot, "@wellness/workoutLogs");
+  const gym = parseArray<GymLog>(snapshot, "@wellness/gymLog");
+  const progress = progressDataFromSnapshot(snapshot);
   const medications = parseArray<Medication>(snapshot, "@wellness/medications").filter((m) => m.enabled);
   const medicationLogs = parseArray<MedicationLog>(snapshot, "@wellness/medicationLogs");
   const lensLogs = parseArray<LensLog>(snapshot, "@wellness/lensLog");
   const timelineLogs = parseArray<TimelineLog>(snapshot, "@wellness/timelineLog");
   const lensTracked = "@wellness/lens" in snapshot;
-  const waterLog = parseArray<{ date: string; glasses: number }>(snapshot, "@wellness/waterLog");
+  const waterLog = parseArray<{ date: string; bottles?: number; glasses?: number }>(snapshot, "@wellness/waterLog");
 
   const monday = parseDateKey(weekStartKey(dateKey));
   const rows = Array.from({ length: 7 }, (_, i) => {
     const date = addDays(monday, i);
     const key = toDateKey(date);
     const entry = entries.find((e) => e.date === key);
-    const sets = workouts
-      .filter((w) => w.date === key)
-      .reduce((sum, w) => sum + (w.exerciseSets ?? []).reduce((s, e) => s + e.repsPerSet.length, 0), 0);
+    const sets = gym
+      .filter((g) => g.date === key)
+      .reduce((sum, g) => sum + Object.values(g.exercises ?? {}).reduce((n, list) => n + list.length, 0), 0);
+    const hours = entry?.trainingHours ?? toHalfHours(trainingMinutes(progress.plan, progress.timelineLog, key).done);
     const medsTaken = medicationLogs.filter(
       (l) => l.date === key && medications.some((m) => m.id === l.medicationId)
     ).length;
@@ -119,7 +114,8 @@ export function buildWeeklyTableCsv(snapshot: StorageSnapshot, dateKey: string):
       DAY_NAMES[date.getDay()],
       entry?.mood === undefined ? "" : entry.mood > 0 ? `+${entry.mood}` : String(entry.mood),
       entry?.sleepHours ?? "",
-      Math.max(entry?.waterGlasses ?? 0, waterLog.find((w) => w.date === key)?.glasses ?? 0) || "",
+      Math.max(entry?.waterBottles ?? 0, bottlesOf(waterLog.find((w) => w.date === key))) || "",
+      hours,
       sets,
       medications.length > 0 ? `${medsTaken}/${medications.length}` : "",
       lensTracked ? (lensLogs.some((l) => l.date === key && l.removedAt) ? "sì" : "no") : "",

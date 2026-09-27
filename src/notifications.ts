@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { channelId, ensureSoundChannels, soundContent } from "./notificationChannels";
 import { Medication, ReminderSettings } from "./types";
 
 const REMINDER_IDENTIFIER = "wellness-daily-reminder";
@@ -11,8 +12,8 @@ Notifications.setNotificationHandler({
   handleNotification: async (notification) => ({
     shouldShowBanner: true,
     shouldShowList: true,
-    // The rest timer must ring even with the app open.
-    shouldPlaySound: notification.request.identifier.startsWith("rest-"),
+    // Each kind of activity has its own sound: play it also with the app open, so the habit forms around the sound.
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
@@ -34,17 +35,20 @@ export async function syncDailyReminder(settings: ReminderSettings): Promise<voi
 
   const granted = await requestNotificationPermission();
   if (!granted) return;
+  await ensureSoundChannels().catch(() => {});
 
   await Notifications.scheduleNotificationAsync({
     identifier: REMINDER_IDENTIFIER,
     content: {
-      title: "Wellness check-in",
-      body: "Don't forget to log your mood, sleep, water and activity today!",
+      title: "Registra la giornata",
+      body: "Umore, sonno e acqua di oggi: 30 secondi.",
+      ...soundContent("routine"),
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour: settings.hour,
       minute: settings.minute,
+      channelId: channelId("routine"),
     },
   });
 }
@@ -64,6 +68,7 @@ export async function syncMedicationReminders(medications: Medication[]): Promis
 
   const granted = await requestNotificationPermission();
   if (!granted) return;
+  await ensureSoundChannels().catch(() => {});
 
   for (const medication of enabledMedications) {
     await Notifications.scheduleNotificationAsync({
@@ -71,11 +76,13 @@ export async function syncMedicationReminders(medications: Medication[]): Promis
       content: {
         title: "Promemoria farmaco",
         body: `È ora di prendere: ${medication.name}${medication.dosage ? ` (${medication.dosage})` : ""}`,
+        ...soundContent("meds"),
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: medication.hour,
         minute: medication.minute,
+        channelId: channelId("meds"),
       },
     });
   }

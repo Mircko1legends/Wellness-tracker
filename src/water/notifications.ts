@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { WATER_CATEGORY } from "../notificationActions";
+import { channelId, ensureSoundChannels, soundContent } from "../notificationChannels";
 import { isNotificationsSupported, requestNotificationPermission } from "../notifications";
 import { reminderBody, reminderTimes, WaterSettings } from "./water";
 
@@ -14,13 +15,14 @@ export async function syncWaterReminders(settings: WaterSettings): Promise<numbe
       .map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier).catch(() => {}))
   );
   if (!settings.enabled || !(await requestNotificationPermission())) return 0;
+  await ensureSoundChannels().catch(() => {});
   const times = reminderTimes(settings);
   for (const time of times) {
     const [hour, minute] = time.split(":").map(Number);
     await Notifications.scheduleNotificationAsync({
       identifier: `${PREFIX}${time}`,
-      content: { title: "Bevi", body: reminderBody(settings), categoryIdentifier: WATER_CATEGORY, data: { kind: "water" } },
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute },
+      content: { title: "Qualche sorso", body: reminderBody(settings), categoryIdentifier: WATER_CATEGORY, data: { kind: "water" }, ...soundContent("water") },
+      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute, channelId: channelId("water") },
     });
   }
   return times.length;

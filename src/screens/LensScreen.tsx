@@ -16,9 +16,11 @@ import {
   formatReminderSchedule,
   LENS_RULES,
   LensSettings,
+  lastSmsStatus,
   LensStep,
   MORNING_STEPS,
   replacementStatus,
+  smsProblems,
 } from "../utils/lens";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -152,12 +154,22 @@ function GuardSetup() {
 
   const sendTest = () => {
     const who = settings.yourName.trim() || "un amico";
-    const ok = LensGuard!.sendTestSms(
+    LensGuard!.sendTestSms(
       settings.friendPhone.trim(),
       `Messaggio di prova dall'app di ${who}: se lo ricevi, l'avviso automatico per le lenti funziona. Non devi fare nulla.`
     );
-    setTestResult(ok ? "SMS di prova inviato: chiedi al tuo amico se è arrivato." : "SMS non inviato: controlla permesso e numero.");
+    setTestResult("In invio…");
+    // Android reports the real outcome a few seconds later: follow it here.
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+      refreshGuard();
+      if (tries >= 20) clearInterval(timer);
+    }, 1500);
   };
+
+  const problems = smsProblems(guard);
+  const status = lastSmsStatus(guard, Date.now());
 
   return (
     <View style={styles.card}>
@@ -190,13 +202,27 @@ function GuardSetup() {
           Prossimo controllo: {new Date(guard.nextDeadlineAt).toLocaleString("it-IT")}
         </Text>
       )}
+      {problems.map((p) => (
+        <View key={p.text} style={[styles.problem, styles.spaced]}>
+          <Text style={styles.problemText}>{p.text}</Text>
+          <Text style={styles.hint}>{p.fix}</Text>
+        </View>
+      ))}
+      <TouchableOpacity onPress={() => LensGuard!.openAppSettings()}>
+        <Text style={styles.link}>Apri impostazioni dell'app</Text>
+      </TouchableOpacity>
       <PressableScale
         style={[styles.ghost, styles.spaced, (!guard.smsPermission || !settings.friendPhone.trim()) && styles.disabled]}
         onPress={sendTest}
       >
         <Text style={styles.ghostText}>Invia SMS di prova all'amico</Text>
       </PressableScale>
-      {testResult && <Text style={[styles.hint, styles.spaced]}>{testResult}</Text>}
+      {(testResult || status) && <Text style={[styles.hint, styles.spaced]}>Ultimo SMS: {status ?? testResult}</Text>}
+      <Text style={[styles.hint, styles.spaced]}>
+        Diagnosi: Android {guard.androidVersion} · permesso SMS {guard.smsPermission ? "sì" : "no"} · invio consentito dal sistema{" "}
+        {guard.smsAppOpAllowed ? "sì" : "no"} · SIM predefinita per SMS {guard.defaultSmsSubscription === -1 ? "nessuna" : "sì"} · SIM attive{" "}
+        {guard.activeSims === -1 ? "?" : guard.activeSims}
+      </Text>
     </View>
   );
 }
@@ -327,6 +353,8 @@ const styles = StyleSheet.create({
   hint: { fontSize: 12, color: colors.textMuted, lineHeight: 17 },
   warning: { color: colors.accent },
   spaced: { marginTop: spacing.sm },
+  problem: { backgroundColor: colors.cardAlt, borderRadius: radii.sm, padding: spacing.sm, borderLeftWidth: 3, borderLeftColor: colors.accent },
+  problemText: { color: colors.text, fontSize: 13, fontWeight: "700", marginBottom: 2 },
   link: { color: colors.primary, fontSize: 13, fontWeight: "600", marginTop: spacing.xs },
   bigButton: {
     flexDirection: "row",

@@ -10,30 +10,32 @@ import { colors, radii, spacing } from "../theme";
 import { WellnessEntry } from "../types";
 import { computeWeeklyComparison } from "../utils/comparison";
 import { formatShortLabel, lastNDateKeys } from "../utils/date";
-import { goalsMet } from "../utils/streak";
-import { setsCompletedOnDate } from "../utils/workout";
+import { dayGoals, toHalfHours, trainingMinutes } from "../progress/lifeProgress";
+import { useLifeProgress } from "../progress/useLifeProgress";
 
 export function HistoryScreen() {
   const navigation = useNavigation();
-  const { entries, goals, workoutLogs } = useWellness();
+  const { entries } = useWellness();
+  const progress = useLifeProgress();
 
   const last7 = lastNDateKeys(7);
   const byDate = useMemo(() => new Map(entries.map((e) => [e.date, e])), [entries]);
-  const comparison = useMemo(
-    () => computeWeeklyComparison(entries, workoutLogs),
-    [entries, workoutLogs]
-  );
+  const hoursOn = (date: string) => {
+    if (!progress) return 0;
+    const manual = byDate.get(date)?.trainingHours;
+    return manual ?? toHalfHours(trainingMinutes(progress.data.plan, progress.data.timelineLog, date).done);
+  };
+  const comparison = useMemo(() => computeWeeklyComparison(entries, hoursOn), [entries, progress]);
 
   const sleepData = last7.map((d) => byDate.get(d)?.sleepHours ?? 0);
-  const waterData = last7.map((d) => byDate.get(d)?.waterGlasses ?? 0);
-  const setsData = last7.map((d) => setsCompletedOnDate(workoutLogs, d));
+  const waterData = last7.map((d) => byDate.get(d)?.waterBottles ?? 0);
+  const trainingData = last7.map(hoursOn);
   const labels = last7.map(formatShortLabel);
 
   const recent = [...entries].sort((a, b) => b.date.localeCompare(a.date));
 
   const renderItem = ({ item }: { item: WellnessEntry }) => {
-    const setsCompleted = setsCompletedOnDate(workoutLogs, item.date);
-    const met = goalsMet(item, goals, setsCompleted);
+    const met = progress ? dayGoals(progress.data, item.date)?.all : false;
     return (
       <View style={styles.row}>
         <View style={styles.rowHeader}>
@@ -41,7 +43,7 @@ export function HistoryScreen() {
           {met && <Text style={styles.metBadge}>Obiettivi raggiunti</Text>}
         </View>
         <Text style={styles.rowDetail}>
-          😴 {item.sleepHours}h · 💧 {item.waterGlasses} · 🏋️ {setsCompleted} serie · 🙂 umore {formatMood(item.mood)}
+          😴 {item.sleepHours}h · 💧 {item.waterBottles} · 🏋️ {String(hoursOn(item.date)).replace(".", ",")} h · 🙂 umore {formatMood(item.mood)}
         </Text>
         {!!item.notes && <Text style={styles.rowNotes}>{item.notes}</Text>}
       </View>
@@ -64,8 +66,8 @@ export function HistoryScreen() {
           <>
             <ComparisonCard comparison={comparison} />
             <WeekChart title="Sonno (ore) - ultimi 7 giorni" labels={labels} data={sleepData} suffix="h" />
-            <WeekChart title="Acqua (bicchieri) - ultimi 7 giorni" labels={labels} data={waterData} />
-            <WeekChart title="Serie di allenamento - ultimi 7 giorni" labels={labels} data={setsData} />
+            <WeekChart title="Acqua (bottigliette) - ultimi 7 giorni" labels={labels} data={waterData} />
+            <WeekChart title="Allenamento (ore) - ultimi 7 giorni" labels={labels} data={trainingData} suffix="h" />
             <Text style={styles.sectionLabel}>Tutte le registrazioni</Text>
           </>
         }

@@ -2,12 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { loadWaterLog, loadWaterSettings, saveWaterLog, saveWaterSettings } from "../storage/storage";
 import { todayKey } from "../utils/date";
 import { syncWaterReminders } from "../water/notifications";
-import { addGlasses, DEFAULT_WATER_SETTINGS, glassesOn, WaterDay, WaterSettings } from "../water/water";
+import { addBottles, DEFAULT_WATER_SETTINGS, bottlesOn, WaterDay, WaterSettings } from "../water/water";
 import { useWellness } from "./WellnessContext";
 
 interface WaterContextValue {
   settings: WaterSettings;
-  todayGlasses: number;
+  todayBottles: number;
   log: WaterDay[];
   add: (delta: number) => Promise<void>;
   updateSettings: (next: WaterSettings) => Promise<void>;
@@ -31,12 +31,12 @@ export function WaterProvider({ children }: { children: React.ReactNode }) {
 
   const add = async (delta: number) => {
     const date = todayKey();
-    const next = addGlasses(log, date, delta);
+    const next = addBottles(log, date, delta);
     setLog(next);
     await saveWaterLog(next);
     // Keep the daily log in sync when it exists, without inventing a mood for a day not logged yet.
     const entry = getEntryForDate(date);
-    if (entry) await logEntry({ ...entry, waterGlasses: glassesOn(next, date) });
+    if (entry) await logEntry({ ...entry, waterBottles: bottlesOn(next, date) });
   };
 
   const updateSettings = async (next: WaterSettings) => {
@@ -46,7 +46,7 @@ export function WaterProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <WaterContext.Provider value={{ settings, log, todayGlasses: glassesOn(log, todayKey()), add, updateSettings }}>
+    <WaterContext.Provider value={{ settings, log, todayBottles: bottlesOn(log, todayKey()), add, updateSettings }}>
       {children}
     </WaterContext.Provider>
   );

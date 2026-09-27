@@ -17,7 +17,18 @@ export interface LensGuardState extends LensGuardConfig {
   nextDeadlineAt: number;
   exactAlarmsAllowed: boolean;
   smsPermission: boolean;
+  smsAppOpAllowed: boolean;
+  phoneStatePermission: boolean;
+  defaultSmsSubscription: number; // -1 = no default SIM for SMS ("ask every time")
+  activeSims: number; // -1 = unknown (needs the phone permission)
+  androidVersion: number;
   ignoringBatteryOptimizations: boolean;
+  lastSmsQueuedAt: number;
+  lastSmsResultAt: number;
+  lastSmsResultCode: number; // -1 = sent OK, 0 = no answer yet, >0 = Android error code
+  lastSmsDeliveredAt: number;
+  lastSmsError: string;
+  lastSmsSubscription: number;
 }
 
 interface LensGuardNative {
@@ -27,6 +38,7 @@ interface LensGuardNative {
   getState(): LensGuardState;
   openExactAlarmSettings(): void;
   openBatterySettings(): void;
+  openAppSettings(): void;
   sendTestSms(phone: string, message: string): boolean;
 }
 

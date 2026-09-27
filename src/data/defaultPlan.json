@@ -1,7 +1,7 @@
 {
  "app": "wellness-tracker-plan",
- "version": 1,
- "name": "Routine annuale 2026–27 + dieta",
+ "version": 2,
+ "name": "Routine annuale 2026–27 + dieta (MMA mar/gio, pesi lun/mar/gio/ven)",
  "routine": [
   {
    "id": "a1",
@@ -18,52 +18,68 @@
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "20′ fissi: denti, viso, lenti, skincare, deodorante, capelli. I prodotti della skincare entrano uno alla volta ogni 2 settimane (regola del PDF): Melano CC dal 12 ottobre, retinolo dal 26 ottobre, Cure dal 9 novembre.",
    "steps": [
     {
      "id": "a1-s0",
      "time": "06:30",
-     "label": "Denti 2′ (spazzolino + lingua)"
+     "label": "Sveglia alle 06:30: alzati subito",
+     "detail": "Anche nel weekend. Alzati appena suona, senza rimandare: il telefono resta lontano fino a fine colazione (a parte la sveglia)."
     },
     {
      "id": "a1-s1",
-     "time": "06:33",
-     "label": "Viso: detergente delicato"
+     "time": "06:30",
+     "label": "Denti 2′ (spazzolino + lingua)",
+     "detail": "2 minuti cronometrati: 30″ per quadrante (sopra-destra, sopra-sinistra, sotto-destra, sotto-sinistra), setole a 45° verso la gengiva, movimenti piccoli. Poi 10 passate sulla lingua dal fondo verso la punta. Sputa ma non sciacquare con acqua: il fluoro lavora di più."
     },
     {
      "id": "a1-s2",
-     "time": "06:35",
-     "label": "Idratante"
+     "time": "06:33",
+     "label": "Viso: Hada Labo Gokujyun Foaming Face Wash",
+     "detail": "Mani lavate. Bagna il viso con acqua tiepida (non calda). Una pompata di schiuma sul palmo, massaggia 30–40″ con i polpastrelli: fronte, naso, lati del naso, mento, guance, attaccatura dei capelli e sotto la mascella. Sciacqua bene e tampona con un asciugamano pulito, senza strofinare."
     },
     {
      "id": "a1-s3",
-     "time": "06:37",
-     "label": "Protezione solare SPF 30+"
+     "time": "06:35",
+     "label": "Mani lavate e asciutte, poi metti le lenti",
+     "detail": "Lava le mani con sapone per 20″, sciacqua e asciuga con un panno che non lascia pelucchi. Prima la lente destra, sempre (così non le scambi). Controlla che non sia rovesciata (bordo a coppa, non a piattino), guarda in alto e appoggiala sull'occhio. Poi la sinistra. Il portalenti: svuota, sciacqua con la soluzione (mai acqua del rubinetto) e lascialo asciugare aperto a testa in giù."
     },
     {
      "id": "a1-s4",
-     "time": "06:39",
-     "label": "Deodorante"
+     "time": "06:38",
+     "label": "Rohto Melano CC: 2–3 gocce",
+     "detail": "Dopo le lenti, con le mani pulite: 2–3 gocce sui polpastrelli, picchietta su tutto il viso, a un dito di distanza dalle ciglia. Aspetta 1′ che si assorba. È vitamina C: la mattina protegge dai danni del sole e schiarisce le macchie. Se pizzica forte o arrossa, saltala e parlane nel brainstorm.",
+     "from": "2026-10-12"
     },
     {
      "id": "a1-s5",
-     "time": "06:41",
-     "label": "Capelli"
+     "time": "06:40",
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Quanto un pisello abbondante: puntini su fronte, guance, naso e mento, poi stendi. È l'idratante: la pelle idratata sopporta meglio SPF, vitamina C e retinolo."
     },
     {
      "id": "a1-s6",
-     "time": "06:44",
-     "label": "Lenti a contatto: mani lavate e asciutte, poi mettile"
+     "time": "06:42",
+     "label": "SPF: Hada Labo UV White Gel SPF50+",
+     "detail": "Ultimo passaggio della skincare, ogni mattina, anche nuvoloso e d'inverno. Quantità: due strisce lungo indice e medio per viso e collo; ricorda orecchie e nuca. Retinolo e vitamina C rendono la pelle più sensibile al sole. Se stai fuori a lungo, riapplica dopo 2–3 ore."
     },
     {
      "id": "a1-s7",
-     "time": "06:48",
-     "label": "Controllo generale: unghie, barba se serve"
+     "time": "06:44",
+     "label": "Deodorante e capelli",
+     "detail": "Deodorante sotto le ascelle asciutte. Capelli: pettina/sistema come ti piace, senza perderci più di 3′."
+    },
+    {
+     "id": "a1-s8",
+     "time": "06:46",
+     "label": "Controllo: unghie, barba se serve",
+     "detail": "Guardati allo specchio 30″: unghie corte e pulite (obbligatorie per l'MMA), barba rasata se serve, niente macchie sui vestiti. Se devi radere, fallo la sera prima: al mattino il tempo è contato."
     }
    ]
   },
   {
    "id": "a2",
-   "title": "Igiene mattina + pesata",
+   "title": "Pesata + igiene mattina",
    "start": "06:30",
    "end": "06:50",
    "days": [
@@ -71,39 +87,152 @@
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "20′ fissi: denti, viso, lenti, skincare, deodorante, capelli. I prodotti della skincare entrano uno alla volta ogni 2 settimane (regola del PDF): Melano CC dal 12 ottobre, retinolo dal 26 ottobre, Cure dal 9 novembre.",
    "steps": [
     {
      "id": "a2-s0",
      "time": "06:30",
-     "label": "Pesati: appena sveglio, dopo il bagno, prima di bere. Annota il peso"
+     "label": "Pesati: appena sveglio, dopo il bagno, prima di bere",
+     "detail": "Bilancia sempre nello stesso punto, a piedi nudi, senza vestiti o con gli stessi leggeri. Una volta a settimana, la domenica: segna il peso in Dieta → Peso e massa. Conta la media delle ultime 4 settimane, mai il singolo giorno."
     },
     {
      "id": "a2-s1",
-     "time": "06:33",
-     "label": "Denti 2′ (spazzolino + lingua)"
+     "time": "06:32",
+     "label": "Denti 2′ (spazzolino + lingua)",
+     "detail": "2 minuti cronometrati: 30″ per quadrante (sopra-destra, sopra-sinistra, sotto-destra, sotto-sinistra), setole a 45° verso la gengiva, movimenti piccoli. Poi 10 passate sulla lingua dal fondo verso la punta. Sputa ma non sciacquare con acqua: il fluoro lavora di più."
     },
     {
      "id": "a2-s2",
-     "time": "06:36",
-     "label": "Viso: detergente, idratante, SPF"
+     "time": "06:35",
+     "label": "Viso: Hada Labo Gokujyun Foaming Face Wash",
+     "detail": "Mani lavate. Bagna il viso con acqua tiepida (non calda). Una pompata di schiuma sul palmo, massaggia 30–40″ con i polpastrelli: fronte, naso, lati del naso, mento, guance, attaccatura dei capelli e sotto la mascella. Sciacqua bene e tampona con un asciugamano pulito, senza strofinare."
     },
     {
      "id": "a2-s3",
-     "time": "06:40",
-     "label": "Deodorante e capelli"
+     "time": "06:37",
+     "label": "Mani lavate e asciutte, poi metti le lenti",
+     "detail": "Lava le mani con sapone per 20″, sciacqua e asciuga con un panno che non lascia pelucchi. Prima la lente destra, sempre (così non le scambi). Controlla che non sia rovesciata (bordo a coppa, non a piattino), guarda in alto e appoggiala sull'occhio. Poi la sinistra. Il portalenti: svuota, sciacqua con la soluzione (mai acqua del rubinetto) e lascialo asciugare aperto a testa in giù."
     },
     {
      "id": "a2-s4",
+     "time": "06:40",
+     "label": "Rohto Melano CC: 2–3 gocce",
+     "detail": "Dopo le lenti, con le mani pulite: 2–3 gocce sui polpastrelli, picchietta su tutto il viso, a un dito di distanza dalle ciglia. Aspetta 1′ che si assorba. È vitamina C: la mattina protegge dai danni del sole e schiarisce le macchie. Se pizzica forte o arrossa, saltala e parlane nel brainstorm.",
+     "from": "2026-10-12"
+    },
+    {
+     "id": "a2-s5",
+     "time": "06:42",
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Quanto un pisello abbondante: puntini su fronte, guance, naso e mento, poi stendi. È l'idratante: la pelle idratata sopporta meglio SPF, vitamina C e retinolo."
+    },
+    {
+     "id": "a2-s6",
      "time": "06:44",
-     "label": "Lenti a contatto: mani lavate e asciutte, poi mettile"
+     "label": "SPF: Hada Labo UV White Gel SPF50+",
+     "detail": "Ultimo passaggio della skincare, ogni mattina, anche nuvoloso e d'inverno. Quantità: due strisce lungo indice e medio per viso e collo; ricorda orecchie e nuca. Retinolo e vitamina C rendono la pelle più sensibile al sole. Se stai fuori a lungo, riapplica dopo 2–3 ore."
+    },
+    {
+     "id": "a2-s7",
+     "time": "06:46",
+     "label": "Deodorante e capelli",
+     "detail": "Deodorante sotto le ascelle asciutte. Capelli: pettina/sistema come ti piace, senza perderci più di 3′."
+    },
+    {
+     "id": "a2-s8",
+     "time": "06:48",
+     "label": "Controllo: unghie, barba se serve",
+     "detail": "Guardati allo specchio 30″: unghie corte e pulite (obbligatorie per l'MMA), barba rasata se serve, niente macchie sui vestiti. Se devi radere, fallo la sera prima: al mattino il tempo è contato."
     }
    ]
   },
   {
    "id": "a3",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 1. Regola del mattino: niente telefono fino alla fine della colazione (a parte la sveglia).",
+   "steps": [
+    {
+     "id": "a3-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: overnight oats (fatti ieri sera): 100 g avena + 300 ml latte + 1 banana + 20 g burro d'arachidi",
+     "detail": "Dal frigo, già pronti nel barattolo: mescola e mangia. Se ieri sera non li hai preparati: stessi ingredienti in una ciotola, 3′ e via (anche da freddi). ≈ 735 kcal, 29 g proteine."
+    },
+    {
+     "id": "a3-s1",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a4",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 1. Niente telefono fino alla fine della colazione.",
+   "steps": [
+    {
+     "id": "a4-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: yogurt bowl: 250 g yogurt bianco + 80 g avena + 1 banana + 20 g burro d'arachidi",
+     "detail": "In una ciotola: yogurt, avena, banana a rondelle, burro d'arachidi sopra. 3′ di preparazione. ≈ 675 kcal, 26 g proteine."
+    },
+    {
+     "id": "a4-s1",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a5",
+   "title": "Colazione",
+   "start": "06:50",
+   "end": "07:05",
+   "days": [
+    6,
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 1. Nel weekend la sveglia resta alle 06:30: il ritmo del sonno non cambia.",
+   "steps": [
+    {
+     "id": "a5-s0",
+     "time": "06:50",
+     "label": "Prepara/pesa: 3 uova strapazzate + 100 g pane + 1 frutto + 200 ml latte",
+     "detail": "Uova strapazzate come si deve (6′): fuoco basso, uova appena sbattute con un pizzico di sale, mescola di continuo e togli dal fuoco quando sono ancora umide: finiscono di cuocere da sole. ≈ 650 kcal, 35 g proteine."
+    },
+    {
+     "id": "a5-s1",
+     "time": "07:03",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a6",
    "title": "Vestiti, zaino",
    "start": "07:05",
-   "end": "07:15",
+   "end": "07:10",
    "days": [
     1,
     2,
@@ -115,24 +244,43 @@
    "essential": true,
    "steps": [
     {
-     "id": "a3-s0",
+     "id": "a6-s0",
      "time": "07:05",
-     "label": "Vestiti (preparati ieri sera)"
+     "label": "Vestiti preparati ieri sera",
+     "detail": "Solo indossarli: si scelgono la sera prima nella routine serale, così al mattino non decidi niente."
     },
     {
-     "id": "a3-s1",
-     "time": "07:09",
-     "label": "Controllo zaino e borsa sport"
-    },
-    {
-     "id": "a3-s2",
-     "time": "07:12",
-     "label": "Borraccia da 1 L piena nello zaino"
+     "id": "a6-s1",
+     "time": "07:07",
+     "label": "Zaino: contenitore, spuntino e 2 bottigliette piene",
+     "detail": "Controlla che ci siano: libri del giorno, contenitore del pranzo (messo ieri sera), spuntino della scuola, 2 bottigliette d'acqua da mezzo litro piene. Nei giorni di palestra la borsa è già pronta vicino alla porta."
     }
    ]
   },
   {
-   "id": "a4",
+   "id": "a7",
+   "title": "Margine",
+   "start": "07:10",
+   "end": "07:15",
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a7-s0",
+     "time": "07:10",
+     "label": "Riserva per gli imprevisti del mattino",
+     "detail": "Tempo di riserva per gli imprevisti (bus in ritardo, una cosa durata più del previsto). Se non ti serve, è pausa vera: siediti, bevi, respira. Non riempirlo con altro."
+    }
+   ]
+  },
+  {
+   "id": "a8",
    "title": "Bus · inglese",
    "start": "07:15",
    "end": "08:00",
@@ -144,28 +292,84 @@
     5
    ],
    "color": "#cfcfca",
+   "subject": "inglese",
+   "detail": "45′ di bus sfruttati per le attività leggere: la grammatica è il tuo punto debole, l'ascolto il tuo punto forte.",
    "steps": [
     {
-     "id": "a4-s0",
+     "id": "a8-s0",
      "time": "07:15",
-     "label": "15′ grammatica: esercizi sull'argomento della settimana"
+     "label": "15′ grammatica: esercizi sull'argomento della settimana",
+     "detail": "Un argomento a settimana (vedi il tema del mese qui sopra). Esercizi scritti su app o libro, non teoria: se sbagli, leggi la regola solo di quell'errore. Il giovedì non studi inglese a casa: il venerdì sera recuperi 40′."
     },
     {
-     "id": "a4-s1",
+     "id": "a8-s1",
      "time": "07:30",
-     "label": "15′ vocaboli in flashcard"
+     "label": "15′ vocaboli: flashcard (tipo Anki)",
+     "detail": "Ripassa le carte in scadenza, poi aggiungi 5–10 parole nuove prese da podcast o video della settimana (con una frase d'esempio, non solo la traduzione)."
     },
     {
-     "id": "a4-s2",
+     "id": "a8-s2",
      "time": "07:45",
-     "label": "15′ flashcard della maturità"
+     "label": "15′ flashcard della maturità",
+     "detail": "Le flashcard che hai creato studiando le materie della maturità: definizioni, date, formule, autori. Rispondi a voce bassa prima di girare la carta."
     }
    ]
   },
   {
-   "id": "a5",
+   "id": "a9",
    "title": "Scuola",
    "start": "08:00",
+   "end": "10:55",
+   "days": [
+    1
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a9-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti",
+     "detail": "Telefono spento o silenzioso nello zaino. Prendi appunti che poi userai nel blocco di maturità del pomeriggio: parole chiave e domande, non trascrizioni."
+    },
+    {
+     "id": "a9-s1",
+     "time": "09:00",
+     "label": "Qualche sorso d'acqua tra un'ora e l'altra",
+     "detail": "Le bottigliette sono nello zaino: bevi ai cambi d'ora, così arrivi a 10 senza fatica."
+    }
+   ]
+  },
+  {
+   "id": "a10",
+   "title": "Spuntino a scuola",
+   "start": "10:55",
+   "end": "11:10",
+   "days": [
+    1
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 2, durante la ricreazione (orario ipotizzato: adattalo).",
+   "steps": [
+    {
+     "id": "a10-s0",
+     "time": "10:55",
+     "label": "Prepara: panino: 100 g pane + 80 g tonno al naturale + 1 mela",
+     "detail": "Preparato la sera prima o al mattino (2′): pane tagliato, tonno sgocciolato dentro. ≈ 435 kcal, 28 g proteine."
+    },
+    {
+     "id": "a10-s1",
+     "time": "10:57",
+     "label": "Mangia con calma, anche parlando con i compagni",
+     "detail": "Pasto 2. È la ricreazione: mangia tutto, serve per arrivare al pranzo senza cali. L'orario va adattato alla tua ricreazione reale."
+    }
+   ]
+  },
+  {
+   "id": "a11",
+   "title": "Scuola",
+   "start": "11:10",
    "end": "14:00",
    "days": [
     1
@@ -174,31 +378,74 @@
    "essential": true,
    "steps": [
     {
-     "id": "a5-s0",
-     "time": "08:00",
-     "label": "In classe: telefono silenzioso, appunti"
+     "id": "a11-s0",
+     "time": "11:10",
+     "label": "Seconda parte della mattina",
+     "detail": "Stesse regole: telefono nello zaino, appunti utili per il pomeriggio."
     },
     {
-     "id": "a5-s1",
-     "time": "11:00",
-     "label": "Pasto 2: panino con 100 g pane + 80 g tonno al naturale + 1 mela"
-    },
-    {
-     "id": "a5-s2",
-     "time": "11:05",
-     "label": "Riempi la borraccia"
-    },
-    {
-     "id": "a5-s3",
+     "id": "a11-s1",
      "time": "13:50",
-     "label": "Annota compiti, verifiche e interrogazioni"
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Scrivili nel diario o nell'agenda prima di uscire: stasera e nella revisione della domenica ti servono per decidere i blocchi."
     }
    ]
   },
   {
-   "id": "a6",
+   "id": "a12",
    "title": "Scuola",
    "start": "08:00",
+   "end": "10:55",
+   "days": [
+    2
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a12-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti",
+     "detail": "Telefono spento o silenzioso nello zaino. Prendi appunti che poi userai nel blocco di maturità del pomeriggio: parole chiave e domande, non trascrizioni."
+    },
+    {
+     "id": "a12-s1",
+     "time": "09:00",
+     "label": "Qualche sorso d'acqua tra un'ora e l'altra",
+     "detail": "Le bottigliette sono nello zaino: bevi ai cambi d'ora, così arrivi a 10 senza fatica."
+    }
+   ]
+  },
+  {
+   "id": "a13",
+   "title": "Spuntino a scuola",
+   "start": "10:55",
+   "end": "11:10",
+   "days": [
+    2
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 2, durante la ricreazione (orario ipotizzato: adattalo).",
+   "steps": [
+    {
+     "id": "a13-s0",
+     "time": "10:55",
+     "label": "Prepara: panino: 100 g pane + 2 uova sode + 1 mela",
+     "detail": "Le uova sode escono dalla cucina della domenica. ≈ 490 kcal, 23 g proteine."
+    },
+    {
+     "id": "a13-s1",
+     "time": "10:57",
+     "label": "Mangia con calma, anche parlando con i compagni",
+     "detail": "Pasto 2. È la ricreazione: mangia tutto, serve per arrivare al pranzo senza cali. L'orario va adattato alla tua ricreazione reale."
+    }
+   ]
+  },
+  {
+   "id": "a14",
+   "title": "Scuola",
+   "start": "11:10",
    "end": "14:00",
    "days": [
     2
@@ -207,31 +454,74 @@
    "essential": true,
    "steps": [
     {
-     "id": "a6-s0",
-     "time": "08:00",
-     "label": "In classe: telefono silenzioso, appunti"
+     "id": "a14-s0",
+     "time": "11:10",
+     "label": "Seconda parte della mattina",
+     "detail": "Stesse regole: telefono nello zaino, appunti utili per il pomeriggio."
     },
     {
-     "id": "a6-s1",
-     "time": "11:00",
-     "label": "Pasto 2: panino con 100 g pane + 2 uova sode + 1 mela"
-    },
-    {
-     "id": "a6-s2",
-     "time": "11:05",
-     "label": "Riempi la borraccia"
-    },
-    {
-     "id": "a6-s3",
+     "id": "a14-s1",
      "time": "13:50",
-     "label": "Annota compiti, verifiche e interrogazioni"
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Scrivili nel diario o nell'agenda prima di uscire: stasera e nella revisione della domenica ti servono per decidere i blocchi."
     }
    ]
   },
   {
-   "id": "a7",
+   "id": "a15",
    "title": "Scuola",
    "start": "08:00",
+   "end": "10:55",
+   "days": [
+    3
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a15-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti",
+     "detail": "Telefono spento o silenzioso nello zaino. Prendi appunti che poi userai nel blocco di maturità del pomeriggio: parole chiave e domande, non trascrizioni."
+    },
+    {
+     "id": "a15-s1",
+     "time": "09:00",
+     "label": "Qualche sorso d'acqua tra un'ora e l'altra",
+     "detail": "Le bottigliette sono nello zaino: bevi ai cambi d'ora, così arrivi a 10 senza fatica."
+    }
+   ]
+  },
+  {
+   "id": "a16",
+   "title": "Spuntino a scuola",
+   "start": "10:55",
+   "end": "11:10",
+   "days": [
+    3
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 2, durante la ricreazione (orario ipotizzato: adattalo).",
+   "steps": [
+    {
+     "id": "a16-s0",
+     "time": "10:55",
+     "label": "Prepara: panino: 100 g pane + 100 g sgombro + 1 mela",
+     "detail": "Sgombro in scatola sgocciolato nel pane. ≈ 550 kcal, 30 g proteine."
+    },
+    {
+     "id": "a16-s1",
+     "time": "10:57",
+     "label": "Mangia con calma, anche parlando con i compagni",
+     "detail": "Pasto 2. È la ricreazione: mangia tutto, serve per arrivare al pranzo senza cali. L'orario va adattato alla tua ricreazione reale."
+    }
+   ]
+  },
+  {
+   "id": "a17",
+   "title": "Scuola",
+   "start": "11:10",
    "end": "14:00",
    "days": [
     3
@@ -240,32 +530,24 @@
    "essential": true,
    "steps": [
     {
-     "id": "a7-s0",
-     "time": "08:00",
-     "label": "In classe: telefono silenzioso, appunti"
+     "id": "a17-s0",
+     "time": "11:10",
+     "label": "Seconda parte della mattina",
+     "detail": "Stesse regole: telefono nello zaino, appunti utili per il pomeriggio."
     },
     {
-     "id": "a7-s1",
-     "time": "11:00",
-     "label": "Pasto 2: panino con 100 g pane + 100 g sgombro + 1 mela"
-    },
-    {
-     "id": "a7-s2",
-     "time": "11:05",
-     "label": "Riempi la borraccia"
-    },
-    {
-     "id": "a7-s3",
+     "id": "a17-s1",
      "time": "13:50",
-     "label": "Annota compiti, verifiche e interrogazioni"
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Scrivili nel diario o nell'agenda prima di uscire: stasera e nella revisione della domenica ti servono per decidere i blocchi."
     }
    ]
   },
   {
-   "id": "a8",
+   "id": "a18",
    "title": "Scuola",
    "start": "08:00",
-   "end": "16:00",
+   "end": "10:55",
    "days": [
     4
    ],
@@ -273,31 +555,125 @@
    "essential": true,
    "steps": [
     {
-     "id": "a8-s0",
+     "id": "a18-s0",
      "time": "08:00",
-     "label": "In classe: telefono silenzioso, appunti"
+     "label": "In classe: telefono silenzioso, appunti",
+     "detail": "Telefono spento o silenzioso nello zaino. Prendi appunti che poi userai nel blocco di maturità del pomeriggio: parole chiave e domande, non trascrizioni."
     },
     {
-     "id": "a8-s1",
-     "time": "11:00",
-     "label": "Pasto 2 (doppio, oggi 8 ore): 150 g pane + 80 g tonno + 2 uova sode + 2 frutti"
-    },
-    {
-     "id": "a8-s2",
-     "time": "11:05",
-     "label": "Riempi la borraccia"
-    },
-    {
-     "id": "a8-s3",
-     "time": "15:50",
-     "label": "Annota compiti, verifiche e interrogazioni"
+     "id": "a18-s1",
+     "time": "09:00",
+     "label": "Qualche sorso d'acqua tra un'ora e l'altra",
+     "detail": "Le bottigliette sono nello zaino: bevi ai cambi d'ora, così arrivi a 10 senza fatica."
     }
    ]
   },
   {
-   "id": "a9",
+   "id": "a19",
+   "title": "Spuntino doppio a scuola",
+   "start": "10:55",
+   "end": "11:10",
+   "days": [
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 2, durante la ricreazione (orario ipotizzato: adattalo).",
+   "steps": [
+    {
+     "id": "a19-s0",
+     "time": "10:55",
+     "label": "Prepara: spuntino doppio: 150 g pane + 80 g tonno + 2 uova sode + 2 frutti",
+     "detail": "Oggi la scuola dura 8 ore e poi ci sono pesi e MMA: è il giorno che ne ha più bisogno. ≈ 800 kcal, 40 g proteine."
+    },
+    {
+     "id": "a19-s1",
+     "time": "10:57",
+     "label": "Mangia con calma, anche parlando con i compagni",
+     "detail": "Pasto 2. È la ricreazione: mangia tutto, serve per arrivare al pranzo senza cali. L'orario va adattato alla tua ricreazione reale."
+    }
+   ]
+  },
+  {
+   "id": "a20",
+   "title": "Scuola",
+   "start": "11:10",
+   "end": "13:00",
+   "days": [
+    4
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a20-s0",
+     "time": "11:10",
+     "label": "Seconda parte della mattina",
+     "detail": "Stesse regole: telefono nello zaino, appunti utili per il pomeriggio."
+    },
+    {
+     "id": "a20-s1",
+     "time": "12:50",
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Scrivili nel diario o nell'agenda prima di uscire: stasera e nella revisione della domenica ti servono per decidere i blocchi."
+    }
+   ]
+  },
+  {
+   "id": "a21",
    "title": "Scuola",
    "start": "08:00",
+   "end": "10:55",
+   "days": [
+    5
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a21-s0",
+     "time": "08:00",
+     "label": "In classe: telefono silenzioso, appunti",
+     "detail": "Telefono spento o silenzioso nello zaino. Prendi appunti che poi userai nel blocco di maturità del pomeriggio: parole chiave e domande, non trascrizioni."
+    },
+    {
+     "id": "a21-s1",
+     "time": "09:00",
+     "label": "Qualche sorso d'acqua tra un'ora e l'altra",
+     "detail": "Le bottigliette sono nello zaino: bevi ai cambi d'ora, così arrivi a 10 senza fatica."
+    }
+   ]
+  },
+  {
+   "id": "a22",
+   "title": "Spuntino a scuola",
+   "start": "10:55",
+   "end": "11:10",
+   "days": [
+    5
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 2, durante la ricreazione (orario ipotizzato: adattalo).",
+   "steps": [
+    {
+     "id": "a22-s0",
+     "time": "10:55",
+     "label": "Prepara: panino: 100 g pane + 80 g tonno + 1 mela",
+     "detail": "≈ 435 kcal, 28 g proteine."
+    },
+    {
+     "id": "a22-s1",
+     "time": "10:57",
+     "label": "Mangia con calma, anche parlando con i compagni",
+     "detail": "Pasto 2. È la ricreazione: mangia tutto, serve per arrivare al pranzo senza cali. L'orario va adattato alla tua ricreazione reale."
+    }
+   ]
+  },
+  {
+   "id": "a23",
+   "title": "Scuola",
+   "start": "11:10",
    "end": "14:00",
    "days": [
     5
@@ -306,29 +682,73 @@
    "essential": true,
    "steps": [
     {
-     "id": "a9-s0",
-     "time": "08:00",
-     "label": "In classe: telefono silenzioso, appunti"
+     "id": "a23-s0",
+     "time": "11:10",
+     "label": "Seconda parte della mattina",
+     "detail": "Stesse regole: telefono nello zaino, appunti utili per il pomeriggio."
     },
     {
-     "id": "a9-s1",
-     "time": "11:00",
-     "label": "Pasto 2: panino con 100 g pane + 80 g tonno + 1 mela"
-    },
-    {
-     "id": "a9-s2",
-     "time": "11:05",
-     "label": "Riempi la borraccia"
-    },
-    {
-     "id": "a9-s3",
+     "id": "a23-s1",
      "time": "13:50",
-     "label": "Annota compiti, verifiche e interrogazioni"
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Scrivili nel diario o nell'agenda prima di uscire: stasera e nella revisione della domenica ti servono per decidere i blocchi."
     }
    ]
   },
   {
-   "id": "a10",
+   "id": "a24",
+   "title": "Pranzo a scuola",
+   "start": "13:00",
+   "end": "13:20",
+   "days": [
+    4
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 3 del giovedì, durante la pausa pranzo della giornata lunga.",
+   "steps": [
+    {
+     "id": "a24-s0",
+     "time": "13:00",
+     "label": "Prepara/pesa: dal contenitore: 120 g riso + 160 g tonno + 200 g verdure + 10 g olio",
+     "detail": "Il riso viene dalla teglia di mercoledì; il tonno lo aggiungi dalla scatola. Buono anche freddo: non serve scaldarlo. ≈ 750 kcal, 49 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a24-s1",
+     "time": "13:18",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a25",
+   "title": "Scuola",
+   "start": "13:20",
+   "end": "16:00",
+   "days": [
+    4
+   ],
+   "color": "#8fb3e0",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a25-s0",
+     "time": "13:20",
+     "label": "Pomeriggio a scuola",
+     "detail": "Ultime ore della giornata lunga. Tieni le energie: stasera pesi e MMA."
+    },
+    {
+     "id": "a25-s1",
+     "time": "15:50",
+     "label": "Annota compiti, verifiche e interrogazioni",
+     "detail": "Oggi non studi a casa: segna bene cosa serve per venerdì."
+    }
+   ]
+  },
+  {
+   "id": "a26",
    "title": "Bus · ascolto",
    "start": "14:00",
    "end": "14:45",
@@ -341,19 +761,21 @@
    "color": "#cfcfca",
    "steps": [
     {
-     "id": "a10-s0",
+     "id": "a26-s0",
      "time": "14:00",
-     "label": "Podcast o video in inglese B2–C1 (20–25′)"
+     "label": "Podcast o video in inglese B2–C1 (20–25′)",
+     "detail": "Notizie o divulgazione scientifica in inglese, livello B2–C1 (es. BBC Learning English, TED-Ed, Kurzgesagt). Ascolto attivo: se senti un'espressione nuova, segnala per le flashcard di domani."
     },
     {
-     "id": "a10-s1",
+     "id": "a26-s1",
      "time": "14:25",
-     "label": "Stacco mentale"
+     "label": "Stacco mentale",
+     "detail": "Niente schermi: guarda fuori, respira. Arrivi a casa scarico e pronto per mangiare."
     }
    ]
   },
   {
-   "id": "a11",
+   "id": "a27",
    "title": "Bus · ascolto",
    "start": "16:00",
    "end": "16:45",
@@ -363,121 +785,48 @@
    "color": "#cfcfca",
    "steps": [
     {
-     "id": "a11-s0",
+     "id": "a27-s0",
      "time": "16:00",
-     "label": "Podcast o video in inglese (20–25′)"
+     "label": "Podcast o video in inglese (20–25′)",
+     "detail": "Come gli altri giorni. Oggi è l'unico inglese dopo il bus di andata."
     },
     {
-     "id": "a11-s1",
+     "id": "a27-s1",
      "time": "16:25",
-     "label": "Stacco mentale"
+     "label": "Stacco mentale",
+     "detail": "Niente schermi: ti aspettano pesi e MMA."
     }
    ]
   },
   {
-   "id": "a12",
-   "title": "Colazione",
-   "start": "06:50",
-   "end": "07:05",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a12-s0",
-     "time": "06:50",
-     "label": "Prepara/pesa: overnight oats (preparati la sera prima): 100 g avena + 300 ml latte + 1 banana + 20 g burro d'arachidi"
-    },
-    {
-     "id": "a12-s1",
-     "time": "07:03",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a13",
-   "title": "Colazione",
-   "start": "06:50",
-   "end": "07:05",
-   "days": [
-    2,
-    4
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a13-s0",
-     "time": "06:50",
-     "label": "Prepara/pesa: 250 g yogurt bianco + 80 g avena + 1 banana + 20 g burro d'arachidi"
-    },
-    {
-     "id": "a13-s1",
-     "time": "07:03",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a14",
-   "title": "Colazione",
-   "start": "06:50",
-   "end": "07:05",
-   "days": [
-    6,
-    0
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a14-s0",
-     "time": "06:50",
-     "label": "Prepara/pesa: 3 uova strapazzate (fuoco basso)"
-    },
-    {
-     "id": "a14-s1",
-     "time": "06:57",
-     "label": "Prepara/pesa: 100 g pane + 1 frutto + 200 ml latte"
-    },
-    {
-     "id": "a14-s2",
-     "time": "07:03",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a15",
+   "id": "a28",
    "title": "Pranzo",
    "start": "14:45",
    "end": "15:00",
    "days": [
-    1,
-    5
+    1
    ],
    "color": "#a8d99a",
    "essential": true,
+   "detail": "Pasto 3, già pronto nel contenitore: 15′ in tutto.",
    "steps": [
     {
-     "id": "a15-s0",
+     "id": "a28-s0",
      "time": "14:45",
-     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 120 g riso (crudo) + 200 g verdure + 10 g olio"
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 120 g riso (peso crudo) + 200 g verdure + 10 g olio",
+     "detail": "Pollo dalla teglia della domenica, riso dai 500 g cotti domenica, verdure surgelate saltate o al vapore, olio a crudo. Scalda 2–3′. ≈ 745 kcal, 42 g proteine.",
+     "carbs": true
     },
     {
-     "id": "a15-s1",
+     "id": "a28-s1",
      "time": "14:58",
-     "label": "Mangia seduto, senza telefono"
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a16",
+   "id": "a29",
    "title": "Pranzo",
    "start": "14:45",
    "end": "15:00",
@@ -488,19 +837,22 @@
    "essential": true,
    "steps": [
     {
-     "id": "a16-s0",
+     "id": "a29-s0",
      "time": "14:45",
-     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 400 g patate + 200 g verdure + 10 g olio + 60 g pane"
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 400 g patate + 200 g verdure + 10 g olio + 60 g pane",
+     "detail": "Pollo e patate dalla teglia della domenica. ≈ 775 kcal, 46 g proteine. Oggi pesi e MMA: mangialo tutto.",
+     "carbs": true
     },
     {
-     "id": "a16-s1",
+     "id": "a29-s1",
      "time": "14:58",
-     "label": "Mangia seduto, senza telefono"
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a17",
+   "id": "a30",
    "title": "Pranzo",
    "start": "14:45",
    "end": "15:00",
@@ -511,42 +863,48 @@
    "essential": true,
    "steps": [
     {
-     "id": "a17-s0",
+     "id": "a30-s0",
      "time": "14:45",
-     "label": "Prepara/pesa: dal contenitore: pasta e ceci (100 g pasta + 150 g ceci + pelati + 10 g olio)"
+     "label": "Prepara/pesa: dal contenitore: pasta e ceci: 100 g pasta + 150 g ceci + pelati + 10 g olio",
+     "detail": "Ceci dalla pentola della domenica. Ricetta (20′, 2 porzioni): soffriggi aglio e rosmarino, aggiungi pelati e ceci con la loro acqua; dopo 10′ versa la pasta cruda e acqua a coprire, cuoci mescolando finché la pasta è pronta. ≈ 620 kcal, 25 g proteine.",
+     "carbs": true
     },
     {
-     "id": "a17-s1",
+     "id": "a30-s1",
      "time": "14:58",
-     "label": "Mangia seduto, senza telefono"
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a18",
-   "title": "Pranzo tardivo",
-   "start": "16:45",
-   "end": "17:00",
+   "id": "a31",
+   "title": "Pranzo",
+   "start": "14:45",
+   "end": "15:00",
    "days": [
-    4
+    5
    ],
    "color": "#a8d99a",
    "essential": true,
    "steps": [
     {
-     "id": "a18-s0",
-     "time": "16:45",
-     "label": "Prepara/pesa: dal contenitore: 120 g riso + 160 g tonno + 200 g verdure + 10 g olio (buono anche freddo)"
+     "id": "a31-s0",
+     "time": "14:45",
+     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 120 g riso + 200 g verdure + 10 g olio",
+     "detail": "Dalla teglia di pollo e riso di mercoledì. ≈ 745 kcal, 42 g proteine.",
+     "carbs": true
     },
     {
-     "id": "a18-s1",
-     "time": "16:58",
-     "label": "Mangia seduto, senza telefono"
+     "id": "a31-s1",
+     "time": "14:58",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a19",
+   "id": "a32",
    "title": "Denti + stacco",
    "start": "15:00",
    "end": "15:15",
@@ -559,501 +917,1499 @@
    "color": "#86cfc2",
    "steps": [
     {
-     "id": "a19-s0",
-     "time": "15:00",
-     "label": "Denti (o almeno risciacquo) + filo se serve"
-    },
-    {
-     "id": "a19-s1",
-     "time": "15:05",
-     "label": "10′ senza schermo"
-    }
-   ]
-  },
-  {
-   "id": "a20",
-   "title": "Denti + stacco",
-   "start": "17:00",
-   "end": "17:15",
-   "days": [
-    4
-   ],
-   "color": "#86cfc2",
-   "steps": [
-    {
-     "id": "a20-s0",
-     "time": "17:00",
-     "label": "Denti + filo se serve"
-    },
-    {
-     "id": "a20-s1",
-     "time": "17:05",
-     "label": "10′ senza schermo"
-    }
-   ]
-  },
-  {
-   "id": "a21",
-   "title": "Studio 75′ · Maturità",
-   "start": "15:15",
-   "end": "16:30",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a21-s0",
-     "time": "15:15",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a21-s1",
-     "time": "15:17",
-     "label": "compiti + consolidamento di quanto spiegato oggi"
-    },
-    {
-     "id": "a21-s2",
-     "time": "15:53",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a21-s3",
-     "time": "16:28",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a22",
-   "title": "Borsa sport",
-   "start": "16:30",
-   "end": "16:40",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#f2c27b",
-   "steps": [
-    {
-     "id": "a22-s0",
-     "time": "16:30",
-     "label": "Bende pulite"
-    },
-    {
-     "id": "a22-s1",
-     "time": "16:31",
-     "label": "Guantoni"
-    },
-    {
-     "id": "a22-s2",
-     "time": "16:32",
-     "label": "Paradenti nella custodia"
-    },
-    {
-     "id": "a22-s3",
-     "time": "16:33",
-     "label": "Asciugamano e ciabatte"
-    },
-    {
-     "id": "a22-s4",
-     "time": "16:35",
-     "label": "Cambio"
-    },
-    {
-     "id": "a22-s5",
-     "time": "16:37",
-     "label": "Snack (Pasto 4) e borraccia"
-    }
-   ]
-  },
-  {
-   "id": "a23",
-   "title": "Tragitto palestra",
-   "start": "16:40",
-   "end": "17:00",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#cfcfca",
-   "steps": [
-    {
-     "id": "a23-s0",
-     "time": "16:40",
-     "label": "Parti"
-    },
-    {
-     "id": "a23-s1",
-     "time": "16:42",
-     "label": "Flashcard sul bus"
-    }
-   ]
-  },
-  {
-   "id": "a24",
-   "title": "Cambio",
-   "start": "17:00",
-   "end": "17:10",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#e07a5f",
-   "steps": [
-    {
-     "id": "a24-s0",
-     "time": "17:00",
-     "label": "Spogliatoio"
-    },
-    {
-     "id": "a24-s1",
-     "time": "17:04",
-     "label": "Bendaggio mani"
-    }
-   ]
-  },
-  {
-   "id": "a25",
-   "title": "Muay Thai 90′",
-   "start": "17:10",
-   "end": "18:40",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a25-s0",
-     "time": "17:10",
-     "label": "Lezione: tecnica prima dei pesi, da fresco"
-    },
-    {
-     "id": "a25-s1",
-     "time": "17:55",
-     "label": "Bevi durante la sessione"
-    },
-    {
-     "id": "a25-s2",
-     "time": "18:35",
-     "label": "Paradenti sciacquato subito e nella custodia"
-    }
-   ]
-  },
-  {
-   "id": "a26",
-   "title": "Pesi 45′ · Scheda A",
-   "start": "18:40",
-   "end": "19:25",
-   "days": [
-    1,
-    5
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "weeks": "odd",
-   "group": "Pesi 45′",
-   "steps": [
-    {
-     "id": "a26-s0",
-     "time": "18:40",
-     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
-    },
-    {
-     "id": "a26-s1",
-     "time": "18:42",
-     "label": "Squat (o goblet squat) 3 × 6–10"
-    },
-    {
-     "id": "a26-s2",
-     "time": "18:50",
-     "label": "Panca piana con manubri 3 × 8–12"
-    },
-    {
-     "id": "a26-s3",
-     "time": "18:58",
-     "label": "Rematore con manubrio o al cavo 3 × 8–12"
-    },
-    {
-     "id": "a26-s4",
-     "time": "19:06",
-     "label": "Stacco rumeno 2 × 8–10"
-    },
-    {
-     "id": "a26-s5",
-     "time": "19:14",
-     "label": "Plank / core anti-rotazione 2 serie"
-    },
-    {
-     "id": "a26-s6",
-     "time": "19:23",
-     "label": "Annota carichi e ripetizioni nel registro"
-    }
-   ]
-  },
-  {
-   "id": "a27",
-   "title": "Pesi 45′ · Scheda B",
-   "start": "18:40",
-   "end": "19:25",
-   "days": [
-    3
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "weeks": "odd",
-   "group": "Pesi 45′",
-   "steps": [
-    {
-     "id": "a27-s0",
-     "time": "18:40",
-     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
-    },
-    {
-     "id": "a27-s1",
-     "time": "18:42",
-     "label": "Pressa o affondi 3 × 8–12"
-    },
-    {
-     "id": "a27-s2",
-     "time": "18:50",
-     "label": "Military press con manubri 3 × 8–10"
-    },
-    {
-     "id": "a27-s3",
-     "time": "18:58",
-     "label": "Lat machine o trazioni 3 × 6–12"
-    },
-    {
-     "id": "a27-s4",
-     "time": "19:06",
-     "label": "Hip thrust o leg curl 2 × 10–12"
-    },
-    {
-     "id": "a27-s5",
-     "time": "19:14",
-     "label": "Addominali + isometrie del collo leggere (con l'ok del maestro) 2 serie"
-    },
-    {
-     "id": "a27-s6",
-     "time": "19:23",
-     "label": "Annota carichi e ripetizioni nel registro"
-    }
-   ]
-  },
-  {
-   "id": "a28",
-   "title": "Pesi 45′ · Scheda B",
-   "start": "18:40",
-   "end": "19:25",
-   "days": [
-    1,
-    5
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "weeks": "even",
-   "group": "Pesi 45′",
-   "steps": [
-    {
-     "id": "a28-s0",
-     "time": "18:40",
-     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
-    },
-    {
-     "id": "a28-s1",
-     "time": "18:42",
-     "label": "Pressa o affondi 3 × 8–12"
-    },
-    {
-     "id": "a28-s2",
-     "time": "18:50",
-     "label": "Military press con manubri 3 × 8–10"
-    },
-    {
-     "id": "a28-s3",
-     "time": "18:58",
-     "label": "Lat machine o trazioni 3 × 6–12"
-    },
-    {
-     "id": "a28-s4",
-     "time": "19:06",
-     "label": "Hip thrust o leg curl 2 × 10–12"
-    },
-    {
-     "id": "a28-s5",
-     "time": "19:14",
-     "label": "Addominali + isometrie del collo leggere (con l'ok del maestro) 2 serie"
-    },
-    {
-     "id": "a28-s6",
-     "time": "19:23",
-     "label": "Annota carichi e ripetizioni nel registro"
-    }
-   ]
-  },
-  {
-   "id": "a29",
-   "title": "Pesi 45′ · Scheda A",
-   "start": "18:40",
-   "end": "19:25",
-   "days": [
-    3
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "weeks": "even",
-   "group": "Pesi 45′",
-   "steps": [
-    {
-     "id": "a29-s0",
-     "time": "18:40",
-     "label": "1–2 serie leggere del primo esercizio (sei già caldo dalla Muay Thai)"
-    },
-    {
-     "id": "a29-s1",
-     "time": "18:42",
-     "label": "Squat (o goblet squat) 3 × 6–10"
-    },
-    {
-     "id": "a29-s2",
-     "time": "18:50",
-     "label": "Panca piana con manubri 3 × 8–12"
-    },
-    {
-     "id": "a29-s3",
-     "time": "18:58",
-     "label": "Rematore con manubrio o al cavo 3 × 8–12"
-    },
-    {
-     "id": "a29-s4",
-     "time": "19:06",
-     "label": "Stacco rumeno 2 × 8–10"
-    },
-    {
-     "id": "a29-s5",
-     "time": "19:14",
-     "label": "Plank / core anti-rotazione 2 serie"
-    },
-    {
-     "id": "a29-s6",
-     "time": "19:23",
-     "label": "Annota carichi e ripetizioni nel registro"
-    }
-   ]
-  },
-  {
-   "id": "a30",
-   "title": "Doccia post",
-   "start": "19:25",
-   "end": "19:45",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#86cfc2",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a30-s0",
-     "time": "19:25",
-     "label": "Doccia completa con ciabatte"
-    },
-    {
-     "id": "a30-s1",
-     "time": "19:33",
-     "label": "Capelli"
-    },
-    {
-     "id": "a30-s2",
-     "time": "19:36",
-     "label": "Asciuga bene tra le dita dei piedi"
-    },
-    {
-     "id": "a30-s3",
-     "time": "19:39",
-     "label": "Deodorante e biancheria pulita"
-    },
-    {
-     "id": "a30-s4",
-     "time": "19:42",
-     "label": "Crema viso idratante"
-    }
-   ]
-  },
-  {
-   "id": "a31",
-   "title": "Ritorno + snack",
-   "start": "19:45",
-   "end": "20:05",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#a8d99a",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a31-s0",
-     "time": "19:45",
-     "label": "Pasto 4: 1 banana + 30 g pane"
-    },
-    {
-     "id": "a31-s1",
-     "time": "19:50",
-     "label": "Ascolto leggero sul bus"
-    }
-   ]
-  },
-  {
-   "id": "a32",
-   "title": "Cena",
-   "start": "20:05",
-   "end": "20:20",
-   "days": [
-    1
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
      "id": "a32-s0",
-     "time": "20:05",
-     "label": "Prepara/pesa: frittata di patate e cipolla (3 uova)"
+     "time": "15:00",
+     "label": "Denti dopo pranzo (o almeno risciacquo) + filo se serve",
+     "detail": "2′ di spazzolino oppure risciacquo energico con acqua; filo solo se hai qualcosa tra i denti."
     },
     {
      "id": "a32-s1",
-     "time": "20:09",
-     "label": "Prepara/pesa: 100 g pane + insalata"
-    },
-    {
-     "id": "a32-s2",
-     "time": "20:14",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a32-s3",
-     "time": "20:18",
-     "label": "Più tardi, se hai fame: 250 ml latte"
+     "time": "15:05",
+     "label": "10′ senza schermo",
+     "detail": "Sdraiati o siediti lontano da telefono e PC: il cervello scarica la mattina e il blocco di studio rende di più. Fa anche da margine per gli imprevisti del rientro."
     }
    ]
   },
   {
    "id": "a33",
-   "title": "Cena",
-   "start": "20:05",
+   "title": "Studio 75′ · Maturità",
+   "start": "15:15",
+   "end": "16:30",
+   "days": [
+    1,
+    2,
+    5
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "maturita",
+   "detail": "Blocco di maturità di 75 minuti. Compiti + consolidamento del giorno: il credito del 5° anno si costruisce qui.",
+   "steps": [
+    {
+     "id": "a33-s0",
+     "time": "15:15",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a33-s1",
+     "time": "15:17",
+     "label": "studio attivo di quanto spiegato oggi + compiti",
+     "detail": "Studio attivo, mai solo rileggere: leggi un paragrafo, chiudi il libro, ripetilo a voce; fai lo schema a memoria e poi confrontalo; trasforma le cose da ricordare in flashcard. Parti da quanto spiegato oggi in classe e dai compiti per domani."
+    },
+    {
+     "id": "a33-s2",
+     "time": "15:53",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a33-s3",
+     "time": "16:28",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a34",
+   "title": "Studio 90′ · Matematica",
+   "start": "15:15",
+   "end": "16:45",
+   "days": [
+    3
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "matematica",
+   "detail": "Blocco di matematica di 90 minuti. Il blocco di matematica più importante della settimana.",
+   "steps": [
+    {
+     "id": "a34-s0",
+     "time": "15:15",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a34-s1",
+     "time": "15:17",
+     "label": "45′: teoria minima, poi esercizi graduati",
+     "detail": "20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a34-s2",
+     "time": "16:02",
+     "label": "Pausa 5′ in piedi",
+     "detail": "5′ in piedi: alzati, bevi qualche sorso, guarda fuori dalla finestra. Niente telefono e niente social: una pausa sul telefono stanca come studiare."
+    },
+    {
+     "id": "a34-s3",
+     "time": "16:07",
+     "label": "40′: teoria minima, poi esercizi graduati",
+     "detail": "20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a34-s4",
+     "time": "16:43",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a35",
+   "title": "Studio 75′ · Fisica",
+   "start": "17:00",
+   "end": "18:15",
+   "days": [
+    3
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "fisica",
+   "detail": "Blocco di fisica di 75 minuti.",
+   "steps": [
+    {
+     "id": "a35-s0",
+     "time": "17:00",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a35-s1",
+     "time": "17:02",
+     "label": "problemi, dal più semplice al più difficile",
+     "detail": "Per ogni problema: disegno, dati con unità di misura, formula, conto, controllo dell'ordine di grandezza. 20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a35-s2",
+     "time": "17:38",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a35-s3",
+     "time": "18:13",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a36",
+   "title": "Studio 60′ · Maturità",
+   "start": "18:30",
+   "end": "19:30",
+   "days": [
+    3
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "maturita",
+   "detail": "Blocco di maturità di 60 minuti. Materie di indirizzo.",
+   "steps": [
+    {
+     "id": "a36-s0",
+     "time": "18:30",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a36-s1",
+     "time": "18:32",
+     "label": "studio attivo di quanto spiegato oggi + compiti",
+     "detail": "Studio attivo, mai solo rileggere: leggi un paragrafo, chiudi il libro, ripetilo a voce; fai lo schema a memoria e poi confrontalo; trasforma le cose da ricordare in flashcard. Parti da quanto spiegato oggi in classe e dai compiti per domani."
+    },
+    {
+     "id": "a36-s2",
+     "time": "19:00",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a36-s3",
+     "time": "19:28",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a37",
+   "title": "Studio 40′ · Inglese",
+   "start": "19:55",
+   "end": "20:35",
+   "days": [
+    5
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "inglese",
+   "detail": "Blocco di inglese di 40 minuti. Grammatica spostata dal giovedì (giornata con scuola, pesi e MMA).",
+   "steps": [
+    {
+     "id": "a37-s0",
+     "time": "19:55",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a37-s1",
+     "time": "19:57",
+     "label": "grammatica: teoria dell'argomento della settimana + esercizi scritti",
+     "detail": "Il sabato: test di ripasso + 1 testo scritto (email, saggio breve) corretto con le regole studiate. Il venerdì sera: la grammatica spostata dal giovedì."
+    },
+    {
+     "id": "a37-s2",
+     "time": "20:33",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a38",
+   "title": "Studio 90′ · Matematica",
+   "start": "08:00",
+   "end": "09:30",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "matematica",
+   "detail": "Blocco di matematica di 90 minuti. Il blocco più difficile a mente fresca.",
+   "steps": [
+    {
+     "id": "a38-s0",
+     "time": "08:00",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a38-s1",
+     "time": "08:02",
+     "label": "45′: teoria minima, poi esercizi graduati",
+     "detail": "20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a38-s2",
+     "time": "08:47",
+     "label": "Pausa 5′ in piedi",
+     "detail": "5′ in piedi: alzati, bevi qualche sorso, guarda fuori dalla finestra. Niente telefono e niente social: una pausa sul telefono stanca come studiare."
+    },
+    {
+     "id": "a38-s3",
+     "time": "08:52",
+     "label": "40′: teoria minima, poi esercizi graduati",
+     "detail": "20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a38-s4",
+     "time": "09:28",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a39",
+   "title": "Studio 90′ · Fisica",
+   "start": "09:45",
+   "end": "11:15",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "fisica",
+   "detail": "Blocco di fisica di 90 minuti.",
+   "steps": [
+    {
+     "id": "a39-s0",
+     "time": "09:45",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a39-s1",
+     "time": "09:47",
+     "label": "45′: problemi, dal più semplice al più difficile",
+     "detail": "Per ogni problema: disegno, dati con unità di misura, formula, conto, controllo dell'ordine di grandezza. 20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a39-s2",
+     "time": "10:32",
+     "label": "Pausa 5′ in piedi",
+     "detail": "5′ in piedi: alzati, bevi qualche sorso, guarda fuori dalla finestra. Niente telefono e niente social: una pausa sul telefono stanca come studiare."
+    },
+    {
+     "id": "a39-s3",
+     "time": "10:37",
+     "label": "40′: problemi, dal più semplice al più difficile",
+     "detail": "Per ogni problema: disegno, dati con unità di misura, formula, conto, controllo dell'ordine di grandezza. 20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a39-s4",
+     "time": "11:13",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a40",
+   "title": "Studio 75′ · Sant'Anna",
+   "start": "11:30",
+   "end": "12:45",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "santanna",
+   "detail": "Blocco di sant'anna di 75 minuti. Sant'Anna / TOLC-I · problem solving.",
+   "steps": [
+    {
+     "id": "a40-s0",
+     "time": "11:30",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a40-s1",
+     "time": "11:32",
+     "label": "problem solving: logica ed esercizi «non standard»",
+     "detail": "Problemi di logica e di matematica fuori dagli schemi della scuola (archivi delle Olimpiadi, prove passate del Sant'Anna). Quando non esce, prova 15′ davvero, poi leggi la soluzione e rifai il problema da capo senza guardarla."
+    },
+    {
+     "id": "a40-s2",
+     "time": "12:08",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a40-s3",
+     "time": "12:43",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a41",
+   "title": "Studio 75′ · Maturità",
+   "start": "14:30",
+   "end": "15:45",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "maturita",
+   "detail": "Blocco di maturità di 75 minuti. Da febbraio: una simulazione di seconda prova ogni 2 settimane in questo blocco (esteso).",
+   "steps": [
+    {
+     "id": "a41-s0",
+     "time": "14:30",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a41-s1",
+     "time": "14:32",
+     "label": "studio attivo di quanto spiegato oggi + compiti",
+     "detail": "Studio attivo, mai solo rileggere: leggi un paragrafo, chiudi il libro, ripetilo a voce; fai lo schema a memoria e poi confrontalo; trasforma le cose da ricordare in flashcard. Parti da quanto spiegato oggi in classe e dai compiti per domani."
+    },
+    {
+     "id": "a41-s2",
+     "time": "15:08",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a41-s3",
+     "time": "15:43",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a42",
+   "title": "Studio 60′ · Inglese",
+   "start": "16:00",
+   "end": "17:00",
+   "days": [
+    6
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "inglese",
+   "detail": "Blocco di inglese di 60 minuti. Grammatica + writing.",
+   "steps": [
+    {
+     "id": "a42-s0",
+     "time": "16:00",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a42-s1",
+     "time": "16:02",
+     "label": "grammatica: teoria dell'argomento della settimana + esercizi scritti",
+     "detail": "Il sabato: test di ripasso + 1 testo scritto (email, saggio breve) corretto con le regole studiate. Il venerdì sera: la grammatica spostata dal giovedì."
+    },
+    {
+     "id": "a42-s2",
+     "time": "16:30",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a42-s3",
+     "time": "16:58",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a43",
+   "title": "Studio 90′ · Errori mate/fisica",
+   "start": "08:30",
+   "end": "10:00",
+   "days": [
+    0
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "errori",
+   "detail": "Blocco di errori mate/fisica di 90 minuti. Quaderno degli errori della settimana.",
+   "steps": [
+    {
+     "id": "a43-s0",
+     "time": "08:30",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a43-s1",
+     "time": "08:32",
+     "label": "45′: rifai gli esercizi sbagliati in settimana",
+     "detail": "Apri il quaderno degli errori: rifai ogni esercizio della settimana da zero, senza guardare la correzione. Se riesce, spuntalo; se no, resta per la prossima domenica."
+    },
+    {
+     "id": "a43-s2",
+     "time": "09:17",
+     "label": "Pausa 5′ in piedi",
+     "detail": "5′ in piedi: alzati, bevi qualche sorso, guarda fuori dalla finestra. Niente telefono e niente social: una pausa sul telefono stanca come studiare."
+    },
+    {
+     "id": "a43-s3",
+     "time": "09:22",
+     "label": "40′: rifai gli esercizi sbagliati in settimana",
+     "detail": "Apri il quaderno degli errori: rifai ogni esercizio della settimana da zero, senza guardare la correzione. Se riesce, spuntalo; se no, resta per la prossima domenica."
+    },
+    {
+     "id": "a43-s4",
+     "time": "09:58",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a44",
+   "title": "Studio 60′ · Maturità",
+   "start": "10:15",
+   "end": "11:15",
+   "days": [
+    0
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "maturita",
+   "detail": "Blocco di maturità di 60 minuti. Da maggio: simulazioni del colloquio ad alta voce (anche registrandoti).",
+   "steps": [
+    {
+     "id": "a44-s0",
+     "time": "10:15",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a44-s1",
+     "time": "10:17",
+     "label": "flashcard della maturità + esercizi misti",
+     "detail": "Studio attivo, mai solo rileggere: leggi un paragrafo, chiudi il libro, ripetilo a voce; fai lo schema a memoria e poi confrontalo; trasforma le cose da ricordare in flashcard. Parti da quanto spiegato oggi in classe e dai compiti per domani."
+    },
+    {
+     "id": "a44-s2",
+     "time": "10:45",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a44-s3",
+     "time": "11:13",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a45",
+   "title": "Studio 60′ · Matematica",
+   "start": "15:00",
+   "end": "16:00",
+   "days": [
+    0
+   ],
+   "color": "#6e62b6",
+   "essential": false,
+   "subject": "matematica",
+   "detail": "Blocco di matematica di 60 minuti. Recupera il blocco di matematica del giovedì, che ora è giorno di pesi e MMA.",
+   "steps": [
+    {
+     "id": "a45-s0",
+     "time": "15:00",
+     "label": "Obiettivo del blocco in una riga · telefono in un'altra stanza",
+     "detail": "Prima di iniziare (2′): scrivi in una riga cosa avrai fatto alla fine del blocco, concreto e misurabile. Esempi: «10 disequazioni fratte», «capitolo 3 di storia + 15 flashcard». Un obiettivo vago («studio mate») non conta. Telefono in un'altra stanza (non in tasca, non a faccia in giù sulla scrivania): è la regola del metodo di studio. Se ti serve per le flashcard, modalità aereo."
+    },
+    {
+     "id": "a45-s1",
+     "time": "15:02",
+     "label": "teoria minima, poi esercizi graduati",
+     "detail": "20% teoria, 80% esercizi. Leggi la teoria solo quanto basta per fare il primo esercizio, poi esercizi graduati dal più facile al più difficile. Ogni errore va nel quaderno degli errori con 4 righe: testo, errore, correzione, perché l'hai sbagliato. La domenica li rifai."
+    },
+    {
+     "id": "a45-s2",
+     "time": "15:30",
+     "label": "Metà blocco: ripeti a voce senza guardare",
+     "detail": "Chiudi libro e appunti e ripeti ad alta voce quello che hai fatto finora, come se lo spiegassi a un compagno. Dove ti blocchi è ciò che devi riguardare nella seconda metà."
+    },
+    {
+     "id": "a45-s3",
+     "time": "15:58",
+     "label": "Segna le ore nella scheda settimanale",
+     "detail": "Fine blocco (2′): segna quanti minuti hai studiato davvero. L'app li somma nel resoconto della domenica (obiettivo settimanale 18h10, minimo 15h)."
+    }
+   ]
+  },
+  {
+   "id": "a46",
+   "title": "Pausa",
+   "start": "16:45",
+   "end": "17:00",
+   "days": [
+    3
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a46-s0",
+     "time": "16:45",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a47",
+   "title": "Pausa",
+   "start": "18:15",
+   "end": "18:30",
+   "days": [
+    3
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a47-s0",
+     "time": "18:15",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a48",
+   "title": "Pausa",
+   "start": "09:30",
+   "end": "09:45",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a48-s0",
+     "time": "09:30",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a49",
+   "title": "Pausa",
+   "start": "11:15",
+   "end": "11:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a49-s0",
+     "time": "11:15",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a50",
+   "title": "Pausa",
+   "start": "12:45",
+   "end": "13:00",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a50-s0",
+     "time": "12:45",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a51",
+   "title": "Pausa",
+   "start": "15:45",
+   "end": "16:00",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a51-s0",
+     "time": "15:45",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a52",
+   "title": "Pausa",
+   "start": "10:00",
+   "end": "10:15",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a52-s0",
+     "time": "10:00",
+     "label": "Alzati, qualche sorso, niente social",
+     "detail": "Tra due blocchi di studio: in piedi, finestra, acqua. Niente telefono: il prossimo blocco parte più facile."
+    }
+   ]
+  },
+  {
+   "id": "a53",
+   "title": "Borsa + spuntino pre-palestra",
+   "start": "16:30",
+   "end": "16:40",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a53-s0",
+     "time": "16:30",
+     "label": "Borsa: cambio, asciugamano, ciabatte, 2 bottigliette",
+     "detail": "La borsa è già stata preparata ieri sera nella routine serale: qui controlli soltanto. Bende pulite (tienine 2 paia e alternale), paradenti nella custodia, ciabatte e asciugamano personali, lucchetto."
+    },
+    {
+     "id": "a53-s1",
+     "time": "16:35",
+     "label": "Mangia: 1 banana + 30 g pane",
+     "detail": "Pre-palestra (dal PDF della dieta): carboidrati veloci e leggeri, 60–90′ prima dei pesi."
+    }
+   ]
+  },
+  {
+   "id": "a54",
+   "title": "Tragitto palestra",
+   "start": "16:40",
+   "end": "17:10",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a54-s0",
+     "time": "16:40",
+     "label": "Esci e prendi il bus (orario da confermare)",
+     "detail": "30′ di viaggio. Con i pesi prima dell'MMA esci prima delle 18: controlla l'orario del bus e correggi qui se serve."
+    },
+    {
+     "id": "a54-s1",
+     "time": "16:43",
+     "label": "Sul bus: flashcard",
+     "detail": "Flashcard di inglese o della maturità, come la mattina. Niente di pesante."
+    }
+   ]
+  },
+  {
+   "id": "a55",
+   "title": "Cambio",
+   "start": "17:10",
+   "end": "17:20",
+   "days": [
+    1,
+    5
+   ],
+   "color": "#e07a5f",
+   "steps": [
+    {
+     "id": "a55-s0",
+     "time": "17:10",
+     "label": "Spogliatoio: cambio, borsa nell'armadietto",
+     "detail": "Ciabatte ai piedi negli spogliatoi, sempre."
+    },
+    {
+     "id": "a55-s1",
+     "time": "17:15",
+     "label": "Bottiglietta con te in sala",
+     "detail": "Bevi durante tutta la sessione, qualche sorso tra le serie."
+    }
+   ]
+  },
+  {
+   "id": "a56",
+   "title": "Borsa + spuntino pre-palestra",
+   "start": "16:30",
+   "end": "16:45",
+   "days": [
+    2
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a56-s0",
+     "time": "16:30",
+     "label": "Borsa: cambio pesi e MMA, bende, paradenti, asciugamano, ciabatte, 2 bottigliette",
+     "detail": "La borsa è già stata preparata ieri sera nella routine serale: qui controlli soltanto. Bende pulite (tienine 2 paia e alternale), paradenti nella custodia, ciabatte e asciugamano personali, lucchetto."
+    },
+    {
+     "id": "a56-s1",
+     "time": "16:35",
+     "label": "Mangia: 1 banana + 30 g pane",
+     "detail": "Pre-palestra (dal PDF della dieta): carboidrati veloci e leggeri, 60–90′ prima dei pesi."
+    }
+   ]
+  },
+  {
+   "id": "a57",
+   "title": "Tragitto palestra",
+   "start": "16:45",
+   "end": "17:15",
+   "days": [
+    2
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a57-s0",
+     "time": "16:45",
+     "label": "Esci e prendi il bus (orario da confermare)",
+     "detail": "30′ di viaggio. Con i pesi prima dell'MMA esci prima delle 18: controlla l'orario del bus e correggi qui se serve."
+    },
+    {
+     "id": "a57-s1",
+     "time": "16:48",
+     "label": "Sul bus: flashcard",
+     "detail": "Flashcard di inglese o della maturità, come la mattina. Niente di pesante."
+    }
+   ]
+  },
+  {
+   "id": "a58",
+   "title": "Cambio",
+   "start": "17:15",
+   "end": "17:25",
+   "days": [
+    2
+   ],
+   "color": "#e07a5f",
+   "steps": [
+    {
+     "id": "a58-s0",
+     "time": "17:15",
+     "label": "Spogliatoio: cambio, borsa nell'armadietto",
+     "detail": "Ciabatte ai piedi negli spogliatoi, sempre."
+    },
+    {
+     "id": "a58-s1",
+     "time": "17:20",
+     "label": "Bottiglietta con te in sala",
+     "detail": "Bevi durante tutta la sessione, qualche sorso tra le serie."
+    }
+   ]
+  },
+  {
+   "id": "a59",
+   "title": "Casa: denti + borsa + banana",
+   "start": "16:45",
+   "end": "16:55",
+   "days": [
+    4
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a59-s0",
+     "time": "16:45",
+     "label": "Denti o risciacquo",
+     "detail": "Veloce: hai appena pranzato a scuola."
+    },
+    {
+     "id": "a59-s1",
+     "time": "16:48",
+     "label": "Prendi la borsa (pronta da ieri sera)",
+     "detail": "Cambio pesi e MMA, bende, paradenti, asciugamano, ciabatte, 2 bottigliette."
+    },
+    {
+     "id": "a59-s2",
+     "time": "16:51",
+     "label": "Mangia: 1 banana",
+     "detail": "Pre-palestra del giovedì (dal PDF della dieta)."
+    }
+   ]
+  },
+  {
+   "id": "a60",
+   "title": "Tragitto palestra",
+   "start": "16:55",
+   "end": "17:25",
+   "days": [
+    4
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a60-s0",
+     "time": "16:55",
+     "label": "Esci e prendi il bus (orario da confermare)",
+     "detail": "Controlla l'orario reale del bus e correggi qui se serve."
+    },
+    {
+     "id": "a60-s1",
+     "time": "16:58",
+     "label": "Sul bus: flashcard",
+     "detail": "Leggere: oggi la giornata è lunga."
+    }
+   ]
+  },
+  {
+   "id": "a61",
+   "title": "Cambio",
+   "start": "17:25",
+   "end": "17:35",
+   "days": [
+    4
+   ],
+   "color": "#e07a5f",
+   "steps": [
+    {
+     "id": "a61-s0",
+     "time": "17:25",
+     "label": "Spogliatoio: cambio, borsa nell'armadietto",
+     "detail": "Ciabatte negli spogliatoi, bottiglietta con te."
+    }
+   ]
+  },
+  {
+   "id": "a62",
+   "title": "Pesi 80′ · Lower B",
+   "start": "17:20",
+   "end": "18:40",
+   "days": [
+    1
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "group": "Pesi",
+   "detail": "Parte bassa B (catena posteriore, quadricipiti, condizionamento). Lunedì senza MMA: è la seduta più pesante per le gambe, lontana dall'MMA di martedì.",
+   "steps": [
+    {
+     "id": "a62-s0",
+     "time": "17:20",
+     "label": "Riscaldamento 6–8′",
+     "detail": "3′ di bici + mobilità di spalle e anche. Poi solo sul primo esercizio: 1 serie da 5 con metà del peso di lavoro e 1 da 3 con tre quarti. Il riscaldamento non si conta nelle serie."
+    },
+    {
+     "id": "a62-s1",
+     "time": "17:28",
+     "label": "Stacco da terra 4 × 4–6 · recupero 3′",
+     "detail": "Tecnica prima del carico, sempre: schiena neutra, bilanciere attaccato alle gambe, spingi il pavimento. Filmati di lato ogni tanto. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a62-s2",
+     "time": "17:39",
+     "label": "Pressa 45° 3 × 8–12 · recupero 2′",
+     "detail": "Oppure hack squat. Scendi finché la schiena resta appoggiata, ginocchia in linea con le punte. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a62-s3",
+     "time": "17:51",
+     "label": "Squat bulgaro 3 × 8–10 per gamba · recupero 90″",
+     "detail": "Corregge gli squilibri tra le due gambe. Parti dalla gamba più debole. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a62-s4",
+     "time": "18:02",
+     "label": "Leg extension 3 × 12–15 · recupero 60″",
+     "detail": "Pausa di un secondo in alto. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a62-s5",
+     "time": "18:13",
+     "label": "Calf raise da seduto 4 × 12–15 · recupero 60″",
+     "detail": "Lavora il soleo. Pausa di un secondo in alto e in basso. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a62-s6",
+     "time": "18:25",
+     "label": "Condizionamento 15′: 10 × 30″ forte / 60″ piano",
+     "detail": "Bici o vogatore. 30″ a tutta (ma tecnica pulita), 60″ pedalando piano, per 10 volte. Oggi niente MMA: è il tuo lavoro di fiato."
+    },
+    {
+     "id": "a62-s7",
+     "time": "18:37",
+     "label": "Registro completo: carichi e ripetizioni salvati",
+     "detail": "Controlla nel tab Allenamento che tutte le serie siano spuntate: senza numeri la massa non si misura."
+    }
+   ]
+  },
+  {
+   "id": "a63",
+   "title": "Pesi 75′ · Upper A",
+   "start": "17:25",
+   "end": "18:40",
+   "days": [
+    2
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "group": "Pesi",
+   "detail": "Parte alta A (petto, dorso, spalle, braccia). Prima dell'MMA: niente cedimento, lascia 2 ripetizioni di riserva.",
+   "steps": [
+    {
+     "id": "a63-s0",
+     "time": "17:25",
+     "label": "Riscaldamento 6–8′",
+     "detail": "3′ di bici + mobilità di spalle e anche. Poi solo sul primo esercizio: 1 serie da 5 con metà del peso di lavoro e 1 da 3 con tre quarti. Il riscaldamento non si conta nelle serie."
+    },
+    {
+     "id": "a63-s1",
+     "time": "17:33",
+     "label": "Panca piana con bilanciere 4 × 5–8 · recupero 2–3′",
+     "detail": "Il movimento su cui misuri i progressi della parte alta. Scapole strette e basse, piedi piantati, bilanciere al petto basso, gomiti a circa 45°. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s2",
+     "time": "17:44",
+     "label": "Rematore con bilanciere 4 × 6–10 · recupero 2′",
+     "detail": "Schiena piatta, busto a circa 45°, tira verso l'ombelico. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s3",
+     "time": "17:54",
+     "label": "Military press in piedi 3 × 6–10 · recupero 2′",
+     "detail": "Oppure lento avanti con manubri se la spalla tira. Glutei e addome contratti, niente schiena inarcata. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s4",
+     "time": "18:05",
+     "label": "Lat machine presa larga 3 × 8–12 · recupero 90″",
+     "detail": "Petto in fuori, tira la sbarra al mento/petto alto. Passa alle trazioni assistite appena ci riesci. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s5",
+     "time": "18:15",
+     "label": "Curl con bilanciere 3 × 8–12 · recupero 75″",
+     "detail": "Gomiti fermi al fianco, niente slancio. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s6",
+     "time": "18:26",
+     "label": "Push-down ai cavi 3 × 10–12 · recupero 75″",
+     "detail": "Oppure French press con manubrio. Gomiti fermi. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a63-s7",
+     "time": "18:37",
+     "label": "Registro completo: carichi e ripetizioni salvati",
+     "detail": "Controlla nel tab Allenamento che tutte le serie siano spuntate: senza numeri la massa non si misura."
+    }
+   ]
+  },
+  {
+   "id": "a64",
+   "title": "Pesi 65′ · Lower A (ridotta)",
+   "start": "17:35",
+   "end": "18:40",
+   "days": [
+    4
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "group": "Pesi",
+   "detail": "Parte bassa A in versione ridotta: niente affondi e niente plank perché dopo c'è l'MMA (le gambe servono fresche e il core lo lavori lì). È la regola del PDF: se il tempo è poco, solo gli esercizi principali.",
+   "steps": [
+    {
+     "id": "a64-s0",
+     "time": "17:35",
+     "label": "Riscaldamento 6–8′",
+     "detail": "3′ di bici + mobilità di spalle e anche. Poi solo sul primo esercizio: 1 serie da 5 con metà del peso di lavoro e 1 da 3 con tre quarti. Il riscaldamento non si conta nelle serie."
+    },
+    {
+     "id": "a64-s1",
+     "time": "17:43",
+     "label": "Squat con bilanciere 4 × 5–8 · recupero 3′",
+     "detail": "Il movimento su cui misuri i progressi della parte bassa. Piedi alla larghezza delle spalle, scendi almeno a parallelo con la schiena neutra. Oggi c'è l'MMA dopo: lascia sempre 2–3 ripetizioni di riserva. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a64-s2",
+     "time": "17:56",
+     "label": "Stacco rumeno 3 × 8–10 · recupero 2′",
+     "detail": "Scendi finché senti tirare dietro la coscia, non oltre. Schiena neutra. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a64-s3",
+     "time": "18:10",
+     "label": "Leg curl 3 × 10–12 · recupero 90″",
+     "detail": "Due secondi in discesa. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a64-s4",
+     "time": "18:23",
+     "label": "Calf raise in piedi 4 × 12–15 · recupero 60″",
+     "detail": "Pausa di un secondo in alto e in basso. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a64-s5",
+     "time": "18:37",
+     "label": "Registro completo: carichi e ripetizioni salvati",
+     "detail": "Controlla nel tab Allenamento che tutte le serie siano spuntate: senza numeri la massa non si misura."
+    }
+   ]
+  },
+  {
+   "id": "a65",
+   "title": "Pesi 75′ · Upper B",
+   "start": "17:20",
+   "end": "18:35",
+   "days": [
+    5
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "group": "Pesi",
+   "detail": "Parte alta B (dorso, petto alto, spalle, braccia).",
+   "steps": [
+    {
+     "id": "a65-s0",
+     "time": "17:20",
+     "label": "Riscaldamento 6–8′",
+     "detail": "3′ di bici + mobilità di spalle e anche. Poi solo sul primo esercizio: 1 serie da 5 con metà del peso di lavoro e 1 da 3 con tre quarti. Il riscaldamento non si conta nelle serie."
+    },
+    {
+     "id": "a65-s1",
+     "time": "17:28",
+     "label": "Trazioni alla sbarra 4 × 6–10 · recupero 2–3′",
+     "detail": "Assistite o lat machine presa inversa se non arrivi a 6. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s2",
+     "time": "17:39",
+     "label": "Panca inclinata con manubri 4 × 8–10 · recupero 2′",
+     "detail": "Inclinazione 30°, non di più. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s3",
+     "time": "17:49",
+     "label": "Rematore con manubrio, un braccio 3 × 10–12 · recupero 90″",
+     "detail": "Appoggio su panca, tira lungo il fianco. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s4",
+     "time": "18:00",
+     "label": "Alzate laterali 3 × 12–15 · recupero 60″",
+     "detail": "Leggere: qui non serve il carico, serve la sensazione sul deltoide. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s5",
+     "time": "18:10",
+     "label": "Dip alle parallele 3 × 8–12 · recupero 90″",
+     "detail": "Oppure panca presa stretta. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s6",
+     "time": "18:21",
+     "label": "Curl a martello 3 × 10–12 · recupero 60″",
+     "detail": "Presa neutra, lavora anche l'avambraccio. Fermati 1–3 ripetizioni prima del cedimento. Nel tab Allenamento il peso è già impostato: correggilo solo se serve, tocca ✓ dopo ogni serie e parte il timer di recupero."
+    },
+    {
+     "id": "a65-s7",
+     "time": "18:32",
+     "label": "Registro completo: carichi e ripetizioni salvati",
+     "detail": "Controlla nel tab Allenamento che tutte le serie siano spuntate: senza numeri la massa non si misura."
+    }
+   ]
+  },
+  {
+   "id": "a66",
+   "title": "Pre-MMA",
+   "start": "18:40",
+   "end": "19:00",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#e07a5f",
+   "steps": [
+    {
+     "id": "a66-s0",
+     "time": "18:40",
+     "label": "Qualche sorso e 5′ seduto",
+     "detail": "Recupera dai pesi: acqua, respira. Se hai fame: mezza banana (tienila da parte dal pre-palestra)."
+    },
+    {
+     "id": "a66-s1",
+     "time": "18:45",
+     "label": "Cambio per l'MMA: bende, paradenti nella custodia",
+     "detail": "Bende pulite, unghie corte, paradenti pronto. Chiedi al maestro se preferisce un riscaldamento suo."
+    },
+    {
+     "id": "a66-s2",
+     "time": "18:50",
+     "label": "Riscaldamento o quello che ti dice il maestro",
+     "detail": "Corda, mobilità, shadow leggero: 8–10′ per arrivare caldo alle 19:00."
+    }
+   ]
+  },
+  {
+   "id": "a67",
+   "title": "MMA",
+   "start": "19:00",
+   "end": "20:00",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#e07a5f",
+   "essential": false,
+   "detail": "Martedì e giovedì 19:00–20:00. Dopo: doccia veloce e bus delle 20:20.",
+   "steps": [
+    {
+     "id": "a67-s0",
+     "time": "19:00",
+     "label": "Lezione: ascolta il maestro, tecnica prima della forza",
+     "detail": "Stai imparando: movimenti puliti e controllati. Sparring solo quando e come dice il maestro. Autodifesa concreta: la prima tecnica è evitare lo scontro (attenzione, distanza, allontanarsi); la legge italiana ammette solo una difesa proporzionata all'offesa."
+    },
+    {
+     "id": "a67-s1",
+     "time": "19:30",
+     "label": "Bevi tra un round e l'altro",
+     "detail": "Qualche sorso ogni pausa: oggi sudi tanto."
+    },
+    {
+     "id": "a67-s2",
+     "time": "19:57",
+     "label": "Paradenti sciacquato subito e nella custodia",
+     "detail": "Sotto l'acqua fredda appena finisci, poi nella custodia. Stasera lo lavi con acqua fredda e sapone."
+    }
+   ]
+  },
+  {
+   "id": "a68",
+   "title": "Doccia in palestra",
+   "start": "20:00",
+   "end": "20:15",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#86cfc2",
+   "steps": [
+    {
+     "id": "a68-s0",
+     "time": "20:00",
+     "label": "Doccia veloce con ciabatte",
+     "detail": "Doccia completa ma rapida (il bus è alle 20:20): sapone su tutto il corpo, capelli se serve."
+    },
+    {
+     "id": "a68-s1",
+     "time": "20:09",
+     "label": "Asciuga bene tra le dita dei piedi, deodorante, biancheria pulita",
+     "detail": "Piedi ben asciutti prevengono funghi e irritazioni."
+    },
+    {
+     "id": "a68-s2",
+     "time": "20:12",
+     "label": "Bende e vestiti sudati nel sacchetto",
+     "detail": "Separati dal resto: a casa le bende si lavano (ne alterni 2 paia)."
+    }
+   ]
+  },
+  {
+   "id": "a69",
+   "title": "Alla fermata",
+   "start": "20:15",
    "end": "20:20",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a69-s0",
+     "time": "20:15",
+     "label": "Aspetta il bus delle 20:20",
+     "detail": "Nessuna attività: guarda solo se arriva il bus. Va bene così."
+    }
+   ]
+  },
+  {
+   "id": "a70",
+   "title": "Bus ritorno",
+   "start": "20:20",
+   "end": "20:50",
+   "days": [
+    2,
+    4
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a70-s0",
+     "time": "20:20",
+     "label": "Siediti e bevi",
+     "detail": "Finisci la bottiglietta: dopo pesi e MMA ti serve."
+    },
+    {
+     "id": "a70-s1",
+     "time": "20:23",
+     "label": "Stacca: niente o ascolto leggero",
+     "detail": "Musica o podcast leggero, oppure niente. La giornata di lavoro è finita."
+    }
+   ]
+  },
+  {
+   "id": "a71",
+   "title": "Doccia in palestra",
+   "start": "18:40",
+   "end": "19:00",
+   "days": [
+    1
+   ],
+   "color": "#86cfc2",
+   "steps": [
+    {
+     "id": "a71-s0",
+     "time": "18:40",
+     "label": "Doccia completa con ciabatte",
+     "detail": "Sempre, anche se sei stanco: corpo, capelli."
+    },
+    {
+     "id": "a71-s1",
+     "time": "18:52",
+     "label": "Piedi asciutti, deodorante, biancheria pulita",
+     "detail": "Asciuga bene tra le dita dei piedi."
+    },
+    {
+     "id": "a71-s2",
+     "time": "18:56",
+     "label": "Crema viso Hada Labo",
+     "detail": "La pelle dopo la doccia calda si secca: un velo di crema."
+    }
+   ]
+  },
+  {
+   "id": "a72",
+   "title": "Ritorno",
+   "start": "19:00",
+   "end": "19:30",
+   "days": [
+    1
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a72-s0",
+     "time": "19:00",
+     "label": "Bus di ritorno",
+     "detail": "Bevi e ascolto leggero."
+    },
+    {
+     "id": "a72-s1",
+     "time": "19:05",
+     "label": "Ascolto leggero o stacco",
+     "detail": "Niente di impegnativo."
+    }
+   ]
+  },
+  {
+   "id": "a73",
+   "title": "Doccia in palestra",
+   "start": "18:35",
+   "end": "18:55",
+   "days": [
+    5
+   ],
+   "color": "#86cfc2",
+   "steps": [
+    {
+     "id": "a73-s0",
+     "time": "18:35",
+     "label": "Doccia completa con ciabatte",
+     "detail": "Sempre, anche se sei stanco: corpo, capelli."
+    },
+    {
+     "id": "a73-s1",
+     "time": "18:47",
+     "label": "Piedi asciutti, deodorante, biancheria pulita",
+     "detail": "Asciuga bene tra le dita dei piedi."
+    },
+    {
+     "id": "a73-s2",
+     "time": "18:51",
+     "label": "Crema viso Hada Labo",
+     "detail": "La pelle dopo la doccia calda si secca: un velo di crema."
+    }
+   ]
+  },
+  {
+   "id": "a74",
+   "title": "Ritorno",
+   "start": "18:55",
+   "end": "19:25",
+   "days": [
+    5
+   ],
+   "color": "#cfcfca",
+   "steps": [
+    {
+     "id": "a74-s0",
+     "time": "18:55",
+     "label": "Bus di ritorno",
+     "detail": "Bevi e ascolto leggero."
+    },
+    {
+     "id": "a74-s1",
+     "time": "19:00",
+     "label": "Ascolto leggero o stacco",
+     "detail": "Niente di impegnativo."
+    }
+   ]
+  },
+  {
+   "id": "a75",
+   "title": "Shadow + mobilità",
+   "start": "19:40",
+   "end": "19:55",
+   "days": [
+    3
+   ],
+   "color": "#e07a5f",
+   "detail": "Tecnica a casa nel giorno senza palestra. Intanto la teglia è in forno.",
+   "steps": [
+    {
+     "id": "a75-s0",
+     "time": "19:40",
+     "label": "3 round di shadow da 3′",
+     "detail": "Ripassa quello che hai fatto all'ultima lezione di MMA: guardia, passi, combinazioni. Lento e pulito, 1′ di pausa tra i round."
+    },
+    {
+     "id": "a75-s1",
+     "time": "19:51",
+     "label": "Mobilità anche e caviglie",
+     "detail": "Affondi profondi con rotazione, cerchi di caviglia, 90/90 per le anche: 4′ in tutto."
+    }
+   ]
+  },
+  {
+   "id": "a76",
+   "title": "Tecnica MMA a casa 45′",
+   "start": "17:15",
+   "end": "18:00",
+   "days": [
+    6
+   ],
+   "color": "#e07a5f",
+   "detail": "Leggera: serve alla tecnica, non ad affaticarti.",
+   "steps": [
+    {
+     "id": "a76-s0",
+     "time": "17:15",
+     "label": "Shadow a tema: l'ultima lezione",
+     "detail": "3–4 round da 3′: rifai le tecniche della settimana, pulite e lente, poi a ritmo."
+    },
+    {
+     "id": "a76-s1",
+     "time": "17:30",
+     "label": "Lavoro di piedi",
+     "detail": "Passi avanti/indietro/laterali in guardia, cambi di angolo: 10′."
+    },
+    {
+     "id": "a76-s2",
+     "time": "17:40",
+     "label": "Mobilità",
+     "detail": "Anche, caviglie, spalle: 10′."
+    },
+    {
+     "id": "a76-s3",
+     "time": "17:50",
+     "label": "Core",
+     "detail": "Plank 3 × 45″, dead bug, hollow hold: 10′."
+    }
+   ]
+  },
+  {
+   "id": "a77",
+   "title": "Cena",
+   "start": "19:30",
+   "end": "19:50",
+   "days": [
+    1
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 5 dopo i pesi: conta il totale della giornata.",
+   "steps": [
+    {
+     "id": "a77-s0",
+     "time": "19:30",
+     "label": "Prepara/pesa: frittata di patate e cipolla (3 uova) + 100 g pane + insalata",
+     "detail": "Ricetta (15′, 2 porzioni: l'altra la conservi): rosola cipolla e 2 patate già lesse a fette in padella con olio, versa sopra 6 uova sbattute con sale, coperchio e fuoco basso 5′, gira e altri 2′. ≈ 830 kcal, 33 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a77-s1",
+     "time": "19:48",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a78",
+   "title": "Cena",
+   "start": "20:50",
+   "end": "21:10",
+   "days": [
+    2
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 5 dopo pesi e MMA.",
+   "steps": [
+    {
+     "id": "a78-s0",
+     "time": "20:50",
+     "label": "Prepara/pesa: 125 g sgombro in scatola + 400 g patate lesse + 200 g verdure + 10 g olio",
+     "detail": "Patate lesse già pronte (o 10′ in pentola a pressione), sgombro sgocciolato, verdure surgelate saltate. ≈ 710 kcal, 36 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a78-s1",
+     "time": "21:08",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a79",
+   "title": "Cena",
+   "start": "19:55",
+   "end": "20:15",
    "days": [
     3
    ],
@@ -1061,660 +2417,1311 @@
    "essential": true,
    "steps": [
     {
-     "id": "a33-s0",
-     "time": "20:05",
-     "label": "Prepara/pesa: pasta al tonno: 100 g pasta + 120 g tonno + pelati + 10 g olio + verdura"
+     "id": "a79-s0",
+     "time": "19:55",
+     "label": "Prepara/pesa: pasta al tonno: 100 g pasta + 120 g tonno + pelati + 10 g olio + verdura",
+     "detail": "10′: pasta in acqua salata; nel frattempo scalda pelati e tonno in padella con l'olio; unisci con la verdura. ≈ 670 kcal, 46 g proteine.",
+     "carbs": true
     },
     {
-     "id": "a33-s1",
-     "time": "20:12",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a33-s2",
-     "time": "20:18",
-     "label": "Più tardi, se hai fame: 150 g yogurt bianco"
+     "id": "a79-s1",
+     "time": "20:13",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a34",
+   "id": "a80",
    "title": "Cena",
-   "start": "20:05",
-   "end": "20:20",
+   "start": "20:50",
+   "end": "21:10",
    "days": [
-    5
+    4
    ],
    "color": "#a8d99a",
    "essential": true,
    "steps": [
     {
-     "id": "a34-s0",
-     "time": "20:05",
-     "label": "Prepara/pesa: riso saltato: riso avanzato + 3 uova + 200 g verdure surgelate + salsa di soia"
-    },
-    {
-     "id": "a34-s1",
-     "time": "20:12",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a34-s2",
-     "time": "20:18",
-     "label": "Più tardi, se hai fame: 250 ml latte o 150 g yogurt"
-    }
-   ]
-  },
-  {
-   "id": "a35",
-   "title": "Libero",
-   "start": "20:20",
-   "end": "21:00",
-   "days": [
-    1,
-    3,
-    5
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a35-s0",
-     "time": "20:20",
-     "label": "Guantoni aperti ad asciugare, bende a lavare"
-    },
-    {
-     "id": "a35-s1",
-     "time": "20:25",
-     "label": "Tempo per te: recupero, famiglia"
-    },
-    {
-     "id": "a35-s2",
+     "id": "a80-s0",
      "time": "20:50",
-     "label": "Prepara zaino, borsa e vestiti per domani"
+     "label": "Prepara/pesa: 3 uova strapazzate + 100 g pane + verdure saltate + 10 g olio",
+     "detail": "6′: salta le verdure surgelate e mettile da parte; uova a fuoco basso mescolando, via dal fuoco ancora umide. ≈ 620 kcal, 30 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a80-s1",
+     "time": "21:08",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a36",
-   "title": "Studio 90′ · Matematica",
-   "start": "15:15",
-   "end": "16:45",
+   "id": "a81",
+   "title": "Cena",
+   "start": "19:25",
+   "end": "19:45",
    "days": [
-    2
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a36-s0",
-     "time": "15:15",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a36-s1",
-     "time": "15:17",
-     "label": "45′: teoria + 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a36-s2",
-     "time": "16:02",
-     "label": "Pausa 5′ in piedi"
-    },
-    {
-     "id": "a36-s3",
-     "time": "16:07",
-     "label": "40′: teoria + 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a36-s4",
-     "time": "16:43",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a37",
-   "title": "Pausa",
-   "start": "16:45",
-   "end": "17:00",
-   "days": [
-    2
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a37-s0",
-     "time": "16:45",
-     "label": "Alzati, bevi acqua, niente social"
-    }
-   ]
-  },
-  {
-   "id": "a38",
-   "title": "Studio 75′ · Fisica",
-   "start": "17:00",
-   "end": "18:15",
-   "days": [
-    2
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a38-s0",
-     "time": "17:00",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Fisica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a38-s1",
-     "time": "17:02",
-     "label": "problemi; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a38-s2",
-     "time": "17:38",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a38-s3",
-     "time": "18:13",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a39",
-   "title": "Spuntino",
-   "start": "18:15",
-   "end": "18:30",
-   "days": [
-    2
+    5
    ],
    "color": "#a8d99a",
    "essential": true,
    "steps": [
     {
-     "id": "a39-s0",
-     "time": "18:15",
-     "label": "Prepara/pesa: 1 banana + 30 g pane"
+     "id": "a81-s0",
+     "time": "19:25",
+     "label": "Prepara/pesa: riso saltato: riso avanzato + 3 uova + 200 g verdure surgelate + salsa di soia",
+     "detail": "8′: verdure in padella a fuoco alto; spostale di lato e strapazza le uova nello spazio libero; aggiungi il riso già cotto e la salsa di soia, mescola 2′. ≈ 810 kcal, 29 g proteine."
     },
     {
-     "id": "a39-s1",
-     "time": "18:28",
-     "label": "Mangia seduto, senza telefono"
+     "id": "a81-s1",
+     "time": "19:43",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a40",
-   "title": "Studio 60′ · Maturità",
-   "start": "18:30",
-   "end": "19:30",
-   "days": [
-    2
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a40-s0",
-     "time": "18:30",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a40-s1",
-     "time": "18:32",
-     "label": "materie di indirizzo, studio attivo: ripeti a voce, schemi, flashcard (mai solo rileggere)"
-    },
-    {
-     "id": "a40-s2",
-     "time": "19:00",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a40-s3",
-     "time": "19:28",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a41",
-   "title": "Shadow + mobilità",
+   "id": "a82",
+   "title": "Cena",
    "start": "19:30",
    "end": "19:45",
    "days": [
-    2
+    6
    ],
-   "color": "#e07a5f",
-   "essential": false,
+   "color": "#a8d99a",
+   "essential": true,
    "steps": [
     {
-     "id": "a41-s0",
+     "id": "a82-s0",
      "time": "19:30",
-     "label": "3 round di shadow boxing da 3′ sul tema dell'ultima lezione"
+     "label": "Prepara/pesa: pasta e fagioli: 100 g pasta + 240 g fagioli + pelati + 10 g olio + verdura",
+     "detail": "Fagioli dalla pentola cotta alle 18:15. Ricetta (20′): scalda pelati, fagioli e aglio con un bicchiere d'acqua; dopo 8′ schiaccia metà fagioli (viene cremosa); butta la pasta dentro e cuoci mescolando. ≈ 740 kcal, 30 g proteine.",
+     "carbs": true
     },
     {
-     "id": "a41-s1",
-     "time": "19:40",
-     "label": "Mobilità anche e caviglie"
+     "id": "a82-s1",
+     "time": "19:43",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
     }
    ]
   },
   {
-   "id": "a42",
+   "id": "a83",
    "title": "Cena",
-   "start": "19:45",
+   "start": "19:30",
+   "end": "19:45",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a83-s0",
+     "time": "19:30",
+     "label": "Prepara/pesa: dalla teglia appena fatta: 150 g pollo + 350 g patate + 200 g verdure + 10 g olio + 60 g pane",
+     "detail": "≈ 745 kcal, 46 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a83-s1",
+     "time": "19:43",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a84",
+   "title": "Margine",
+   "start": "19:50",
    "end": "20:00",
    "days": [
-    2
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a42-s0",
-     "time": "19:45",
-     "label": "Prepara/pesa: 125 g sgombro in scatola + 400 g patate lesse + 200 g verdure + 10 g olio"
-    },
-    {
-     "id": "a42-s1",
-     "time": "19:52",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a42-s2",
-     "time": "19:58",
-     "label": "Prima di sederti: seconda teglia (pollo e riso) in forno — cuoce mentre ceni"
-    }
-   ]
-  },
-  {
-   "id": "a43",
-   "title": "Libero",
-   "start": "20:00",
-   "end": "20:30",
-   "days": [
-    2
+    1
    ],
    "color": "#e9e2cf",
-   "essential": false,
    "steps": [
     {
-     "id": "a43-s0",
-     "time": "20:00",
-     "label": "Recupero"
-    },
-    {
-     "id": "a43-s1",
-     "time": "20:20",
-     "label": "Togli la teglia: riempi 2 contenitori (pranzo di giovedì in frigo, venerdì in freezer)"
+     "id": "a84-s0",
+     "time": "19:50",
+     "label": "Riserva per gli imprevisti",
+     "detail": "Tempo di riserva per gli imprevisti (bus in ritardo, una cosa durata più del previsto). Se non ti serve, è pausa vera: siediti, bevi, respira. Non riempirlo con altro."
     }
    ]
   },
   {
-   "id": "a44",
-   "title": "Studio 90′ · Matematica",
-   "start": "17:15",
-   "end": "18:45",
-   "days": [
-    4
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a44-s0",
-     "time": "17:15",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a44-s1",
-     "time": "17:17",
-     "label": "45′: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a44-s2",
-     "time": "18:02",
-     "label": "Pausa 5′ in piedi"
-    },
-    {
-     "id": "a44-s3",
-     "time": "18:07",
-     "label": "40′: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a44-s4",
-     "time": "18:43",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a45",
-   "title": "Spuntino",
-   "start": "18:45",
-   "end": "19:00",
-   "days": [
-    4
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a45-s0",
-     "time": "18:45",
-     "label": "Prepara/pesa: 1 banana (leggero: la cena è vicina)"
-    },
-    {
-     "id": "a45-s1",
-     "time": "18:58",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a46",
-   "title": "Studio 40′ · Inglese",
-   "start": "19:00",
-   "end": "19:40",
-   "days": [
-    4
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a46-s0",
-     "time": "19:00",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Inglese) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a46-s1",
-     "time": "19:02",
-     "label": "grammatica: teoria dell'argomento della settimana + esercizi scritti"
-    },
-    {
-     "id": "a46-s2",
-     "time": "19:38",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a47",
-   "title": "Shadow + mobilità",
-   "start": "19:40",
+   "id": "a85",
+   "title": "Margine",
+   "start": "19:45",
    "end": "19:55",
    "days": [
-    4
+    5
    ],
-   "color": "#e07a5f",
-   "essential": false,
+   "color": "#e9e2cf",
    "steps": [
     {
-     "id": "a47-s0",
-     "time": "19:40",
-     "label": "3 round di shadow boxing"
-    },
-    {
-     "id": "a47-s1",
-     "time": "19:50",
-     "label": "Stretching"
+     "id": "a85-s0",
+     "time": "19:45",
+     "label": "Riserva per gli imprevisti",
+     "detail": "Tempo di riserva per gli imprevisti (bus in ritardo, una cosa durata più del previsto). Se non ti serve, è pausa vera: siediti, bevi, respira. Non riempirlo con altro."
     }
    ]
   },
   {
-   "id": "a48",
-   "title": "Cena",
-   "start": "19:55",
-   "end": "20:10",
-   "days": [
-    4
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a48-s0",
-     "time": "19:55",
-     "label": "Prepara/pesa: 3 uova strapazzate + 100 g pane"
-    },
-    {
-     "id": "a48-s1",
-     "time": "19:59",
-     "label": "Prepara/pesa: verdure saltate + 10 g olio"
-    },
-    {
-     "id": "a48-s2",
-     "time": "20:04",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a48-s3",
-     "time": "20:08",
-     "label": "Più tardi, se hai fame: 250 ml latte"
-    }
-   ]
-  },
-  {
-   "id": "a49",
-   "title": "Libero",
-   "start": "20:10",
+   "id": "a86",
+   "title": "Margine",
+   "start": "20:25",
    "end": "20:30",
    "days": [
-    4
+    3
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a86-s0",
+     "time": "20:25",
+     "label": "Riserva per gli imprevisti",
+     "detail": "Tempo di riserva per gli imprevisti (bus in ritardo, una cosa durata più del previsto). Se non ti serve, è pausa vera: siediti, bevi, respira. Non riempirlo con altro."
+    }
+   ]
+  },
+  {
+   "id": "a87",
+   "title": "Tempo libero",
+   "start": "20:00",
+   "end": "21:00",
+   "days": [
+    1
    ],
    "color": "#e9e2cf",
    "essential": false,
    "steps": [
     {
-     "id": "a49-s0",
-     "time": "20:10",
-     "label": "Giornata lunga: stacca davvero"
+     "id": "a87-s0",
+     "time": "20:00",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
     }
    ]
   },
   {
-   "id": "a50",
+   "id": "a88",
+   "title": "Tempo libero",
+   "start": "20:35",
+   "end": "21:00",
+   "days": [
+    5
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a88-s0",
+     "time": "20:35",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a89",
+   "title": "Tempo libero",
+   "start": "13:15",
+   "end": "14:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a89-s0",
+     "time": "13:15",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a90",
+   "title": "Tempo libero",
+   "start": "18:00",
+   "end": "18:15",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a90-s0",
+     "time": "18:00",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a91",
+   "title": "Tempo libero",
+   "start": "18:45",
+   "end": "19:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a91-s0",
+     "time": "18:45",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a92",
+   "title": "Tempo libero",
+   "start": "19:45",
+   "end": "20:30",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a92-s0",
+     "time": "19:45",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a93",
+   "title": "Tempo libero",
+   "start": "07:05",
+   "end": "08:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a93-s0",
+     "time": "07:05",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a94",
+   "title": "Tempo libero",
+   "start": "12:15",
+   "end": "13:00",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a94-s0",
+     "time": "12:15",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a95",
+   "title": "Tempo libero",
+   "start": "13:15",
+   "end": "15:00",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a95-s0",
+     "time": "13:15",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a96",
+   "title": "Tempo libero",
+   "start": "17:45",
+   "end": "18:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a96-s0",
+     "time": "17:45",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a97",
+   "title": "Cucina: teglia pollo e riso",
+   "start": "19:30",
+   "end": "19:40",
+   "days": [
+    3
+   ],
+   "color": "#f2c27b",
+   "detail": "Seconda sessione di cucina della settimana (dal PDF della dieta): prepara i pranzi di giovedì e venerdì.",
+   "steps": [
+    {
+     "id": "a97-s0",
+     "time": "19:30",
+     "label": "Teglia in forno: pollo e riso",
+     "detail": "Pollo a pezzi e riso (già cotto o crudo con acqua, secondo come lo fai di solito), olio, sale e spezie in teglia; forno a 200 °C. Cuoce da sola mentre fai shadow e ceni: zero minuti di lavoro in più."
+    },
+    {
+     "id": "a97-s1",
+     "time": "19:36",
+     "label": "Timer del forno puntato",
+     "detail": "Metti il timer: la togli dopo cena."
+    }
+   ]
+  },
+  {
+   "id": "a98",
+   "title": "Contenitori di giovedì e venerdì",
+   "start": "20:15",
+   "end": "20:25",
+   "days": [
+    3
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a98-s0",
+     "time": "20:15",
+     "label": "Sforna e riempi 2 contenitori",
+     "detail": "Contenitore di giovedì: riso (ci aggiungerai 160 g tonno) + verdure. Contenitore di venerdì: pollo + riso + verdure. Il giovedì va davanti a tutto in frigo: domattina parte nello zaino."
+    },
+    {
+     "id": "a98-s1",
+     "time": "20:21",
+     "label": "Pulisci teglia e piano",
+     "detail": "Subito, finché è caldo: 3′."
+    }
+   ]
+  },
+  {
+   "id": "a99",
+   "title": "Cucina 30′",
+   "start": "18:15",
+   "end": "18:45",
+   "days": [
+    6
+   ],
+   "color": "#f2c27b",
+   "detail": "Terza sessione di cucina, prima della sera libera.",
+   "steps": [
+    {
+     "id": "a99-s0",
+     "time": "18:15",
+     "label": "Pentola di fagioli",
+     "detail": "Per la cena di stasera (pasta e fagioli) e il pranzo di domani."
+    },
+    {
+     "id": "a99-s1",
+     "time": "18:23",
+     "label": "400 g di riso",
+     "detail": "Per il riso saltato e i contenitori della settimana."
+    },
+    {
+     "id": "a99-s2",
+     "time": "18:30",
+     "label": "4 uova sode",
+     "detail": "9′ in acqua bollente, poi acqua fredda: per gli spuntini a scuola."
+    },
+    {
+     "id": "a99-s3",
+     "time": "18:40",
+     "label": "Tutto in frigo, etichettato",
+     "detail": "Quello che si mangia entro 48 ore sta in frigo, il resto in freezer subito."
+    }
+   ]
+  },
+  {
+   "id": "a100",
+   "title": "Spesa settimanale",
+   "start": "11:15",
+   "end": "12:15",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a100-s0",
+     "time": "11:15",
+     "label": "Controlla dispensa e frigo",
+     "detail": "Guarda cosa manca rispetto alla lista (Dieta → Lista della spesa). Tieni sempre la scorta del piano B: tonno, fagioli, pomodorini e pane per 2 pasti."
+    },
+    {
+     "id": "a100-s1",
+     "time": "11:20",
+     "label": "Spesa con la lista dell'app",
+     "detail": "Discount o mercato a fine giornata. Circa 69 € a settimana (50 € nella versione risparmio): solo quello che c'è in lista."
+    },
+    {
+     "id": "a100-s2",
+     "time": "12:00",
+     "label": "Pane da 1 kg: affettalo e congelalo oggi",
+     "detail": "Si scongela in padella in 2′."
+    },
+    {
+     "id": "a100-s3",
+     "time": "12:07",
+     "label": "Riponi e registra la spesa in Finanza",
+     "detail": "Registrare le spese: 2′ al giorno, totale controllato la domenica."
+    }
+   ]
+  },
+  {
+   "id": "a101",
+   "title": "Cucina 60′",
+   "start": "18:30",
+   "end": "19:30",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "detail": "Prima e più lunga sessione di cucina: «cuoci una volta, mangia tre volte».",
+   "steps": [
+    {
+     "id": "a101-s0",
+     "time": "18:30",
+     "label": "Teglia pollo e patate in forno (3 porzioni)",
+     "detail": "1 kg cosce di pollo + 1 kg patate a cubi da 2 cm, 2 cucchiai d'olio, sale, paprika, rosmarino; mescola con le mani in teglia; forno a 200 °C per 30–35′. Esce: cena di stasera, pranzo di lunedì e di martedì."
+    },
+    {
+     "id": "a101-s1",
+     "time": "18:35",
+     "label": "Mentre cuoce: 500 g di riso",
+     "detail": "Per il contenitore di lunedì e per il resto della settimana."
+    },
+    {
+     "id": "a101-s2",
+     "time": "18:45",
+     "label": "6 uova sode",
+     "detail": "9′ in acqua bollente, poi fredda. Per gli spuntini della settimana."
+    },
+    {
+     "id": "a101-s3",
+     "time": "18:55",
+     "label": "Pentola di ceci",
+     "detail": "Per la pasta e ceci di mercoledì (ceci in scatola o secchi messi a bagno ieri)."
+    },
+    {
+     "id": "a101-s4",
+     "time": "19:10",
+     "label": "3 barattoli di overnight oats (lun, mer, ven)",
+     "detail": "Per ognuno: 100 g avena + 300 ml latte + 1 banana a fette + 20 g burro d'arachidi + cannella. In frigo."
+    },
+    {
+     "id": "a101-s5",
+     "time": "19:25",
+     "label": "Dividi la teglia: cena + contenitori di lunedì e martedì",
+     "detail": "Contenitore di lunedì: pollo + riso + verdure. Contenitore di martedì: pollo + patate + verdure."
+    }
+   ]
+  },
+  {
+   "id": "a102",
+   "title": "Pranzo",
+   "start": "13:00",
+   "end": "13:15",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "detail": "Pasto 3 del sabato, tra due blocchi di studio.",
+   "steps": [
+    {
+     "id": "a102-s0",
+     "time": "13:00",
+     "label": "Prepara/pesa: 150 g pollo + 400 g patate + 200 g verdure + 100 g pane",
+     "detail": "Pollo in padella (10′) o dal freezer se avanzato, patate lesse, verdure surgelate. ≈ 855 kcal, 50 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a102-s1",
+     "time": "13:13",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a103",
+   "title": "Pranzo",
+   "start": "13:00",
+   "end": "13:15",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a103-s0",
+     "time": "13:00",
+     "label": "Prepara/pesa: zero cottura: 120 g tonno + 240 g fagioli + pomodorini + 10 g olio + 100 g pane",
+     "detail": "5′: sciacqua i fagioli (quelli cotti sabato o in scatola) sotto l'acqua fredda, unisci tonno, 10 pomodorini tagliati, olio e origano. È anche il piano B di qualsiasi giorno. ≈ 690 kcal, 54 g proteine.",
+     "carbs": true
+    },
+    {
+     "id": "a103-s1",
+     "time": "13:13",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a104",
+   "title": "Merenda",
+   "start": "17:00",
+   "end": "17:15",
+   "days": [
+    6
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a104-s0",
+     "time": "17:00",
+     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 30 g pane",
+     "detail": "Al cambio di attività, anche in piedi. ≈ 350 kcal, 14 g proteine."
+    },
+    {
+     "id": "a104-s1",
+     "time": "17:13",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a105",
+   "title": "Merenda",
+   "start": "16:00",
+   "end": "16:15",
+   "days": [
+    0
+   ],
+   "color": "#a8d99a",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a105-s0",
+     "time": "16:00",
+     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 40 g avena",
+     "detail": "≈ 430 kcal, 17 g proteine."
+    },
+    {
+     "id": "a105-s1",
+     "time": "16:13",
+     "label": "Mangia seduto, senza telefono",
+     "detail": "Mangia seduto, a tavola, senza telefono né video: 10–15′. Mastica con calma. Se il pasto non è tutto pronto, usa la tabella delle sostituzioni (Dieta → Ricette e sostituzioni)."
+    }
+   ]
+  },
+  {
+   "id": "a106",
+   "title": "Risveglio lento",
+   "start": "07:05",
+   "end": "07:40",
+   "days": [
+    6
+   ],
+   "color": "#e9e2cf",
+   "steps": [
+    {
+     "id": "a106-s0",
+     "time": "07:05",
+     "label": "Lettura leggera o musica, niente social",
+     "detail": "Un libro, musica, un caffè in pace. Niente social: la giornata di studio parte meglio."
+    }
+   ]
+  },
+  {
+   "id": "a107",
+   "title": "Luce + piano",
+   "start": "07:40",
+   "end": "08:00",
+   "days": [
+    6
+   ],
+   "color": "#f2c27b",
+   "steps": [
+    {
+     "id": "a107-s0",
+     "time": "07:40",
+     "label": "5′ fuori o alla finestra",
+     "detail": "Luce naturale in faccia: sveglia il cervello."
+    },
+    {
+     "id": "a107-s1",
+     "time": "07:45",
+     "label": "Scrivi i 5 obiettivi dei blocchi di oggi",
+     "detail": "Uno per blocco (matematica, fisica, Sant'Anna, maturità, inglese), concreti e misurabili."
+    }
+   ]
+  },
+  {
+   "id": "a108",
    "title": "Doccia + capelli",
    "start": "20:30",
    "end": "21:00",
    "days": [
-    2,
-    4,
+    3,
     6,
     0
    ],
    "color": "#86cfc2",
-   "essential": true,
    "steps": [
     {
-     "id": "a50-s0",
+     "id": "a108-s0",
      "time": "20:30",
-     "label": "Doccia completa"
+     "label": "Doccia completa",
+     "detail": "Corpo, capelli con shampoo, risciacquo accurato."
     },
     {
-     "id": "a50-s1",
-     "time": "20:45",
-     "label": "Capelli"
+     "id": "a108-s1",
+     "time": "20:48",
+     "label": "Asciuga bene, anche tra le dita dei piedi",
+     "detail": "Asciugamano pulito: prima i capelli, poi il corpo; tra le dita dei piedi con cura, così non vengono funghi."
     },
     {
-     "id": "a50-s2",
-     "time": "20:52",
-     "label": "Cura del corpo"
+     "id": "a108-s2",
+     "time": "20:55",
+     "label": "Cura del corpo",
+     "detail": "Crema corpo se la pelle tira; unghie a posto."
     }
    ]
   },
   {
-   "id": "a51",
+   "id": "a109",
+   "title": "Revisione settimanale",
+   "start": "16:15",
+   "end": "17:00",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a109-s0",
+     "time": "16:15",
+     "label": "Apri il Resoconto settimana nell'app",
+     "detail": "Altro → Resoconto settimana: ore di studio, allenamenti, sonno, pasti, peso. Rispondi alle domande qui sotto guardando quei numeri."
+    },
+    {
+     "id": "a109-s1",
+     "time": "16:18",
+     "label": "Ore di studio, allenamenti e sonno segnati?",
+     "detail": "Obiettivi: studio 18h10 (minimo 15h), 4 sedute di pesi e 2 di MMA, 7 notti su 7 con spegnimento alle 21:30 (minimo 6)."
+    },
+    {
+     "id": "a109-s2",
+     "time": "16:22",
+     "label": "Quali blocchi sono saltati e perché? Serve spostarne o accorciarne uno?",
+     "detail": "Una riga per blocco saltato: causa e cosa cambi."
+    },
+    {
+     "id": "a109-s3",
+     "time": "16:26",
+     "label": "Voti e verifiche: c'è una materia della maturità in calo?",
+     "detail": "Se sì, sposta su quella materia il blocco di maturità di martedì."
+    },
+    {
+     "id": "a109-s4",
+     "time": "16:30",
+     "label": "Quaderno degli errori: rifatti tutti?",
+     "detail": "Quelli non riusciti restano per la prossima domenica."
+    },
+    {
+     "id": "a109-s5",
+     "time": "16:34",
+     "label": "In linea con il mese del calendario (mate, fisica, Sant'Anna)?",
+     "detail": "Guarda il tema del mese nei blocchi di studio."
+    },
+    {
+     "id": "a109-s6",
+     "time": "16:38",
+     "label": "Pesi: carichi saliti su almeno 2 esercizi nelle ultime 2 settimane?",
+     "detail": "Se due sedute di fila senza progressi: controlla sonno, cibo, recupero; se sono a posto, togli una serie per esercizio per 2 settimane."
+    },
+    {
+     "id": "a109-s7",
+     "time": "16:42",
+     "label": "Peso medio: sale tra 0,2 e 0,5 kg a settimana?",
+     "detail": "Regola del PDF: meno di 0,2 kg → +200 kcal (50 g di pasta o riso crudi, oppure 30 g di burro d'arachidi); più di 0,5 kg → −200 kcal."
+    },
+    {
+     "id": "a109-s8",
+     "time": "16:46",
+     "label": "Sonno: quante sere hai spento dopo le 21:30? Cosa l'ha causato?",
+     "detail": "Una riga di causa per ogni sera."
+    },
+    {
+     "id": "a109-s9",
+     "time": "16:50",
+     "label": "Budget: spese registrate e dentro le quote?",
+     "detail": "Finanza: spese della settimana."
+    },
+    {
+     "id": "a109-s10",
+     "time": "16:54",
+     "label": "Scadenze della prossima settimana (verifiche, TOLC, bando)",
+     "detail": "Scrivile nel diario con il giorno, e decidi in quale blocco di studio le prepari."
+    },
+    {
+     "id": "a109-s11",
+     "time": "16:57",
+     "label": "Borsa sport lavata e pronta, zaino pronto, vestiti del lunedì scelti?",
+     "detail": "Se no, fallo nella cura settimanale o in «Prepara lunedì»."
+    }
+   ]
+  },
+  {
+   "id": "a110",
+   "title": "Cura settimanale",
+   "start": "17:00",
+   "end": "17:45",
+   "days": [
+    0
+   ],
+   "color": "#86cfc2",
+   "essential": false,
+   "steps": [
+    {
+     "id": "a110-s0",
+     "time": "17:00",
+     "label": "Unghie di mani e piedi corte",
+     "detail": "Obbligatorio per l'MMA (sparring e clinch): corte e senza angoli."
+    },
+    {
+     "id": "a110-s1",
+     "time": "17:10",
+     "label": "Scrub corpo leggero",
+     "detail": "Sotto la doccia o con la pelle umida: gomiti, ginocchia, schiena. Leggero."
+    },
+    {
+     "id": "a110-s2",
+     "time": "17:18",
+     "label": "Viso: Cure Natural Aqua Gel",
+     "detail": "Esfoliante 1 volta a settimana, mai nella stessa sera del retinolo. Viso asciutto: una pompata, massaggia 30″ in piccoli cerchi (si formano palline), sciacqua bene, poi crema Hada Labo.",
+     "from": "2026-11-09"
+    },
+    {
+     "id": "a110-s3",
+     "time": "17:24",
+     "label": "Pulisci rasoio e pettini",
+     "detail": "Acqua calda e sapone, asciuga."
+    },
+    {
+     "id": "a110-s4",
+     "time": "17:30",
+     "label": "Lava bende, borsa, bottigliette",
+     "detail": "Bende in lavatrice o a mano; borsa aperta ad arieggiare; bottigliette lavate."
+    },
+    {
+     "id": "a110-s5",
+     "time": "17:40",
+     "label": "Guantoni aperti ad asciugare",
+     "detail": "Mai chiusi nella borsa."
+    }
+   ]
+  },
+  {
+   "id": "a111",
+   "title": "Prepara lunedì",
+   "start": "19:45",
+   "end": "20:00",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "essential": true,
+   "steps": [
+    {
+     "id": "a111-s0",
+     "time": "19:45",
+     "label": "Zaino",
+     "detail": "Libri del lunedì, astuccio, compiti fatti."
+    },
+    {
+     "id": "a111-s1",
+     "time": "19:50",
+     "label": "Borsa palestra",
+     "detail": "Lunedì: pesi Lower B. Cambio, asciugamano, ciabatte, 2 bottigliette."
+    },
+    {
+     "id": "a111-s2",
+     "time": "19:55",
+     "label": "Vestiti",
+     "detail": "Scelti e pronti sulla sedia."
+    }
+   ]
+  },
+  {
+   "id": "a112",
+   "title": "Brainstorm settimanale con Claude",
+   "start": "20:00",
+   "end": "20:30",
+   "days": [
+    0
+   ],
+   "color": "#f2c27b",
+   "from": "2026-10-04",
+   "steps": [
+    {
+     "id": "a112-s0",
+     "time": "20:00",
+     "label": "Copia il resoconto della settimana",
+     "detail": "Altro → Resoconto settimana → Condividi/copia per il brainstorm."
+    },
+    {
+     "id": "a112-s1",
+     "time": "20:03",
+     "label": "Incollalo nella chat con Claude + cosa ti è pesato e cosa ti è mancato",
+     "detail": "Scegliamo insieme 2–3 miglioramenti per la settimana."
+    }
+   ]
+  },
+  {
+   "id": "a113",
+   "title": "Tempo libero",
+   "start": "20:00",
+   "end": "20:30",
+   "days": [
+    0
+   ],
+   "color": "#e9e2cf",
+   "until": "2026-10-03",
+   "steps": [
+    {
+     "id": "a113-s0",
+     "time": "20:00",
+     "label": "Tempo per te",
+     "detail": "Tempo libero vero: fai quello che ti ricarica (famiglia, amici, musica, giochi, uscire). È parte del piano, non uno spreco: non recuperare studio qui."
+    }
+   ]
+  },
+  {
+   "id": "a114",
    "title": "Routine serale",
    "start": "21:00",
    "end": "21:30",
    "days": [
-    1,
-    3,
-    5
+    1
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "30′: lenti, denti, skincare della sera, preparazione del giorno dopo, luci basse.",
    "steps": [
     {
-     "id": "a51-s0",
+     "id": "a114-s0",
      "time": "21:00",
-     "label": "Filo interdentale + denti 2′"
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
     },
     {
-     "id": "a51-s1",
-     "time": "21:05",
-     "label": "Detergente viso"
+     "id": "a114-s1",
+     "time": "21:03",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
     },
     {
-     "id": "a51-s2",
-     "time": "21:08",
-     "label": "Idratante"
+     "id": "a114-s2",
+     "time": "21:06",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
     },
     {
-     "id": "a51-s3",
+     "id": "a114-s3",
      "time": "21:10",
-     "label": "Antitraspirante (funziona meglio la sera)"
+     "label": "DHC Retinol Cream (sera del retinolo)",
+     "detail": "Viso completamente asciutto (aspetta 2′ dopo il lavaggio). Quantità: un pisello per tutto il viso, a puntini, lontano da occhi, narici e labbra. I primi giorni può tirare o arrossare un po': se brucia, salta la sera successiva. Domattina SPF obbligatorio.",
+     "from": "2026-10-26"
     },
     {
-     "id": "a51-s4",
+     "id": "a114-s4",
      "time": "21:13",
-     "label": "Paradenti lavato con acqua fredda e sapone"
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
     },
     {
-     "id": "a51-s5",
-     "time": "21:15",
-     "label": "Prepara vestiti di domani"
+     "id": "a114-s5",
+     "time": "21:16",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
     },
     {
-     "id": "a51-s6",
-     "time": "21:18",
-     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+     "id": "a114-s6",
+     "time": "21:19",
+     "label": "Contenitore di martedì: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
     },
     {
-     "id": "a51-s7",
-     "time": "21:21",
-     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+     "id": "a114-s7",
+     "time": "21:23",
+     "label": "Vestiti, zaino e borsa di domani",
+     "detail": "Tutto pronto stasera: domattina non decidi niente."
     },
     {
-     "id": "a51-s8",
-     "time": "21:25",
-     "label": "Luci basse, telefono fuori dalla camera"
+     "id": "a114-s8",
+     "time": "21:26",
+     "label": "Se hai fame: 250 ml latte",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a114-s9",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
     }
    ]
   },
   {
-   "id": "a52",
-   "title": "Routine serale",
-   "start": "21:00",
+   "id": "a115",
+   "title": "Routine serale (ridotta)",
+   "start": "21:10",
    "end": "21:30",
    "days": [
     2
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "20′ invece di 30′: stasera sei rientrato alle 20:50. Niente doccia (fatta in palestra).",
    "steps": [
     {
-     "id": "a52-s0",
-     "time": "21:00",
-     "label": "Filo interdentale + denti 2′"
-    },
-    {
-     "id": "a52-s1",
-     "time": "21:05",
-     "label": "Detergente viso"
-    },
-    {
-     "id": "a52-s2",
-     "time": "21:08",
-     "label": "Idratante"
-    },
-    {
-     "id": "a52-s3",
+     "id": "a115-s0",
      "time": "21:10",
-     "label": "Antitraspirante (funziona meglio la sera)"
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
     },
     {
-     "id": "a52-s4",
-     "time": "21:13",
-     "label": "Prepara zaino e vestiti di domani"
+     "id": "a115-s1",
+     "time": "21:12",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
     },
     {
-     "id": "a52-s5",
+     "id": "a115-s2",
+     "time": "21:14",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
+    },
+    {
+     "id": "a115-s3",
+     "time": "21:16",
+     "label": "DHC Retinol Cream (terza sera del retinolo)",
+     "detail": "Dalla quarta settimana di retinolo, se la pelle lo tollera: terza sera. Stesse regole: viso asciutto, un pisello, lontano da occhi e labbra.",
+     "from": "2026-11-23"
+    },
+    {
+     "id": "a115-s4",
      "time": "21:18",
-     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
     },
     {
-     "id": "a52-s6",
+     "id": "a115-s5",
+     "time": "21:20",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
+    },
+    {
+     "id": "a115-s6",
      "time": "21:21",
-     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+     "label": "Paradenti: acqua fredda e sapone",
+     "detail": "Lavalo, sciacqualo e lascialo asciugare nella custodia aperta."
     },
     {
-     "id": "a52-s7",
+     "id": "a115-s7",
+     "time": "21:23",
+     "label": "Contenitore di mercoledì: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
+    },
+    {
+     "id": "a115-s8",
      "time": "21:25",
-     "label": "Luci basse, telefono fuori dalla camera"
+     "label": "Borsa di domani",
+     "detail": "Solo lo stretto necessario: il resto domattina nel margine."
+    },
+    {
+     "id": "a115-s9",
+     "time": "21:27",
+     "label": "Se hai fame: 250 ml latte",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a115-s10",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
     }
    ]
   },
   {
-   "id": "a53",
+   "id": "a116",
    "title": "Routine serale",
    "start": "21:00",
+   "end": "21:30",
+   "days": [
+    3
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "detail": "30′: lenti, denti, skincare della sera, preparazione del giorno dopo, luci basse.",
+   "steps": [
+    {
+     "id": "a116-s0",
+     "time": "21:00",
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
+    },
+    {
+     "id": "a116-s1",
+     "time": "21:03",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
+    },
+    {
+     "id": "a116-s2",
+     "time": "21:06",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
+    },
+    {
+     "id": "a116-s3",
+     "time": "21:10",
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
+    },
+    {
+     "id": "a116-s4",
+     "time": "21:13",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
+    },
+    {
+     "id": "a116-s5",
+     "time": "21:16",
+     "label": "Cambia la federa del cuscino",
+     "detail": "2 volte a settimana (mercoledì e domenica): aiuta anche la pelle del viso."
+    },
+    {
+     "id": "a116-s6",
+     "time": "21:19",
+     "label": "Contenitore di giovedì: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
+    },
+    {
+     "id": "a116-s7",
+     "time": "21:23",
+     "label": "Vestiti, zaino e borsa di domani",
+     "detail": "Tutto pronto stasera: domattina non decidi niente."
+    },
+    {
+     "id": "a116-s8",
+     "time": "21:26",
+     "label": "Se hai fame: 150 g yogurt bianco",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a116-s9",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
+    }
+   ]
+  },
+  {
+   "id": "a117",
+   "title": "Routine serale (ridotta)",
+   "start": "21:10",
    "end": "21:30",
    "days": [
     4
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "20′ invece di 30′: stasera sei rientrato alle 20:50. Niente doccia (fatta in palestra).",
    "steps": [
     {
-     "id": "a53-s0",
-     "time": "21:00",
-     "label": "Filo interdentale + denti 2′"
-    },
-    {
-     "id": "a53-s1",
-     "time": "21:05",
-     "label": "Detergente viso"
-    },
-    {
-     "id": "a53-s2",
-     "time": "21:08",
-     "label": "Idratante"
-    },
-    {
-     "id": "a53-s3",
+     "id": "a117-s0",
      "time": "21:10",
-     "label": "Antitraspirante (funziona meglio la sera)"
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
     },
     {
-     "id": "a53-s4",
-     "time": "21:13",
-     "label": "Prepara la borsa sport per venerdì"
+     "id": "a117-s1",
+     "time": "21:12",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
     },
     {
-     "id": "a53-s5",
+     "id": "a117-s2",
+     "time": "21:14",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
+    },
+    {
+     "id": "a117-s3",
+     "time": "21:16",
+     "label": "DHC Retinol Cream (sera del retinolo)",
+     "detail": "Viso completamente asciutto (aspetta 2′ dopo il lavaggio). Quantità: un pisello per tutto il viso, a puntini, lontano da occhi, narici e labbra. I primi giorni può tirare o arrossare un po': se brucia, salta la sera successiva. Domattina SPF obbligatorio.",
+     "from": "2026-10-26"
+    },
+    {
+     "id": "a117-s4",
      "time": "21:18",
-     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
     },
     {
-     "id": "a53-s6",
+     "id": "a117-s5",
+     "time": "21:20",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
+    },
+    {
+     "id": "a117-s6",
      "time": "21:21",
-     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+     "label": "Paradenti: acqua fredda e sapone",
+     "detail": "Lavalo, sciacqualo e lascialo asciugare nella custodia aperta."
     },
     {
-     "id": "a53-s7",
+     "id": "a117-s7",
+     "time": "21:23",
+     "label": "Contenitore di venerdì: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
+    },
+    {
+     "id": "a117-s8",
      "time": "21:25",
-     "label": "Luci basse, telefono fuori dalla camera"
+     "label": "Borsa di domani",
+     "detail": "Solo lo stretto necessario: il resto domattina nel margine."
+    },
+    {
+     "id": "a117-s9",
+     "time": "21:27",
+     "label": "Se hai fame: 250 ml latte",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a117-s10",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
     }
    ]
   },
   {
-   "id": "a54",
+   "id": "a118",
+   "title": "Routine serale",
+   "start": "21:00",
+   "end": "21:30",
+   "days": [
+    5
+   ],
+   "color": "#86cfc2",
+   "essential": true,
+   "detail": "30′: lenti, denti, skincare della sera, preparazione del giorno dopo, luci basse.",
+   "steps": [
+    {
+     "id": "a118-s0",
+     "time": "21:00",
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
+    },
+    {
+     "id": "a118-s1",
+     "time": "21:04",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
+    },
+    {
+     "id": "a118-s2",
+     "time": "21:07",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
+    },
+    {
+     "id": "a118-s3",
+     "time": "21:11",
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
+    },
+    {
+     "id": "a118-s4",
+     "time": "21:15",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
+    },
+    {
+     "id": "a118-s5",
+     "time": "21:18",
+     "label": "Contenitore di sabato: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
+    },
+    {
+     "id": "a118-s6",
+     "time": "21:22",
+     "label": "Vestiti, zaino e borsa di domani",
+     "detail": "Tutto pronto stasera: domattina non decidi niente."
+    },
+    {
+     "id": "a118-s7",
+     "time": "21:25",
+     "label": "Se hai fame: 250 ml latte o 150 g yogurt",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a118-s8",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
+    }
+   ]
+  },
+  {
+   "id": "a119",
    "title": "Routine serale",
    "start": "21:00",
    "end": "21:30",
@@ -1723,51 +3730,61 @@
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "30′: lenti, denti, skincare della sera, preparazione del giorno dopo, luci basse.",
    "steps": [
     {
-     "id": "a54-s0",
+     "id": "a119-s0",
      "time": "21:00",
-     "label": "Filo interdentale + denti 2′"
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
     },
     {
-     "id": "a54-s1",
-     "time": "21:05",
-     "label": "Detergente viso"
+     "id": "a119-s1",
+     "time": "21:04",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
     },
     {
-     "id": "a54-s2",
+     "id": "a119-s2",
      "time": "21:08",
-     "label": "Idratante"
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
     },
     {
-     "id": "a54-s3",
-     "time": "21:10",
-     "label": "Antitraspirante (funziona meglio la sera)"
+     "id": "a119-s3",
+     "time": "21:12",
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
     },
     {
-     "id": "a54-s4",
-     "time": "21:13",
-     "label": "Prepara la domenica"
+     "id": "a119-s4",
+     "time": "21:17",
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
     },
     {
-     "id": "a54-s5",
-     "time": "21:18",
-     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
-    },
-    {
-     "id": "a54-s6",
+     "id": "a119-s5",
      "time": "21:21",
-     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+     "label": "Vestiti, zaino e borsa di domani",
+     "detail": "Tutto pronto stasera: domattina non decidi niente."
     },
     {
-     "id": "a54-s7",
+     "id": "a119-s6",
      "time": "21:25",
-     "label": "Luci basse, telefono fuori dalla camera"
+     "label": "Se hai fame: 250 ml latte",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a119-s7",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
     }
    ]
   },
   {
-   "id": "a55",
+   "id": "a120",
    "title": "Routine serale",
    "start": "21:00",
    "end": "21:30",
@@ -1776,51 +3793,73 @@
    ],
    "color": "#86cfc2",
    "essential": true,
+   "detail": "30′: lenti, denti, skincare della sera, preparazione del giorno dopo, luci basse.",
    "steps": [
     {
-     "id": "a55-s0",
+     "id": "a120-s0",
      "time": "21:00",
-     "label": "Filo interdentale + denti 2′"
+     "label": "Togli le lenti e spunta «Lenti tolte» nell'app",
+     "detail": "Mani lavate e asciutte. Togli prima la destra. Metti ogni lente nel suo lato del portalenti con soluzione nuova (mai rabboccare quella vecchia). Poi spunta «Lenti tolte» nell'app: se non lo fai entro l'orario, parte l'SMS al tuo amico."
     },
     {
-     "id": "a55-s1",
-     "time": "21:05",
-     "label": "Detergente viso"
+     "id": "a120-s1",
+     "time": "21:03",
+     "label": "Filo interdentale + denti 2′",
+     "detail": "Filo tra tutti i denti (anche dietro gli ultimi), poi 2′ di spazzolino come al mattino."
     },
     {
-     "id": "a55-s2",
-     "time": "21:08",
-     "label": "Idratante"
+     "id": "a120-s2",
+     "time": "21:06",
+     "label": "Viso: Hada Labo Foaming Face Wash",
+     "detail": "Come al mattino: 30–40″ di massaggio, risciacquo tiepido, tamponi."
     },
     {
-     "id": "a55-s3",
+     "id": "a120-s3",
      "time": "21:10",
-     "label": "Antitraspirante (funziona meglio la sera)"
+     "label": "Hada Labo Gokujyun Hyaluronic Cream",
+     "detail": "Un pisello abbondante. Nelle sere del retinolo va dopo, sopra: attenua l'irritazione."
     },
     {
-     "id": "a55-s4",
+     "id": "a120-s4",
      "time": "21:13",
-     "label": "Tutto pronto per lunedì?"
+     "label": "Antitraspirante",
+     "detail": "La sera, sulla pelle asciutta: funziona meglio che al mattino."
     },
     {
-     "id": "a55-s5",
-     "time": "21:18",
-     "label": "Contenitore di domani dal freezer al frigo, poi nello zaino"
+     "id": "a120-s5",
+     "time": "21:16",
+     "label": "Cambia la federa del cuscino",
+     "detail": "2 volte a settimana (mercoledì e domenica): aiuta anche la pelle del viso."
     },
     {
-     "id": "a55-s6",
-     "time": "21:21",
-     "label": "Togli le lenti a contatto e premi \"Ho tolto le lenti\""
+     "id": "a120-s6",
+     "time": "21:19",
+     "label": "Contenitore di lunedì: dal freezer al frigo (e nello zaino)",
+     "detail": "Dal freezer al frigo, poi direttamente nello zaino se domani lo porti a scuola: 30 secondi. È l'abitudine che rende possibile il pranzo da 15′."
     },
     {
-     "id": "a55-s7",
-     "time": "21:25",
-     "label": "Luci basse, telefono fuori dalla camera"
+     "id": "a120-s7",
+     "time": "21:23",
+     "label": "Vestiti, zaino e borsa di domani",
+     "detail": "Tutto pronto stasera: domattina non decidi niente."
+    },
+    {
+     "id": "a120-s8",
+     "time": "21:26",
+     "label": "Se hai fame: 250 ml latte",
+     "detail": "Spuntino facoltativo del PDF: solo se hai fame. Con il tuo peso attuale il menu lo toglie (regola del PDF: sotto i 65 kg si salta).",
+     "optional": true
+    },
+    {
+     "id": "a120-s9",
+     "time": "21:29",
+     "label": "Luci basse, telefono fuori dalla camera o in modalità aereo",
+     "detail": "Dalle 21:30 si dorme: 9 ore piene. Niente schermi a letto."
     }
    ]
   },
   {
-   "id": "a56",
+   "id": "a121",
    "title": "Sonno",
    "start": "21:30",
    "end": "06:30",
@@ -1837,920 +3876,10 @@
    "essential": true,
    "steps": [
     {
-     "id": "a56-s0",
+     "id": "a121-s0",
      "time": "21:30",
-     "label": "Spegni: 9 ore piene, telefono fuori dalla camera o in modalità aereo"
-    },
-    {
-     "id": "a56-s1",
-     "time": "06:29",
-     "label": "Sveglia alle 06:30, anche nel weekend"
-    }
-   ]
-  },
-  {
-   "id": "a57",
-   "title": "Risveglio lento",
-   "start": "07:05",
-   "end": "07:40",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a57-s0",
-     "time": "07:05",
-     "label": "Lettura leggera o musica, niente social"
-    }
-   ]
-  },
-  {
-   "id": "a58",
-   "title": "Luce + piano",
-   "start": "07:40",
-   "end": "08:00",
-   "days": [
-    6
-   ],
-   "color": "#f2c27b",
-   "steps": [
-    {
-     "id": "a58-s0",
-     "time": "07:40",
-     "label": "5′ fuori o alla finestra"
-    },
-    {
-     "id": "a58-s1",
-     "time": "07:46",
-     "label": "Scrivi i 5 obiettivi dei blocchi di oggi"
-    }
-   ]
-  },
-  {
-   "id": "a59",
-   "title": "Studio 90′ · Matematica",
-   "start": "08:00",
-   "end": "09:30",
-   "days": [
-    6
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a59-s0",
-     "time": "08:00",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Matematica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a59-s1",
-     "time": "08:02",
-     "label": "45′: blocco più difficile a mente fresca: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a59-s2",
-     "time": "08:47",
-     "label": "Pausa 5′ in piedi"
-    },
-    {
-     "id": "a59-s3",
-     "time": "08:52",
-     "label": "40′: blocco più difficile a mente fresca: 20% teoria, 80% esercizi graduati; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a59-s4",
-     "time": "09:28",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a60",
-   "title": "Pausa",
-   "start": "09:30",
-   "end": "09:45",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a60-s0",
-     "time": "09:30",
-     "label": "Alzati, acqua, niente social"
-    }
-   ]
-  },
-  {
-   "id": "a61",
-   "title": "Studio 90′ · Fisica",
-   "start": "09:45",
-   "end": "11:15",
-   "days": [
-    6
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a61-s0",
-     "time": "09:45",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Fisica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a61-s1",
-     "time": "09:47",
-     "label": "45′: problemi; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a61-s2",
-     "time": "10:32",
-     "label": "Pausa 5′ in piedi"
-    },
-    {
-     "id": "a61-s3",
-     "time": "10:37",
-     "label": "40′: problemi; ogni errore nel quaderno degli errori"
-    },
-    {
-     "id": "a61-s4",
-     "time": "11:13",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a62",
-   "title": "Spuntino",
-   "start": "11:15",
-   "end": "11:30",
-   "days": [
-    6
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a62-s0",
-     "time": "11:15",
-     "label": "Prepara/pesa: 150 g yogurt bianco o 250 ml latte (la dieta il sabato non lo prevede: tienilo leggero)"
-    },
-    {
-     "id": "a62-s1",
-     "time": "11:28",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a63",
-   "title": "Studio 75′ · Sant'Anna / TOLC-I",
-   "start": "11:30",
-   "end": "12:45",
-   "days": [
-    6
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a63-s0",
-     "time": "11:30",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Sant'Anna / TOLC-I) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a63-s1",
-     "time": "11:32",
-     "label": "problem solving: problemi di logica ed esercizi non standard"
-    },
-    {
-     "id": "a63-s2",
-     "time": "12:08",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a63-s3",
-     "time": "12:43",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a64",
-   "title": "Pausa",
-   "start": "12:45",
-   "end": "13:00",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a64-s0",
-     "time": "12:45",
-     "label": "Alzati, acqua"
-    }
-   ]
-  },
-  {
-   "id": "a65",
-   "title": "Pranzo",
-   "start": "13:00",
-   "end": "13:15",
-   "days": [
-    6
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a65-s0",
-     "time": "13:00",
-     "label": "Prepara/pesa: dal contenitore: 150 g pollo + 400 g patate + 200 g verdure + 100 g pane"
-    },
-    {
-     "id": "a65-s1",
-     "time": "13:13",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a66",
-   "title": "Pausa lunga",
-   "start": "13:15",
-   "end": "14:30",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a66-s0",
-     "time": "13:15",
-     "label": "Riposo vero: niente studio"
-    }
-   ]
-  },
-  {
-   "id": "a67",
-   "title": "Studio 75′ · Maturità",
-   "start": "14:30",
-   "end": "15:45",
-   "days": [
-    6
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a67-s0",
-     "time": "14:30",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a67-s1",
-     "time": "14:32",
-     "label": "studio attivo: ripeti a voce, schemi, flashcard (mai solo rileggere)"
-    },
-    {
-     "id": "a67-s2",
-     "time": "15:08",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a67-s3",
-     "time": "15:43",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a68",
-   "title": "Pausa",
-   "start": "15:45",
-   "end": "16:00",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "steps": [
-    {
-     "id": "a68-s0",
-     "time": "15:45",
-     "label": "Alzati, acqua"
-    }
-   ]
-  },
-  {
-   "id": "a69",
-   "title": "Studio 60′ · Inglese",
-   "start": "16:00",
-   "end": "17:00",
-   "days": [
-    6
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a69-s0",
-     "time": "16:00",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Inglese) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a69-s1",
-     "time": "16:02",
-     "label": "test di ripasso + 1 testo scritto (email o saggio breve) corretto con le regole studiate"
-    },
-    {
-     "id": "a69-s2",
-     "time": "16:30",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a69-s3",
-     "time": "16:58",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a70",
-   "title": "Spuntino",
-   "start": "17:00",
-   "end": "17:15",
-   "days": [
-    6
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a70-s0",
-     "time": "17:00",
-     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 30 g pane (anche in piedi)"
-    },
-    {
-     "id": "a70-s1",
-     "time": "17:13",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a71",
-   "title": "Tecnica a casa 45′",
-   "start": "17:15",
-   "end": "18:00",
-   "days": [
-    6
-   ],
-   "color": "#e07a5f",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a71-s0",
-     "time": "17:15",
-     "label": "Shadow a tema (ultima lezione)"
-    },
-    {
-     "id": "a71-s1",
-     "time": "17:30",
-     "label": "Lavoro di piedi"
-    },
-    {
-     "id": "a71-s2",
-     "time": "17:42",
-     "label": "Mobilità anche e caviglie"
-    },
-    {
-     "id": "a71-s3",
-     "time": "17:52",
-     "label": "Core"
-    }
-   ]
-  },
-  {
-   "id": "a72",
-   "title": "Cucina 30′",
-   "start": "18:00",
-   "end": "18:30",
-   "days": [
-    6
-   ],
-   "color": "#f2c27b",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a72-s0",
-     "time": "18:00",
-     "label": "Pentola di fagioli (cena di oggi + pranzo di domani)"
-    },
-    {
-     "id": "a72-s1",
-     "time": "18:08",
-     "label": "400 g di riso"
-    },
-    {
-     "id": "a72-s2",
-     "time": "18:15",
-     "label": "4 uova sode"
-    }
-   ]
-  },
-  {
-   "id": "a73",
-   "title": "Libero",
-   "start": "18:30",
-   "end": "19:30",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a73-s0",
-     "time": "18:30",
-     "label": "Uscite, amici, hobby"
-    }
-   ]
-  },
-  {
-   "id": "a74",
-   "title": "Cena",
-   "start": "19:30",
-   "end": "19:45",
-   "days": [
-    6
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a74-s0",
-     "time": "19:30",
-     "label": "Prepara/pesa: pasta e fagioli: 100 g pasta + 240 g fagioli + pelati + 10 g olio + verdura"
-    },
-    {
-     "id": "a74-s1",
-     "time": "19:37",
-     "label": "Mangia seduto, senza telefono"
-    },
-    {
-     "id": "a74-s2",
-     "time": "19:43",
-     "label": "Più tardi, se hai fame: 250 ml latte"
-    }
-   ]
-  },
-  {
-   "id": "a75",
-   "title": "Libero",
-   "start": "19:45",
-   "end": "20:30",
-   "days": [
-    6
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a75-s0",
-     "time": "19:45",
-     "label": "Tempo libero"
-    }
-   ]
-  },
-  {
-   "id": "a76",
-   "title": "Libero",
-   "start": "07:05",
-   "end": "08:30",
-   "days": [
-    0
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a76-s0",
-     "time": "07:05",
-     "label": "Colazione con calma, passeggiata"
-    }
-   ]
-  },
-  {
-   "id": "a77",
-   "title": "Studio 90′ · Errori mate/fisica",
-   "start": "08:30",
-   "end": "10:00",
-   "days": [
-    0
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a77-s0",
-     "time": "08:30",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Errori mate/fisica) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a77-s1",
-     "time": "08:32",
-     "label": "45′: quaderno degli errori: rifai gli esercizi sbagliati in settimana"
-    },
-    {
-     "id": "a77-s2",
-     "time": "09:17",
-     "label": "Pausa 5′ in piedi"
-    },
-    {
-     "id": "a77-s3",
-     "time": "09:22",
-     "label": "40′: quaderno degli errori: rifai gli esercizi sbagliati in settimana"
-    },
-    {
-     "id": "a77-s4",
-     "time": "09:58",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a78",
-   "title": "Spuntino",
-   "start": "10:00",
-   "end": "10:15",
-   "days": [
-    0
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a78-s0",
-     "time": "10:00",
-     "label": "Prepara/pesa: 150 g yogurt bianco o 250 ml latte (la dieta la domenica non lo prevede: tienilo leggero)"
-    },
-    {
-     "id": "a78-s1",
-     "time": "10:13",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a79",
-   "title": "Studio 60′ · Maturità",
-   "start": "10:15",
-   "end": "11:15",
-   "days": [
-    0
-   ],
-   "color": "#6e62b6",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a79-s0",
-     "time": "10:15",
-     "label": "Scrivi in una riga l'obiettivo del blocco (Maturità) · telefono in un'altra stanza"
-    },
-    {
-     "id": "a79-s1",
-     "time": "10:17",
-     "label": "flashcard della maturità + esercizi misti"
-    },
-    {
-     "id": "a79-s2",
-     "time": "10:45",
-     "label": "Metà blocco: ripeti a voce senza guardare"
-    },
-    {
-     "id": "a79-s3",
-     "time": "11:13",
-     "label": "Segna le ore nella scheda settimanale"
-    }
-   ]
-  },
-  {
-   "id": "a80",
-   "title": "Libero",
-   "start": "11:15",
-   "end": "13:00",
-   "days": [
-    0
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a80-s0",
-     "time": "11:15",
-     "label": "Tempo libero"
-    }
-   ]
-  },
-  {
-   "id": "a81",
-   "title": "Pranzo",
-   "start": "13:00",
-   "end": "13:15",
-   "days": [
-    0
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a81-s0",
-     "time": "13:00",
-     "label": "Prepara/pesa: zero cottura, 5′: 120 g tonno + 240 g fagioli + pomodorini + 10 g olio + 100 g pane"
-    },
-    {
-     "id": "a81-s1",
-     "time": "13:13",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a82",
-   "title": "Riposo",
-   "start": "13:15",
-   "end": "16:00",
-   "days": [
-    0
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a82-s0",
-     "time": "13:15",
-     "label": "Famiglia, uscite, riposo"
-    }
-   ]
-  },
-  {
-   "id": "a83",
-   "title": "Spuntino",
-   "start": "16:00",
-   "end": "16:15",
-   "days": [
-    0
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a83-s0",
-     "time": "16:00",
-     "label": "Prepara/pesa: 250 g yogurt + 1 banana + 40 g avena"
-    },
-    {
-     "id": "a83-s1",
-     "time": "16:13",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a84",
-   "title": "Revisione settimanale",
-   "start": "16:15",
-   "end": "17:00",
-   "days": [
-    0
-   ],
-   "color": "#f2c27b",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a84-s0",
-     "time": "16:15",
-     "label": "Ore di studio, allenamenti e sonno della settimana segnati?"
-    },
-    {
-     "id": "a84-s1",
-     "time": "16:19",
-     "label": "Quali blocchi sono saltati e perché? Sposta o accorcia un blocco"
-    },
-    {
-     "id": "a84-s2",
-     "time": "16:23",
-     "label": "Voti e verifiche: c'è una materia della maturità in calo?"
-    },
-    {
-     "id": "a84-s3",
-     "time": "16:27",
-     "label": "Quaderno degli errori: rifatti tutti?"
-    },
-    {
-     "id": "a84-s4",
-     "time": "16:31",
-     "label": "In linea con il mese del calendario (mate, fisica, Sant'Anna)?"
-    },
-    {
-     "id": "a84-s5",
-     "time": "16:35",
-     "label": "Pesi: carichi saliti su almeno 2 esercizi nelle ultime 2 settimane?"
-    },
-    {
-     "id": "a84-s6",
-     "time": "16:39",
-     "label": "Peso medio: sale di 0,25–0,5% a settimana? Se no, correggi la dieta (+/- 200 kcal)"
-    },
-    {
-     "id": "a84-s7",
-     "time": "16:43",
-     "label": "Sonno: quante sere hai spento dopo le 21:30? Cosa l'ha causato?"
-    },
-    {
-     "id": "a84-s8",
-     "time": "16:47",
-     "label": "Budget: spese della settimana registrate e dentro le quote?"
-    },
-    {
-     "id": "a84-s9",
-     "time": "16:51",
-     "label": "Verifiche e scadenze della prossima settimana (TOLC, bando, interrogazioni)"
-    },
-    {
-     "id": "a84-s10",
-     "time": "16:55",
-     "label": "Borsa sport lavata e pronta, zaino pronto, vestiti del lunedì scelti?"
-    }
-   ]
-  },
-  {
-   "id": "a85",
-   "title": "Cura settimanale",
-   "start": "17:00",
-   "end": "17:45",
-   "days": [
-    0
-   ],
-   "color": "#86cfc2",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a85-s0",
-     "time": "17:00",
-     "label": "Unghie di mani e piedi corte (obbligatorio per sparring e clinch)"
-    },
-    {
-     "id": "a85-s1",
-     "time": "17:12",
-     "label": "Scrub corpo leggero"
-    },
-    {
-     "id": "a85-s2",
-     "time": "17:22",
-     "label": "Pulizia di rasoio e pettini"
-    },
-    {
-     "id": "a85-s3",
-     "time": "17:30",
-     "label": "Lava bende, borsa e borraccia"
-    },
-    {
-     "id": "a85-s4",
-     "time": "17:40",
-     "label": "Guantoni aperti ad asciugare e arieggiare"
-    }
-   ]
-  },
-  {
-   "id": "a86",
-   "title": "Libero",
-   "start": "17:45",
-   "end": "18:30",
-   "days": [
-    0
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a86-s0",
-     "time": "17:45",
-     "label": "Tempo libero"
-    }
-   ]
-  },
-  {
-   "id": "a87",
-   "title": "Cucina 60′",
-   "start": "18:30",
-   "end": "19:30",
-   "days": [
-    0
-   ],
-   "color": "#f2c27b",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a87-s0",
-     "time": "18:30",
-     "label": "Teglia pollo e patate in forno: 1 kg cosce + 1 kg patate a cubi, olio, paprika, rosmarino · 200 °C per 30–35′ (3 porzioni)"
-    },
-    {
-     "id": "a87-s1",
-     "time": "18:35",
-     "label": "Mentre cuoce: 500 g di riso"
-    },
-    {
-     "id": "a87-s2",
-     "time": "18:45",
-     "label": "6 uova sode"
-    },
-    {
-     "id": "a87-s3",
-     "time": "18:55",
-     "label": "Pentola di ceci per il pranzo di mercoledì"
-    },
-    {
-     "id": "a87-s4",
-     "time": "19:10",
-     "label": "3 barattoli di overnight oats (lun, mer, ven)"
-    },
-    {
-     "id": "a87-s5",
-     "time": "19:25",
-     "label": "Dividi la teglia: cena di stasera + contenitori di lunedì e martedì"
-    }
-   ]
-  },
-  {
-   "id": "a88",
-   "title": "Cena",
-   "start": "19:30",
-   "end": "19:45",
-   "days": [
-    0
-   ],
-   "color": "#a8d99a",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a88-s0",
-     "time": "19:30",
-     "label": "Prepara/pesa: dalla teglia appena fatta: 150 g pollo + 350 g patate + 200 g verdure + 10 g olio + 60 g pane"
-    },
-    {
-     "id": "a88-s1",
-     "time": "19:43",
-     "label": "Mangia seduto, senza telefono"
-    }
-   ]
-  },
-  {
-   "id": "a89",
-   "title": "Prepara lunedì",
-   "start": "19:45",
-   "end": "20:00",
-   "days": [
-    0
-   ],
-   "color": "#f2c27b",
-   "essential": true,
-   "steps": [
-    {
-     "id": "a89-s0",
-     "time": "19:45",
-     "label": "Zaino"
-    },
-    {
-     "id": "a89-s1",
-     "time": "19:50",
-     "label": "Borsa sport"
-    },
-    {
-     "id": "a89-s2",
-     "time": "19:55",
-     "label": "Vestiti"
-    }
-   ]
-  },
-  {
-   "id": "a90",
-   "title": "Libero",
-   "start": "20:00",
-   "end": "20:30",
-   "days": [
-    0
-   ],
-   "color": "#e9e2cf",
-   "essential": false,
-   "steps": [
-    {
-     "id": "a90-s0",
-     "time": "20:00",
-     "label": "Tempo libero"
+     "label": "Luci spente: 9 ore piene",
+     "detail": "Il sonno è fisso tutti i 7 giorni: nessuna attività, nemmeno lo studio, si prende ore di sonno. Telefono fuori dalla camera o in modalità aereo."
     }
    ]
   }
@@ -2761,7 +3890,7 @@
    "id": "goal1",
    "title": "100 alla maturità",
    "priority": 1,
-   "target": "100/100 all'esame di giugno 2027",
+   "target": "100/100 all'esame di giugno 2027 (credito del 5° anno + prima prova + seconda prova + colloquio)",
    "milestones": [
     {
      "id": "goal1-m0",
@@ -2770,51 +3899,56 @@
     },
     {
      "id": "goal1-m1",
+     "due": "2026-10",
+     "title": "Verificato con i docenti il formato ufficiale dell'esame 2027"
+    },
+    {
+     "id": "goal1-m2",
      "due": "2026-12",
      "title": "Pagella del primo periodo con media ≥ 9"
     },
     {
-     "id": "goal1-m2",
+     "id": "goal1-m3",
      "due": "2027-01",
      "title": "Materie della seconda prova uscite: piano delle simulazioni pronto"
     },
     {
-     "id": "goal1-m3",
+     "id": "goal1-m4",
      "due": "2027-02",
      "title": "Media ≥ 9 e nessuna insufficienza (obiettivo intermedio)"
     },
     {
-     "id": "goal1-m4",
-     "due": "2027-02",
-     "title": "Prima simulazione di seconda prova (poi una ogni 2 settimane)"
-    },
-    {
      "id": "goal1-m5",
      "due": "2027-02",
-     "title": "Primo testo completo di prima prova corretto dal docente"
+     "title": "Prima simulazione di seconda prova (poi una ogni 2 settimane, il sabato)"
     },
     {
      "id": "goal1-m6",
+     "due": "2027-02",
+     "title": "Primo testo completo di prima prova corretto dal docente (poi uno ogni 2 settimane, tipologie A, B, C)"
+    },
+    {
+     "id": "goal1-m7",
      "due": "2027-03",
      "title": "Mappa dei collegamenti per ogni materia del colloquio"
     },
     {
-     "id": "goal1-m7",
+     "id": "goal1-m8",
      "due": "2027-04",
      "title": "Due mesi di simulazioni scritte con regolarità"
     },
     {
-     "id": "goal1-m8",
+     "id": "goal1-m9",
      "due": "2027-05",
      "title": "Simulazioni del colloquio ad alta voce, registrandoti la domenica"
     },
     {
-     "id": "goal1-m9",
+     "id": "goal1-m10",
      "due": "2027-06",
-     "title": "Ripasso globale con sonno invariato, anche la notte prima"
+     "title": "Ripasso globale con sonno invariato, anche la notte prima delle prove"
     },
     {
-     "id": "goal1-m10",
+     "id": "goal1-m11",
      "due": "2027-06",
      "title": "Esame: 100/100"
     }
@@ -2824,7 +3958,7 @@
    "id": "goal2",
    "title": "Ammissione al Sant'Anna · Ingegneria",
    "priority": 2,
-   "target": "TOLC-I sopra soglia e prove scritte a fine agosto 2027",
+   "target": "TOLC-I sopra soglia, prove scritte a Pisa a fine agosto 2027, orale a settembre",
    "milestones": [
     {
      "id": "goal2-m0",
@@ -2843,234 +3977,269 @@
     },
     {
      "id": "goal2-m3",
-     "due": "2026-11",
-     "title": "Mate: funzioni, esponenziali e logaritmi"
+     "due": "2026-10",
+     "title": "Fondo concorso avviato: 50 € al mese (450 € a giugno per TOLC, viaggio e soggiorno a Pisa)"
     },
     {
      "id": "goal2-m4",
      "due": "2026-11",
-     "title": "Fisica: cinematica 2D e principi della dinamica"
+     "title": "Mate: funzioni, esponenziali e logaritmi"
     },
     {
      "id": "goal2-m5",
      "due": "2026-11",
-     "title": "Leggere 2 prove passate del Sant'Anna"
+     "title": "Fisica: cinematica 2D e principi della dinamica"
     },
     {
      "id": "goal2-m6",
-     "due": "2026-12",
-     "title": "Mate: goniometria e trigonometria"
+     "due": "2026-11",
+     "title": "Lette 2 prove passate del Sant'Anna (senza risolverle)"
     },
     {
      "id": "goal2-m7",
      "due": "2026-12",
-     "title": "Fisica: lavoro, energia, conservazione"
+     "title": "Mate: goniometria e trigonometria"
     },
     {
      "id": "goal2-m8",
-     "due": "2027-01",
-     "title": "Mate: geometria analitica (retta e coniche)"
+     "due": "2026-12",
+     "title": "Fisica: lavoro, energia, conservazione"
     },
     {
      "id": "goal2-m9",
-     "due": "2027-01",
-     "title": "Fisica: quantità di moto e urti"
+     "due": "2026-12",
+     "title": "Problemi di logica nelle vacanze"
     },
     {
      "id": "goal2-m10",
      "due": "2027-01",
-     "title": "Primi esercizi TOLC-I"
+     "title": "Mate: geometria analitica (retta e coniche)"
     },
     {
      "id": "goal2-m11",
-     "due": "2027-02",
-     "title": "Mate: successioni, limiti, continuità"
+     "due": "2027-01",
+     "title": "Fisica: quantità di moto e urti"
     },
     {
      "id": "goal2-m12",
-     "due": "2027-02",
-     "title": "Fisica: moto rotatorio e gravitazione · meccanica completata"
+     "due": "2027-01",
+     "title": "Primi esercizi TOLC-I"
     },
     {
      "id": "goal2-m13",
      "due": "2027-02",
-     "title": "Prime 3 prove passate lette e tentate"
+     "title": "Mate: successioni, limiti, continuità (arrivato ai limiti)"
     },
     {
      "id": "goal2-m14",
-     "due": "2027-03",
-     "title": "Mate: derivate e studio di funzione"
+     "due": "2027-02",
+     "title": "Fisica: moto rotatorio e gravitazione · meccanica completata"
     },
     {
      "id": "goal2-m15",
-     "due": "2027-03",
-     "title": "Fisica: fluidi e termodinamica"
+     "due": "2027-02",
+     "title": "Prime 3 prove passate lette e tentate"
     },
     {
      "id": "goal2-m16",
      "due": "2027-03",
-     "title": "Leggere il bando 2027 (requisiti, date TOLC, soglia)"
+     "title": "Mate: derivate e studio di funzione"
     },
     {
      "id": "goal2-m17",
-     "due": "2027-04",
-     "title": "Mate: integrali, geometria euclidea e solida"
+     "due": "2027-03",
+     "title": "Fisica: fluidi e termodinamica"
     },
     {
      "id": "goal2-m18",
-     "due": "2027-04",
-     "title": "Fisica: onde ed elettrostatica"
+     "due": "2027-03",
+     "title": "Bando 2027 letto: requisiti, date valide del TOLC-I, soglia"
     },
     {
      "id": "goal2-m19",
      "due": "2027-04",
-     "title": "Iscrizione e primo TOLC-I"
+     "title": "Mate: integrali, geometria euclidea e solida"
     },
     {
      "id": "goal2-m20",
-     "due": "2027-05",
-     "title": "Mate: combinatoria, probabilità, problemi misti"
+     "due": "2027-04",
+     "title": "Fisica: onde ed elettrostatica"
     },
     {
      "id": "goal2-m21",
-     "due": "2027-05",
-     "title": "Fisica: circuiti, magnetismo, induzione"
+     "due": "2027-04",
+     "title": "Iscrizione e primo TOLC-I"
     },
     {
      "id": "goal2-m22",
      "due": "2027-05",
-     "title": "Secondo TOLC-I, se serve"
+     "title": "Mate: combinatoria, probabilità, problemi misti"
     },
     {
      "id": "goal2-m23",
+     "due": "2027-05",
+     "title": "Fisica: circuiti, magnetismo, induzione"
+    },
+    {
+     "id": "goal2-m24",
+     "due": "2027-05",
+     "title": "Secondo TOLC-I, se serve"
+    },
+    {
+     "id": "goal2-m25",
      "due": "2027-06",
      "title": "TOLC-I sopra soglia e 10+ prove passate provate"
     },
     {
-     "id": "goal2-m24",
+     "id": "goal2-m26",
      "due": "2027-07",
-     "title": "Iscrizione al concorso entro la scadenza del bando"
+     "title": "Iscrizione al concorso entro la scadenza del bando · viaggio a Pisa organizzato"
     },
     {
-     "id": "goal2-m25",
+     "id": "goal2-m27",
+     "due": "2027-07",
+     "title": "Lacune chiuse (settimane 2–3 dell'estate)"
+    },
+    {
+     "id": "goal2-m28",
+     "due": "2027-08",
+     "title": "Ritmo d'esame: 2 simulazioni a settimana, poi rifinitura"
+    },
+    {
+     "id": "goal2-m29",
      "due": "2027-08",
      "title": "Prove scritte a Pisa"
     },
     {
-     "id": "goal2-m26",
+     "id": "goal2-m30",
      "due": "2027-09",
-     "title": "Orale"
+     "title": "Orale: soluzioni spiegate ad alta voce e motivazioni pronte"
     }
    ]
   },
   {
    "id": "goal3",
-   "title": "Muay Thai e autodifesa concreta",
+   "title": "Fisico e massa muscolare",
    "priority": 3,
-   "target": "Sparring tecnico regolare e valutazione positiva del maestro",
+   "target": "Carichi dei fondamentali in crescita, peso in aumento controllato (+0,2–0,5 kg a settimana): circa 6–9 kg in un anno scolastico",
    "milestones": [
     {
      "id": "goal3-m0",
      "due": "2026-10",
-     "title": "Iscrizione, orari definitivi del corso, certificato medico se richiesto"
+     "title": "Prime 3 settimane: carichi leggeri, si impara la tecnica (squat e stacco guardati o filmati)"
     },
     {
      "id": "goal3-m1",
      "due": "2026-10",
-     "title": "Attrezzatura: guantoni, 2 paia di bende, paradenti, parastinchi, conchiglia"
+     "title": "Registro completo di carichi e ripetizioni a ogni seduta"
     },
     {
      "id": "goal3-m2",
-     "due": "2026-11",
-     "title": "Combinazioni base pulite al sacco e ai colpitori"
+     "due": "2026-10",
+     "title": "Pesata della domenica mattina ogni settimana"
     },
     {
      "id": "goal3-m3",
-     "due": "2027-01",
-     "title": "Combinazioni da 3–4 colpi e contrattacchi"
+     "due": "2026-10",
+     "title": "Bilancia da cucina: tutto pesato per 3–4 settimane"
     },
     {
      "id": "goal3-m4",
-     "due": "2027-02",
-     "title": "3 round da 3′ al sacco a ritmo costante"
+     "due": "2026-11",
+     "title": "5 pasti con proteine ogni giorno per 4 settimane"
     },
     {
      "id": "goal3-m5",
-     "due": "2027-02",
-     "title": "Clinch di base e condizionamento"
+     "due": "2026-11",
+     "title": "Settimana di scarico a fine novembre (stessi pesi, metà serie)"
     },
     {
      "id": "goal3-m6",
-     "due": "2027-03",
-     "title": "Primi sparring tecnici (solo con l'ok del maestro)"
+     "due": "2027-01",
+     "title": "Settimana di scarico a fine gennaio"
     },
     {
      "id": "goal3-m7",
-     "due": "2027-04",
-     "title": "Lezioni su situazioni di difesa realistiche (chiedi al maestro)"
+     "due": "2027-02",
+     "title": "Carichi aumentati su tutti gli esercizi rispetto a ottobre"
     },
     {
      "id": "goal3-m8",
-     "due": "2027-05",
-     "title": "Sparring leggero regolare"
+     "due": "2027-03",
+     "title": "Peso medio in salita regolare da 3 mesi"
     },
     {
      "id": "goal3-m9",
+     "due": "2027-04",
+     "title": "Settimana di scarico a Pasqua"
+    },
+    {
+     "id": "goal3-m10",
      "due": "2027-06",
-     "title": "Valutazione positiva del maestro"
+     "title": "Carichi dei fondamentali quasi raddoppiati rispetto a ottobre"
     }
    ]
   },
   {
    "id": "goal4",
-   "title": "Fisico e massa muscolare",
+   "title": "MMA e autodifesa concreta",
    "priority": 4,
-   "target": "Carichi dei fondamentali in crescita, peso in aumento controllato (0,25–0,5% a settimana)",
+   "target": "Tecnica solida, sparring controllato con l'ok del maestro, autodifesa realistica",
    "milestones": [
     {
      "id": "goal4-m0",
      "due": "2026-10",
-     "title": "Prime 2 settimane: carichi leggeri e tecnica con l'istruttore"
+     "title": "Iscrizione, certificato medico sportivo e quota: tutto chiesto e fatto"
     },
     {
      "id": "goal4-m1",
      "due": "2026-10",
-     "title": "Registro di carichi e ripetizioni a ogni seduta"
+     "title": "Attrezzatura: guantini/guantoni, 2 paia di bende, paradenti, parastinchi, conchiglia (chiedi al maestro cosa serve)"
     },
     {
      "id": "goal4-m2",
-     "due": "2026-10",
-     "title": "Pesata della domenica mattina ogni settimana"
+     "due": "2026-11",
+     "title": "Fondamentali puliti: guardia, passi, colpi base"
     },
     {
      "id": "goal4-m3",
-     "due": "2026-11",
-     "title": "5 pasti con proteine ogni giorno per 4 settimane"
+     "due": "2027-01",
+     "title": "Combinazioni da 3–4 colpi e contrattacchi"
     },
     {
      "id": "goal4-m4",
-     "due": "2026-12",
-     "title": "Settimana di scarico a Natale"
+     "due": "2027-02",
+     "title": "3 round da 3′ a ritmo costante"
     },
     {
      "id": "goal4-m5",
      "due": "2027-02",
-     "title": "Carichi aumentati su tutti gli esercizi rispetto a ottobre"
+     "title": "Clinch e lotta di base"
     },
     {
      "id": "goal4-m6",
      "due": "2027-03",
-     "title": "Peso medio in salita regolare da 3 mesi"
+     "title": "Primi sparring tecnici (solo con l'ok del maestro)"
     },
     {
      "id": "goal4-m7",
      "due": "2027-04",
-     "title": "Settimana di scarico a Pasqua"
+     "title": "Lezioni su situazioni di difesa realistiche (chiedile al maestro)"
     },
     {
      "id": "goal4-m8",
+     "due": "2027-05",
+     "title": "Sparring leggero regolare"
+    },
+    {
+     "id": "goal4-m9",
      "due": "2027-06",
-     "title": "Carichi dei fondamentali in crescita costante"
+     "title": "Valutazione positiva del maestro"
+    },
+    {
+     "id": "goal4-m10",
+     "due": "2027-08",
+     "title": "Niente sparring pesante nelle 2 settimane prima delle prove a Pisa"
     }
    ]
   },
@@ -3078,7 +4247,7 @@
    "id": "goal5",
    "title": "Inglese da B1 verso C1",
    "priority": 5,
-   "target": "B2 solido entro giugno 2027, C1 pieno nel 2027–28",
+   "target": "B2 solido entro giugno 2027 (grammatica), C1 pieno nel 2027–28",
    "milestones": [
     {
      "id": "goal5-m0",
@@ -3093,7 +4262,7 @@
     {
      "id": "goal5-m2",
      "due": "2027-01",
-     "title": "Grammatica intermedia: tempi verbali, condizionali, passivo, discorso indiretto"
+     "title": "Grammatica intermedia completata: tempi verbali, condizionali, passivo, discorso indiretto"
     },
     {
      "id": "goal5-m3",
@@ -3130,43 +4299,63 @@
    "milestones": [
     {
      "id": "goal6-m0",
-     "due": "2026-10",
-     "title": "Skincare livello 1 ogni giorno: detergente, idratante, SPF"
+     "due": "2026-09",
+     "title": "Skincare base ogni giorno: Foaming Face Wash, Hyaluronic Cream, UV White Gel SPF50+"
     },
     {
      "id": "goal6-m1",
      "due": "2026-10",
-     "title": "Igiene mattina e sera completa 6 giorni su 7 per 4 settimane"
+     "title": "Prima foto progressi di viso e fisico"
     },
     {
      "id": "goal6-m2",
+     "due": "2026-10",
+     "title": "Rohto Melano CC introdotta dal 12 ottobre (da sola, 2 settimane di prova)"
+    },
+    {
+     "id": "goal6-m3",
+     "due": "2026-10",
+     "title": "DHC Retinol introdotto dal 26 ottobre, 2 sere a settimana"
+    },
+    {
+     "id": "goal6-m4",
+     "due": "2026-11",
+     "title": "Cure Natural Aqua Gel introdotto dal 9 novembre, 1 volta a settimana"
+    },
+    {
+     "id": "goal6-m5",
+     "due": "2026-11",
+     "title": "Retinolo a 3 sere a settimana dal 23 novembre, se la pelle lo tollera"
+    },
+    {
+     "id": "goal6-m6",
      "due": "2026-11",
      "title": "Cura della domenica per 4 settimane di fila (unghie, scrub, rasoio)"
     },
     {
-     "id": "goal6-m3",
-     "due": "2026-11",
-     "title": "Federa del cuscino cambiata 2 volte a settimana"
-    },
-    {
-     "id": "goal6-m4",
-     "due": "2026-12",
-     "title": "Skincare livello 2, se il budget lo consente (un prodotto alla volta, 2 settimane di prova)"
-    },
-    {
-     "id": "goal6-m5",
-     "due": "2027-01",
-     "title": "Se l'acne persiste: visita dal dermatologo"
-    },
-    {
-     "id": "goal6-m6",
-     "due": "2027-02",
-     "title": "Postura: shadow e mobilità regolari per 8 settimane"
-    },
-    {
      "id": "goal6-m7",
+     "due": "2026-11",
+     "title": "Federa del cuscino cambiata 2 volte a settimana per 4 settimane"
+    },
+    {
+     "id": "goal6-m8",
+     "due": "2026-12",
+     "title": "Seconda foto progressi: confronto con ottobre"
+    },
+    {
+     "id": "goal6-m9",
+     "due": "2027-01",
+     "title": "Se acne o irritazioni persistono: visita dal dermatologo"
+    },
+    {
+     "id": "goal6-m10",
+     "due": "2027-03",
+     "title": "Foto progressi di marzo: pelle e fisico a confronto"
+    },
+    {
+     "id": "goal6-m11",
      "due": "2027-06",
-     "title": "Fisico in crescita (vedi obiettivo 4)"
+     "title": "Fisico in crescita (vedi obiettivo 3) e foto di giugno"
     }
    ]
   }
@@ -3174,6 +4363,6 @@
  "water": {
   "start": "06:30",
   "end": "21:30",
-  "intervalMin": 60
+  "intervalMin": 30
  }
 }

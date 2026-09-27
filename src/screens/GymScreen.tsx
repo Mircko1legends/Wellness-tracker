@@ -13,6 +13,8 @@ import {
   GymSession,
   GymSet,
   lastSessionWith,
+  isProgramId,
+  PROGRAM_NAMES,
   ProgramId,
   PROGRAMS,
   programFromTitles,
@@ -24,6 +26,7 @@ import {
 import { cancelRestAlarm, ringNow, scheduleRestAlarm } from "../gym/restTimer";
 import type { WorkoutStackParamList } from "../navigation/WorkoutStack";
 import { loadGymLog, loadGymVideos, saveGymLog } from "../storage/storage";
+import { useLifeProgress } from "../progress/useLifeProgress";
 import { colors, radii, spacing } from "../theme";
 import { dayTimeline } from "../timeline/plan";
 import { formatShortLabel, todayKey } from "../utils/date";
@@ -35,6 +38,11 @@ interface DraftSet extends GymSet {
   done: boolean;
 }
 type Draft = Record<string, DraftSet[]>;
+
+/** Thursday: MMA right after the weights, so lunges are left out (PDF: only the main lifts when time is short). */
+function exercisesFor(program: ProgramId, beforeMma: boolean): GymExercise[] {
+  return PROGRAMS[program].filter((e) => !(beforeMma && e.skipBeforeMma));
+}
 
 function buildDraft(program: ProgramId, log: GymSession[], date: string): Draft {
   const today = log.find((s) => s.date === date && s.program === program);
@@ -98,6 +106,7 @@ function ExerciseCard({
         {exercise.sets} × {exercise.repsMin}–{exercise.repsMax} · recupero {formatRest(exercise.restSec)}
         {last ? `  ·  ultima volta (${formatShortLabel(last.date)}): ${formatSets(last.exercises[exercise.id])}` : ""}
       </Text>
+      <Text style={styles.hint}>{exercise.note}</Text>
       <Text style={styles.suggestion}>{suggestion.note}</Text>
       {sets.map((set, i) => (
         <View key={i} style={[styles.setRow, set.done && styles.setDone]}>
@@ -123,11 +132,12 @@ export function GymScreen({ navigation }: Props) {
   const { plan } = useTimeline();
   const date = todayKey();
   const planned = useMemo(
-    () => programFromTitles(dayTimeline(plan, new Date().getDay(), isoWeekNumber(date)).map((a) => a.title)),
+    () => programFromTitles(dayTimeline(plan, new Date().getDay(), isoWeekNumber(date), date).map((a) => a.title)),
     [plan, date]
   );
   const [log, setLog] = useState<GymSession[] | null>(null);
-  const [program, setProgram] = useState<ProgramId>("A");
+  const [program, setProgram] = useState<ProgramId>("UA");
+  const progress = useLifeProgress();
   const [draft, setDraft] = useState<Draft>({});
   const logRef = useRef<GymSession[]>([]);
   const [rest, setRest] = useState<{ endAt: number; total: number; exercise: string } | null>(null);
@@ -187,7 +197,10 @@ export function GymScreen({ navigation }: Props) {
     loadGymLog().then((l) => {
       const todays = l.find((s) => s.date === date);
       const last = [...l].filter((s) => s.date < date).sort((a, b) => b.date.localeCompare(a.date))[0];
-      const initial: ProgramId = planned ?? todays?.program ?? (last ? (last.program === "A" ? "B" : "A") : "A");
+      const order: ProgramId[] = ["LB", "UA", "LA", "UB"];
+      const lastProgram = last && isProgramId(last.program) ? last.program : null;
+      const initial: ProgramId =
+        planned?.program ?? (todays && isProgramId(todays.program) ? todays.program : null) ?? (lastProgram ? order[(order.indexOf(lastProgram) + 1) % 4] : "LB");
       logRef.current = l;
       setLog(l);
       setProgram(initial);
@@ -223,7 +236,9 @@ export function GymScreen({ navigation }: Props) {
   if (!log) return <View style={styles.container} />;
 
   const history = [...log].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
-  const progress = PROGRAMS[program]
+  const beforeMma = !!planned && planned.program === program && planned.beforeMma;
+  const list = exercisesFor(program, beforeMma);
+  const records = PROGRAMS[program]
     .map((ex) => {
       const first = log.find((s) => s.exercises[ex.id]?.length);
       const best = bestKg(log, ex.id);
@@ -235,14 +250,18 @@ export function GymScreen({ navigation }: Props) {
     <View style={styles.container}>
       <ScreenHeader
         eyebrow="Registro pesi"
-        title={`Scheda ${program}`}
-        subtitle={planned ? `Oggi in programma: Scheda ${planned}` : "Oggi niente pesi in programma: puoi comunque registrare"}
+        title={PROGRAM_NAMES[program]}
+        subtitle={
+          planned
+            ? `Oggi: ${PROGRAM_NAMES[planned.program]}${planned.beforeMma ? " · poi MMA" : ""}`
+            : "Oggi niente pesi in programma: puoi comunque registrare"
+        }
       />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.row}>
-          {(["A", "B"] as ProgramId[]).map((p) => (
+          {(["LB", "UA", "LA", "UB"] as ProgramId[]).map((p) => (
             <TouchableOpacity key={p} style={[styles.tab, program === p && styles.tabOn]} onPress={() => switchProgram(p)}>
-              <Text style={[styles.tabText, program === p && styles.tabTextOn]}>Scheda {p}</Text>
+              <Text style={[styles.tabText, program === p && styles.tabTextOn]}>{PROGRAM_NAMES[p]}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -252,14 +271,30 @@ export function GymScreen({ navigation }: Props) {
           dice di cambiare esercizio o carico, ascolta loro.
         </Text>
 
-        {PROGRAMS[program].map((ex) => (
+        {progress && (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>
+              Allenamento della settimana: {String(progress.week.doneHours).replace(".", ",")} h su {String(progress.data.goals.trainingHoursWeek).replace(".", ",")} h
+            </Text>
+            <Text style={styles.hint}>
+              Pesi + MMA + tecnica, in ore e mezze ore. Si calcola da quello che spunti nella Giornata (o dalle ore che scrivi in Registra).
+            </Text>
+          </View>
+        )}
+        {beforeMma && (
+          <Text style={styles.hint}>
+            Oggi dopo c'è l'MMA: {PROGRAMS[program].some((e) => e.skipBeforeMma) ? "niente affondi e " : ""}2 ripetizioni di riserva su
+            tutto.
+          </Text>
+        )}
+        {list.map((ex) => (
           <ExerciseCard key={ex.id} exercise={ex} log={log} date={date} sets={draft[ex.id] ?? []} onChange={(s) => changeExercise(ex.id, s)} onVideo={() => openVideo(ex)} />
         ))}
 
-        {progress.length > 0 && (
+        {records.length > 0 && (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>I tuoi progressi</Text>
-            {progress.map(({ ex, from, best }) => (
+            {records.map(({ ex, from, best }) => (
               <Text key={ex.id} style={styles.line}>
                 {ex.name.replace(/ \(.*\)$/, "")}: {fmtKg(from)} → {fmtKg(best)} kg
               </Text>
@@ -278,9 +313,6 @@ export function GymScreen({ navigation }: Props) {
           </View>
         )}
 
-        <TouchableOpacity onPress={() => navigation.navigate("Bodyweight")}>
-          <Text style={styles.link}>Allenamento a corpo libero (per i giorni fuori dalla palestra)</Text>
-        </TouchableOpacity>
       </ScrollView>
       {rest && (
         <View style={styles.timer} accessibilityLiveRegion="polite">
@@ -312,7 +344,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.md, paddingBottom: 120 },
   row: { flexDirection: "row", gap: spacing.sm, marginBottom: spacing.sm },
-  tab: { flex: 1, paddingVertical: spacing.sm, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, alignItems: "center" },
+  tab: { flex: 1, paddingVertical: spacing.sm, paddingHorizontal: 2, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, alignItems: "center" },
   tabOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   tabText: { color: colors.text, fontWeight: "700" },
   tabTextOn: { color: colors.onPrimary },

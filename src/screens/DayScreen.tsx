@@ -7,6 +7,7 @@ import { StepButtons } from "../components/StepButtons";
 import { StepperInput } from "../components/StepperInput";
 import { WaterCard } from "../components/WaterCard";
 import { useWater } from "../context/WaterContext";
+import { sipShare } from "../water/water";
 import { loadMinimalDay, saveMinimalDay } from "../storage/storage";
 import { isoWeekNumber } from "../utils/weeklyTable";
 import { ScreenHeader } from "../components/ScreenHeader";
@@ -16,6 +17,7 @@ import type { DayStackParamList } from "../navigation/DayStack";
 import { colors, radii, spacing } from "../theme";
 import { currentActivity, dayTimeline, isEssential, PlanActivity } from "../timeline/plan";
 import { todayKey } from "../utils/date";
+import { monthTopic } from "../data/studyCalendar";
 
 type Props = NativeStackScreenProps<DayStackParamList, "Day">;
 
@@ -35,10 +37,12 @@ function useNowMinutes(): number {
 function ActivityCard({ activity, current, past, date }: { activity: PlanActivity; current: boolean; past: boolean; date: string }) {
   const { statusOf, setStep } = useTimeline();
   const [open, setOpen] = useState(current);
+  const [openStep, setOpenStep] = useState<string | null>(null);
   useEffect(() => setOpen(current), [current]);
   const done = activity.steps.filter((s) => statusOf(date, s.id) === "done").length;
   const handled = activity.steps.filter((s) => statusOf(date, s.id) !== null).length;
   const complete = handled === activity.steps.length && handled > 0;
+  const topic = activity.subject ? monthTopic(activity.subject, date) : null;
 
   return (
     <View style={[styles.activity, current && styles.activityCurrent, past && !current && styles.activityPast]}>
@@ -57,14 +61,34 @@ function ActivityCard({ activity, current, past, date }: { activity: PlanActivit
           </Text>
           <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} color={colors.textMuted} />
         </TouchableOpacity>
+        {open && (activity.detail || topic) && (
+          <View style={styles.activityInfo}>
+            {activity.detail ? <Text style={styles.activityDetail}>{activity.detail}</Text> : null}
+            {topic ? <Text style={styles.topic}>{topic}</Text> : null}
+          </View>
+        )}
         {open &&
           activity.steps.map((step) => {
             const status = statusOf(date, step.id);
+            const expanded = openStep === step.id;
             return (
-              <View key={step.id} style={styles.step}>
-                <Text style={styles.stepTime}>{step.time}</Text>
-                <Text style={[styles.stepLabel, status !== null && styles.stepDone]}>{step.label}</Text>
-                <StepButtons status={status} onChange={(s) => setStep(date, step.id, s)} />
+              <View key={step.id}>
+                <View style={styles.step}>
+                  <Text style={styles.stepTime}>{step.time}</Text>
+                  <TouchableOpacity
+                    style={{ flex: 1 }}
+                    onPress={() => setOpenStep(expanded ? null : step.id)}
+                    accessibilityLabel={`Spiegazione: ${step.label}`}
+                    disabled={!step.detail}
+                  >
+                    <Text style={[styles.stepLabel, status !== null && styles.stepDone]}>
+                      {step.label}
+                      {step.detail ? <Text style={styles.more}>{expanded ? "  ▲" : "  ⓘ"}</Text> : null}
+                    </Text>
+                  </TouchableOpacity>
+                  <StepButtons status={status} onChange={(s) => setStep(date, step.id, s)} />
+                </View>
+                {expanded && step.detail ? <Text style={styles.stepDetail}>{step.detail}</Text> : null}
               </View>
             );
           })}
@@ -80,9 +104,10 @@ function WaterSettingsCard() {
     <View style={styles.card}>
       <View style={styles.switchRow}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.cardTitle}>Promemoria acqua tutto il giorno</Text>
+          <Text style={styles.cardTitle}>Promemoria per bere a sorsi</Text>
           <Text style={styles.hint}>
-            Ogni {settings.intervalMin}′ dalle {settings.start} alle {settings.end}
+            Ogni {settings.intervalMin}′ dalle {settings.start} alle {settings.end}: circa {sipShare(settings)} di bottiglietta. L'acqua si segna
+            solo quando finisci una bottiglietta.
           </Text>
         </View>
         <Switch
@@ -96,8 +121,13 @@ function WaterSettingsCard() {
       </TouchableOpacity>
       {open && (
         <>
-          <StepperInput label="Ogni" value={settings.intervalMin} unit="min" min={30} max={180} step={15} onChange={(intervalMin) => updateSettings({ ...settings, intervalMin })} />
-          <StepperInput label="Obiettivo" value={settings.targetMl} unit="ml" min={1500} max={4500} step={250} onChange={(targetMl) => updateSettings({ ...settings, targetMl })} />
+          <StepperInput label="Ogni" value={settings.intervalMin} unit="min" min={15} max={120} step={15} onChange={(intervalMin) => updateSettings({ ...settings, intervalMin })} />
+          <StepperInput label="Obiettivo" value={settings.targetBottles} unit="bottigliette" min={4} max={12} step={1} onChange={(targetBottles) => updateSettings({ ...settings, targetBottles })} />
+          <Text style={[styles.hint, { marginTop: 6 }]}>
+            Se prendi il litio: cambiare di molto quanta acqua bevi può cambiare il livello di litio nel sangue. Prima di passare
+            stabilmente a 5 litri, dillo al tuo psichiatra (potrebbe voler controllare la litiemia). Nei giorni di MMA e pesi
+            bevi comunque anche durante l'allenamento.
+          </Text>
         </>
       )}
     </View>
@@ -115,7 +145,7 @@ export function DayScreen({ navigation }: Props) {
     loadMinimalDay().then(setMinimalDate);
   }, []);
   const minimal = minimalDate === date;
-  const fullTimeline = useMemo(() => dayTimeline(plan, weekday, week), [plan, weekday, week]);
+  const fullTimeline = useMemo(() => dayTimeline(plan, weekday, week, date), [plan, weekday, week, date]);
   const timeline = minimal ? fullTimeline.filter(isEssential) : fullTimeline;
   const current = currentActivity(timeline, now);
   const empty = plan.routine.length === 0 && plan.meals.length === 0;
@@ -238,6 +268,21 @@ const styles = StyleSheet.create({
   stepTime: { fontSize: 12, fontWeight: "700", color: colors.primary, width: 42, marginTop: 2 },
   stepLabel: { flex: 1, fontSize: 13, color: colors.text, lineHeight: 18 },
   stepDone: { color: colors.textMuted, textDecorationLine: "line-through" },
+  more: { color: colors.primary, fontSize: 12 },
+  stepDetail: {
+    fontSize: 13,
+    color: colors.text,
+    lineHeight: 19,
+    marginLeft: 42 + spacing.md + spacing.sm,
+    marginRight: spacing.md,
+    marginBottom: spacing.sm,
+    padding: spacing.sm,
+    backgroundColor: colors.cardAlt,
+    borderRadius: radii.sm,
+  },
+  activityInfo: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: 4 },
+  activityDetail: { fontSize: 12, color: colors.textMuted, lineHeight: 17 },
+  topic: { fontSize: 12, color: colors.primary, lineHeight: 17, fontWeight: "600" },
   switchRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
   minimalOn: { borderColor: colors.primary },
   link: { color: colors.primary, fontSize: 13, fontWeight: "600", marginTop: spacing.sm },

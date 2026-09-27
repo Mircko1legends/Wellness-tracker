@@ -4,10 +4,12 @@ import { ImportedActivity } from "./types";
 
 export interface AiSettings {
   geminiApiKey: string;
+  /** "auto" = the smartest model your key can use, falling back to Flash when its free quota runs out. */
   model: string;
 }
 
-export const DEFAULT_AI_SETTINGS: AiSettings = { geminiApiKey: "", model: "gemini-2.5-flash" };
+export const AUTO_MODEL = "auto";
+export const DEFAULT_AI_SETTINGS: AiSettings = { geminiApiKey: "", model: AUTO_MODEL };
 
 const ROUTINE_PROMPT = `Leggi questo file: contiene una routine giornaliera o settimanale (può essere un grafico con un colore per attività, una torta delle 24 ore, una tabella o un elenco).
 Estrai TUTTE le attività con orario di inizio e di fine (HH:MM, 24 ore). Se è una routine settimanale indica i giorni in cui vale ogni attività (0=domenica, 1=lunedì ... 6=sabato), altrimenti days = null.
@@ -22,40 +24,112 @@ Non inventare alimenti o quantità. Rispondi solo con JSON in questo formato:
 
 export class AiReadError extends Error {}
 
-export type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{
+export type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body?: string }) => Promise<{
   ok: boolean;
   status: number;
   json: () => Promise<any>;
 }>;
 
-export async function callGemini(prompt: string, base64: string, mimeType: string, settings: AiSettings, fetchImpl: FetchLike): Promise<any> {
-  if (!settings.geminiApiKey.trim()) throw new AiReadError("Manca la chiave API di Gemini: aggiungila nelle impostazioni di importazione.");
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(settings.model)}:generateContent`;
-  let res;
+const API = "https://generativelanguage.googleapis.com/v1beta";
+
+/**
+ * Orders the models a key can use from the best reasoning to the cheapest: every "pro" by version (newest first),
+ * then "flash", then "flash-lite". Embedding, image, audio and live models are left out.
+ */
+export function rankModels(names: string[]): string[] {
+  const parsed = names
+    .map((n) => n.replace(/^models\//, ""))
+    .filter((n) => /^gemini-/.test(n) && !/embedding|image|tts|audio|live|native|aqa|computer-use|robotics/i.test(n))
+    .map((n) => {
+      const version = Number(/^gemini-(\d+(?:\.\d+)?)/.exec(n)?.[1] ?? 0);
+      const tier = /flash-lite|lite/.test(n) ? 1 : /flash/.test(n) ? 2 : /pro/.test(n) ? 3 : 0;
+      const stable = /preview|exp/.test(n) ? 0 : 1;
+      return { n, version, tier, stable };
+    })
+    .filter((m) => m.tier > 0);
+  parsed.sort((a, b) => b.tier - a.tier || b.version - a.version || b.stable - a.stable || a.n.length - b.n.length);
+  return [...new Set(parsed.map((m) => m.n))];
+}
+
+const FALLBACK_MODELS = ["gemini-2.5-pro", "gemini-2.5-flash"];
+const modelCache = new Map<string, string[]>();
+
+/** The models to try, best first (listed from your key; cached for the session). */
+export async function modelCandidates(settings: AiSettings, fetchImpl: FetchLike): Promise<string[]> {
+  if (settings.model && settings.model !== AUTO_MODEL) return [settings.model.trim()];
+  const key = settings.geminiApiKey.trim();
+  const cached = modelCache.get(key);
+  if (cached) return cached;
   try {
-    res = await fetchImpl(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": settings.geminiApiKey.trim() },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
-      }),
-    });
+    const res = await fetchImpl(`${API}/models?pageSize=200`, { method: "GET", headers: { "x-goog-api-key": key } });
+    if (res.ok) {
+      const body = await res.json();
+      const usable = (Array.isArray(body?.models) ? body.models : [])
+        .filter((m: any) => (m?.supportedGenerationMethods ?? []).includes("generateContent"))
+        .map((m: any) => String(m.name));
+      const ranked = rankModels(usable);
+      if (ranked.length) {
+        // Best reasoning first, then the best Flash as the free fallback.
+        const bestPro = ranked.filter((m) => /pro/.test(m)).slice(0, 2);
+        const bestFlash = ranked.filter((m) => /flash/.test(m) && !/lite/.test(m)).slice(0, 1);
+        const list = [...bestPro, ...bestFlash].length ? [...bestPro, ...bestFlash] : ranked.slice(0, 2);
+        modelCache.set(key, list);
+        return list;
+      }
+    }
   } catch {
-    throw new AiReadError("Nessuna connessione: l'IA serve internet.");
+    // offline or blocked: use the known names
   }
-  if (!res.ok) {
-    if (res.status === 400 || res.status === 403) throw new AiReadError("Chiave API non valida o modello non disponibile.");
-    if (res.status === 429) throw new AiReadError("Limite gratuito di Gemini raggiunto per ora: riprova più tardi.");
-    throw new AiReadError(`Gemini ha risposto con errore ${res.status}.`);
+  return FALLBACK_MODELS;
+}
+
+/** The model that answered the last request (shown in the app). */
+export let lastModelUsed = "";
+
+export async function callGemini(
+  prompt: string,
+  base64: string | null,
+  mimeType: string | null,
+  settings: AiSettings,
+  fetchImpl: FetchLike
+): Promise<any> {
+  if (!settings.geminiApiKey.trim()) throw new AiReadError("Manca la chiave API di Gemini: aggiungila nelle impostazioni dell'IA.");
+  const parts = base64 && mimeType ? [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: prompt }] : [{ text: prompt }];
+  const candidates = await modelCandidates(settings, fetchImpl);
+  let lastError: AiReadError | null = null;
+  for (const model of candidates) {
+    let res;
+    try {
+      res = await fetchImpl(`${API}/models/${encodeURIComponent(model)}:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": settings.geminiApiKey.trim() },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
+        }),
+      });
+    } catch {
+      throw new AiReadError("Nessuna connessione: l'IA serve internet.");
+    }
+    if (!res.ok) {
+      if (res.status === 429) lastError = new AiReadError("Limite gratuito di Gemini raggiunto per ora: riprova più tardi.");
+      else if (res.status === 400 || res.status === 403) lastError = new AiReadError("Chiave API non valida o modello non disponibile.");
+      else if (res.status === 404) lastError = new AiReadError(`Modello ${model} non disponibile.`);
+      else lastError = new AiReadError(`Gemini ha risposto con errore ${res.status}.`);
+      // Quota finished or model not available for this key: try the next (cheaper) model.
+      if ([429, 403, 404].includes(res.status) || (res.status === 400 && candidates.length > 1)) continue;
+      throw lastError;
+    }
+    const body = await res.json();
+    lastModelUsed = model;
+    const text: string = (body?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? "").join("");
+    try {
+      return JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, ""));
+    } catch {
+      throw new AiReadError("L'IA non ha restituito un risultato leggibile.");
+    }
   }
-  const body = await res.json();
-  const text: string = (body?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? "").join("");
-  try {
-    return JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, ""));
-  } catch {
-    throw new AiReadError("L'IA non ha restituito un risultato leggibile.");
-  }
+  throw lastError ?? new AiReadError("Nessun modello di Gemini disponibile.");
 }
 
 function time(value: unknown): string | null {

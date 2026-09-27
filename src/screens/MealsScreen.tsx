@@ -247,7 +247,7 @@ function WeightCard() {
     const next = upsertWeight(log, today, kg);
     setLog(next);
     await saveWeightLog(next);
-    await updateBodyweightKg(Math.round(kg));
+    await updateBodyweightKg(Math.round(kg * 10) / 10);
   };
   const step = (d: number) => setKg(Math.max(30, Math.round((kg + d) * 10) / 10));
   return (
@@ -296,7 +296,7 @@ export function MealsScreen({ navigation }: Props) {
     loadMealSettings().then(setMealSettings);
   }, []);
 
-  const meals = useMemo(() => planMeals(dayTimeline(plan, new Date().getDay(), isoWeekNumber(date))), [plan, date]);
+  const meals = useMemo(() => planMeals(dayTimeline(plan, new Date().getDay(), isoWeekNumber(date), date)), [plan, date]);
   const today = log.filter((e) => e.date === date).sort((a, b) => a.time.localeCompare(b.time));
   const eaten = totals(today.flatMap((e) => e.items));
   const planned = totals(meals.flatMap((m) => m.items));
@@ -582,6 +582,9 @@ export function MealsScreen({ navigation }: Props) {
           (openfoodfacts.org, licenza ODbL). La foto viene inviata a Gemini solo per l'analisi e non viene salvata
           nell'app.
         </Text>
+        <PressableScale style={[styles.ghost, { marginTop: spacing.md }]} onPress={() => navigation.navigate("Recipes")}>
+          <Text style={styles.ghostText}>Lista della spesa, ricette e sostituzioni</Text>
+        </PressableScale>
         <TouchableOpacity onPress={() => navigation.navigate("DietGuide")}>
           <Text style={[styles.link, { textAlign: "center", marginTop: spacing.md }]}>Guida alla dieta economica</Text>
         </TouchableOpacity>

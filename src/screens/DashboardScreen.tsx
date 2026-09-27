@@ -12,6 +12,9 @@ import { LensTonightCard } from "./LensScreen";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { StatCard } from "../components/StatCard";
 import { useWellness } from "../context/WellnessContext";
+import { useWater } from "../context/WaterContext";
+import { toHalfHours } from "../progress/lifeProgress";
+import { useLifeProgress } from "../progress/useLifeProgress";
 import { colors, metricColors, radii, spacing } from "../theme";
 import { todayKey } from "../utils/date";
 import { formatMood, isMoodStable } from "../utils/mood";
@@ -22,18 +25,22 @@ export function DashboardScreen() {
   const {
     entries,
     goals,
-    streak,
-    bestStreak,
-    level,
     getEntryForDate,
     medications,
     medicationLogs,
     isMedicationTakenToday,
     toggleMedicationTakenToday,
-    setsCompletedToday,
   } = useWellness();
-  const lens = useLens();
   const entry = getEntryForDate(todayKey());
+  const { todayBottles } = useWater();
+  const progress = useLifeProgress();
+  const streak = progress?.streak.current ?? 0;
+  const bestStreak = progress?.streak.best ?? 0;
+  const level = progress?.level ?? { level: 0, title: "Punto di partenza", xpIntoLevel: 0, xpForNextLevel: 37, progress: 0 };
+  const trainedToday = toHalfHours(progress?.trainingToday.done ?? 0);
+  const plannedToday = toHalfHours(progress?.trainingToday.planned ?? 0);
+  const bottlesToday = Math.max(entry?.waterBottles ?? 0, todayBottles);
+  const lens = useLens();
 
   const checkin = useMemo(
     () => computeWeeklyCheckin(entries, goals, medications, medicationLogs),
@@ -61,7 +68,7 @@ export function DashboardScreen() {
               </View>
               <View style={styles.streakBadge}>
                 <Ionicons name="star" size={14} color={colors.accent} />
-                <Text style={styles.streakBadgeText}>Lv.{level.level}</Text>
+                <Text style={styles.streakBadgeText}>Lv.{level.level}/99</Text>
               </View>
             </View>
             {bestStreak > streak && (
@@ -75,7 +82,8 @@ export function DashboardScreen() {
               <View style={[styles.xpFill, { width: `${level.progress * 100}%` }]} />
             </View>
             <Text style={styles.xpLabel}>
-              {level.xpIntoLevel}/{level.xpForNextLevel} XP al livello {level.level + 1}
+              {level.title} · {level.xpIntoLevel}/{level.xpForNextLevel} XP al livello {level.level + 1}
+              {progress ? ` · oggi +${progress.xp.today} XP` : ""}
             </Text>
           </View>
         }
@@ -160,20 +168,24 @@ export function DashboardScreen() {
           <StatCard
             icon="water-outline"
             label="Acqua"
-            value={entry ? `${entry.waterGlasses}` : "—"}
-            goalLabel={`Obiettivo: ${goals.waterGlasses} bicchieri`}
-            progress={entry ? entry.waterGlasses / goals.waterGlasses : 0}
-            met={!!entry && entry.waterGlasses >= goals.waterGlasses}
+            value={`${bottlesToday}`}
+            goalLabel={`Obiettivo: ${goals.waterBottles} bottigliette`}
+            progress={bottlesToday / goals.waterBottles}
+            met={bottlesToday >= goals.waterBottles}
             accentColor={metricColors.water.fg}
             accentBg={metricColors.water.bg}
           />
           <StatCard
             icon="barbell-outline"
-            label="Serie"
-            value={`${setsCompletedToday}`}
-            goalLabel={`Obiettivo: ${goals.setsGoal} serie`}
-            progress={setsCompletedToday / goals.setsGoal}
-            met={setsCompletedToday >= goals.setsGoal}
+            label="Allenamento"
+            value={`${String(trainedToday).replace(".", ",")} h`}
+            goalLabel={
+              plannedToday
+                ? `Oggi: ${String(plannedToday).replace(".", ",")} h · settimana ${String(progress?.week.doneHours ?? 0).replace(".", ",")}/${String(goals.trainingHoursWeek).replace(".", ",")} h`
+                : `Riposo · settimana ${String(progress?.week.doneHours ?? 0).replace(".", ",")}/${String(goals.trainingHoursWeek).replace(".", ",")} h`
+            }
+            progress={plannedToday ? trainedToday / plannedToday : 1}
+            met={!plannedToday || trainedToday >= plannedToday - 0.25}
             accentColor={metricColors.activity.fg}
             accentBg={metricColors.activity.bg}
           />

@@ -62,3 +62,48 @@ describe("readDietWithAi", () => {
     expect(meals[0].items[0]).toMatchObject({ quantity: 100, unit: "g", food: "riso" });
   });
 });
+
+import { AUTO_MODEL, rankModels } from "../gemini";
+
+describe("best Gemini model", () => {
+  it("ranks pro models by version, then flash, then lite", () => {
+    expect(
+      rankModels([
+        "models/gemini-2.5-flash",
+        "models/gemini-2.5-pro",
+        "models/gemini-3-pro-preview",
+        "models/gemini-2.5-flash-lite",
+        "models/text-embedding-004",
+        "models/gemini-2.5-flash-image",
+      ])
+    ).toEqual(["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"]);
+  });
+
+  it("in automatic mode uses the smartest model and falls back to Flash when the free quota ends", async () => {
+    const calls: string[] = [];
+    const impl = async (url: string) => {
+      calls.push(url);
+      if (url.includes("/models?")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            models: [
+              { name: "models/gemini-2.5-pro", supportedGenerationMethods: ["generateContent"] },
+              { name: "models/gemini-2.5-flash", supportedGenerationMethods: ["generateContent"] },
+            ],
+          }),
+        };
+      }
+      if (url.includes("gemini-2.5-pro")) return { ok: false, status: 429, json: async () => ({}) };
+      return { ok: true, status: 200, json: async () => wrap({ meals: [{ name: "Cena", time: "19:30", items: ["100 g pasta"] }] }) };
+    };
+    const meals = await readDietWithAi("x", "image/jpeg", { geminiApiKey: "AUTO-KEY", model: AUTO_MODEL }, impl as any);
+    expect(meals[0].name).toBe("Cena");
+    expect(calls.map((u) => u.replace(/^.*\/v1beta\//, ""))).toEqual([
+      "models?pageSize=200",
+      "models/gemini-2.5-pro:generateContent",
+      "models/gemini-2.5-flash:generateContent",
+    ]);
+  });
+});

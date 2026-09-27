@@ -96,13 +96,13 @@ export function LensProvider({ children }: { children: React.ReactNode }) {
 
   const requestSmsPermission = async () => {
     if (Platform.OS !== "android") return false;
-    const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.SEND_SMS, {
-      title: "Permesso SMS",
-      message: "Serve per avvisare il tuo amico in automatico se non confermi di aver tolto le lenti.",
-      buttonPositive: "Consenti",
-    });
+    // The phone permission is only used to pick a SIM when the phone asks every time which one to use.
+    const result = await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.SEND_SMS,
+      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+    ]);
     refreshGuard();
-    return result === PermissionsAndroid.RESULTS.GRANTED;
+    return result[PermissionsAndroid.PERMISSIONS.SEND_SMS] === PermissionsAndroid.RESULTS.GRANTED;
   };
 
   return (

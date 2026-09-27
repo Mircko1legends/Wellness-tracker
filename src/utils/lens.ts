@@ -124,3 +124,72 @@ export function formatReminderSchedule(settings: LensSettings): string[] {
       return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
     });
 }
+
+export interface SmsDiagnosticsInput {
+  smsPermission: boolean;
+  smsAppOpAllowed: boolean;
+  phoneStatePermission: boolean;
+  defaultSmsSubscription: number;
+  activeSims: number;
+  lastSmsQueuedAt: number;
+  lastSmsResultAt: number;
+  lastSmsResultCode: number;
+  lastSmsDeliveredAt: number;
+  lastSmsError: string;
+}
+
+export interface SmsProblem {
+  text: string;
+  fix: string;
+}
+
+/** Why an SMS may not leave the phone, in the order worth checking. */
+export function smsProblems(s: SmsDiagnosticsInput): SmsProblem[] {
+  const problems: SmsProblem[] = [];
+  if (!s.smsPermission) {
+    problems.push({
+      text: "Android dice che l'app non ha il permesso SMS.",
+      fix:
+        "Tocca \"Apri impostazioni dell'app\" → Autorizzazioni → SMS → Consenti. Se è grigio o compare \"impostazione con restrizioni\": nella pagina dell'app tocca ⋮ in alto a destra → \"Consenti impostazioni con restrizioni\", poi riattiva SMS. Se risulta già consentito, disattivalo e riattivalo.",
+    });
+  } else if (!s.smsAppOpAllowed) {
+    problems.push({
+      text: "Il permesso risulta dato, ma il sistema blocca comunque l'invio (impostazione con restrizioni o controllo del produttore).",
+      fix:
+        "Nella pagina dell'app tocca ⋮ → \"Consenti impostazioni con restrizioni\"; su Xiaomi/Redmi cerca anche \"Invia SMS\" o \"SMS di servizio\" tra le autorizzazioni e mettilo su Consenti.",
+    });
+  }
+  if (s.defaultSmsSubscription === -1 && !s.phoneStatePermission) {
+    problems.push({
+      text: "Il telefono non ha una SIM predefinita per gli SMS (\"chiedi ogni volta\") e l'app non può sceglierne una.",
+      fix: "Consenti il permesso Telefono, oppure in Impostazioni → Gestione SIM scegli una SIM per i messaggi.",
+    });
+  }
+  if (s.activeSims === 0) {
+    problems.push({ text: "Nessuna SIM attiva trovata.", fix: "Controlla che la SIM sia inserita e attiva." });
+  }
+  return problems;
+}
+
+const SMS_ERRORS: Record<number, string> = {
+  1: "errore generico: di solito SIM per gli SMS non scelta, piano SMS/credito esaurito o numero sbagliato",
+  2: "rete spenta o modalità aereo",
+  3: "messaggio non valido",
+  4: "nessun segnale",
+  5: "troppi SMS in poco tempo",
+};
+
+/** The last SMS as Android reported it: queued → sent → delivered. */
+export function lastSmsStatus(s: SmsDiagnosticsInput, now: number): string | null {
+  if (!s.lastSmsQueuedAt) return null;
+  if (s.lastSmsError) return `Non partito: ${s.lastSmsError}.`;
+  if (s.lastSmsResultCode > 0) return `Rifiutato da Android: ${SMS_ERRORS[s.lastSmsResultCode] ?? `codice ${s.lastSmsResultCode}`}.`;
+  if (s.lastSmsResultCode === -1) {
+    return s.lastSmsDeliveredAt >= s.lastSmsQueuedAt
+      ? "Inviato e consegnato al telefono dell'amico ✓"
+      : "Inviato dal tuo telefono ✓ (la conferma di consegna può non arrivare: dipende dall'operatore).";
+  }
+  return now - s.lastSmsQueuedAt < 60_000
+    ? "In invio…"
+    : "Android non ha mai confermato l'invio: controlla SIM predefinita per gli SMS, credito e segnale.";
+}

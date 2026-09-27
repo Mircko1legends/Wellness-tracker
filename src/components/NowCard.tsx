@@ -16,7 +16,7 @@ export function NowCard() {
   const now = new Date();
   const minutes = now.getHours() * 60 + now.getMinutes();
   const date = todayKey();
-  const timeline = useMemo(() => dayTimeline(plan, now.getDay(), isoWeekNumber(date)), [plan, date]);
+  const timeline = useMemo(() => dayTimeline(plan, now.getDay(), isoWeekNumber(date), date), [plan, date]);
   if (timeline.length === 0) return null;
 
   const current = currentActivity(timeline, minutes);

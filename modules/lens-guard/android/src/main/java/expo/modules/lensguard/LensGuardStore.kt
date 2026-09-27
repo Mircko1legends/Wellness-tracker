@@ -53,6 +53,31 @@ class LensGuardStore(context: Context) {
     get() = prefs.getLong("nextDeadlineAt", 0L)
     set(value) = prefs.edit().putLong("nextDeadlineAt", value).apply()
 
+  // Outcome of the last SMS, reported by Android after the send (see LensGuardSmsResultReceiver).
+  var lastSmsQueuedAt: Long
+    get() = prefs.getLong("lastSmsQueuedAt", 0L)
+    set(value) { prefs.edit().putLong("lastSmsQueuedAt", value).commit() }
+
+  var lastSmsResultAt: Long
+    get() = prefs.getLong("lastSmsResultAt", 0L)
+    set(value) { prefs.edit().putLong("lastSmsResultAt", value).commit() }
+
+  var lastSmsResultCode: Int
+    get() = prefs.getInt("lastSmsResultCode", 0)
+    set(value) { prefs.edit().putInt("lastSmsResultCode", value).commit() }
+
+  var lastSmsDeliveredAt: Long
+    get() = prefs.getLong("lastSmsDeliveredAt", 0L)
+    set(value) { prefs.edit().putLong("lastSmsDeliveredAt", value).commit() }
+
+  var lastSmsError: String
+    get() = prefs.getString("lastSmsError", "")!!
+    set(value) { prefs.edit().putString("lastSmsError", value).commit() }
+
+  var lastSmsSubscription: Int
+    get() = prefs.getInt("lastSmsSubscription", -1)
+    set(value) { prefs.edit().putInt("lastSmsSubscription", value).commit() }
+
   /** A confirmation counts for a deadline when it happened at most 12h before it (or any time after). */
   fun isConfirmedFor(deadlineAt: Long): Boolean = confirmedAt >= deadlineAt - CONFIRM_WINDOW_MS
 }

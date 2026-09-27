@@ -1,6 +1,6 @@
 import { LifeGoal, Milestone } from "../goals/goals";
 import { formatHm, parseHm } from "../import/time";
-import { PlanActivity, PlanStep } from "./plan";
+import { PlanActivity, PlanStep, StudySubject } from "./plan";
 
 export interface WaterSchedule {
   start: string;
@@ -11,6 +11,7 @@ export interface WaterSchedule {
 /** A ready-made plan: routine and meals already split into micro-actions, plus goals. */
 export interface PlanPack {
   name: string;
+  version: number;
   routine: PlanActivity[];
   meals: PlanActivity[];
   goals: LifeGoal[];
@@ -19,6 +20,8 @@ export interface PlanPack {
 
 const PACK_APP = "wellness-tracker-plan";
 
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const SUBJECTS: StudySubject[] = ["maturita", "matematica", "fisica", "santanna", "inglese", "errori"];
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 const time = (v: unknown) => {
   const m = typeof v === "string" ? parseHm(v.trim()) : null;
@@ -32,7 +35,15 @@ function sanitizeActivity(raw: any, kind: "routine" | "meal", index: number): Pl
   const end = time(raw?.end);
   if (!title || !start || !end) return null;
   const steps: PlanStep[] = (Array.isArray(raw.steps) ? raw.steps : [])
-    .map((s: any, j: number) => ({ id: str(s?.id) || `${id}-s${j}`, time: time(s?.time) ?? "", label: str(s?.label) }))
+    .map((s: any, j: number) => ({
+      id: str(s?.id) || `${id}-s${j}`,
+      time: time(s?.time) ?? "",
+      label: str(s?.label),
+      ...(str(s?.detail) ? { detail: str(s.detail) } : {}),
+      ...(DATE.test(str(s?.from)) ? { from: str(s.from) } : {}),
+      ...(s?.carbs === true ? { carbs: true } : {}),
+      ...(s?.optional === true ? { optional: true } : {}),
+    }))
     .filter((s: PlanStep) => s.time && s.label);
   const days = Array.isArray(raw.days) ? raw.days.filter((d: unknown) => Number.isInteger(d) && (d as number) >= 0 && (d as number) <= 6) : undefined;
   return {
@@ -47,6 +58,10 @@ function sanitizeActivity(raw: any, kind: "routine" | "meal", index: number): Pl
     ...(typeof raw.essential === "boolean" ? { essential: raw.essential } : {}),
     ...(str(raw.group) ? { group: str(raw.group) } : {}),
     ...(/^#[0-9a-f]{6}$/i.test(str(raw.color)) ? { color: str(raw.color) } : {}),
+    ...(str(raw.detail) ? { detail: str(raw.detail) } : {}),
+    ...(DATE.test(str(raw.from)) ? { from: str(raw.from) } : {}),
+    ...(DATE.test(str(raw.until)) ? { until: str(raw.until) } : {}),
+    ...(SUBJECTS.includes(raw.subject) ? { subject: raw.subject as StudySubject } : {}),
   };
 }
 
@@ -79,7 +94,8 @@ export function sanitizePlanPack(raw: any): PlanPack | null {
       ? { start: time(raw.water.start)!, end: time(raw.water.end)!, intervalMin: Number(raw.water.intervalMin) }
       : undefined;
   if (!routine.length && !meals.length && !goals.length) return null;
-  return { name: str(raw.name) || "Piano", routine, meals, goals, ...(water ? { water } : {}) };
+  const version = Number.isInteger(raw.version) ? raw.version : 1;
+  return { name: str(raw.name) || "Piano", version, routine, meals, goals, ...(water ? { water } : {}) };
 }
 
 /** The plan built into the app (see scripts/build-default-plan.mjs). */

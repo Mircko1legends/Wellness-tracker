@@ -4,10 +4,9 @@ import { addDays, toDateKey } from "../date";
 
 const goals: WellnessGoals = {
   sleepHours: 8,
-  waterGlasses: 8,
-  setsGoal: 12,
+  waterBottles: 8,
+  trainingHoursWeek: 8,
   moodRange: 2,
-  startingWorkoutTier: 1,
 };
 
 const today = new Date("2026-01-10T12:00:00");
@@ -17,7 +16,7 @@ function entryFor(daysAgo: number, overrides: Partial<WellnessEntry> = {}): Well
     date: toDateKey(addDays(today, -daysAgo)),
     mood: 0,
     sleepHours: 8,
-    waterGlasses: 8,
+    waterBottles: 8,
     ...overrides,
   };
 }

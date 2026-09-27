@@ -1,4 +1,4 @@
-export type ProgramId = "A" | "B";
+export type ProgramId = "LB" | "UA" | "LA" | "UB";
 
 export interface GymExercise {
   id: string;
@@ -6,12 +6,16 @@ export interface GymExercise {
   sets: number;
   repsMin: number;
   repsMax: number;
-  /** kg added when every set hits the top of the range (per dumbbell for dumbbell lifts). */
+  /** kg added when every set hits the top of the range: +2.5 upper body, +5 squat, deadlift and leg press (PDF). */
   increment: number;
+  /** Starting weight for you now (58.7 kg, back after years off): deliberately light for the first 3 weeks. 0 = body weight. */
   startKg: number;
-  /** Rest between sets: longer on heavy multi-joint lifts, where short rests cut the reps (and the growth stimulus). */
+  /** Rest between sets from the PDF: fundamentals 2–3′, isolation 60–90″ (longer rests = more reps = more growth). */
   restSec: number;
   videoQuery: string;
+  note: string;
+  /** Left out on Thursday, when MMA comes right after the weights. */
+  skipBeforeMma?: boolean;
 }
 
 export interface GymSet {
@@ -26,29 +30,57 @@ export interface GymSession {
   savedAt: number;
 }
 
-// Mirrors the "Pesi 45′" steps of the built-in plan (core work stays a simple step in the timeline).
+const ex = (e: GymExercise) => e;
+
+// Nutrition & Training System, section 12: 40 sets for the upper body, 40 for the lower body.
 export const PROGRAMS: Record<ProgramId, GymExercise[]> = {
-  A: [
-    { id: "squat", name: "Squat (o goblet squat)", sets: 3, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 20, restSec: 180, videoQuery: "squat tecnica corretta" },
-    { id: "panca-manubri", name: "Panca piana con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 10, restSec: 150, videoQuery: "panca piana manubri tecnica corretta" },
-    { id: "rematore", name: "Rematore con manubrio o al cavo", sets: 3, repsMin: 8, repsMax: 12, increment: 1, startKg: 12, restSec: 120, videoQuery: "rematore manubrio tecnica corretta" },
-    { id: "stacco-rumeno", name: "Stacco rumeno", sets: 2, repsMin: 8, repsMax: 10, increment: 2.5, startKg: 20, restSec: 180, videoQuery: "stacco rumeno tecnica corretta" },
+  LB: [
+    ex({ id: "stacco", name: "Stacco da terra", sets: 4, repsMin: 4, repsMax: 6, increment: 5, startKg: 40, restSec: 180, videoQuery: "stacco da terra tecnica corretta", note: "Tecnica prima del carico, sempre. Filmati di lato ogni tanto." }),
+    ex({ id: "pressa", name: "Pressa 45°", sets: 3, repsMin: 8, repsMax: 12, increment: 5, startKg: 60, restSec: 120, videoQuery: "leg press 45 tecnica corretta", note: "Oppure hack squat." }),
+    ex({ id: "bulgaro", name: "Squat bulgaro (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 10, increment: 2, startKg: 6, restSec: 90, videoQuery: "squat bulgaro tecnica corretta", note: "Per gamba. Corregge gli squilibri tra le due gambe." }),
+    ex({ id: "leg-extension", name: "Leg extension", sets: 3, repsMin: 12, repsMax: 15, increment: 2.5, startKg: 20, restSec: 60, videoQuery: "leg extension tecnica corretta", note: "Pausa di un secondo in alto." }),
+    ex({ id: "calf-seduto", name: "Calf raise da seduto", sets: 4, repsMin: 12, repsMax: 15, increment: 2.5, startKg: 20, restSec: 60, videoQuery: "calf raise seduto tecnica", note: "Lavora il soleo." }),
   ],
-  B: [
-    { id: "pressa", name: "Pressa (o affondi)", sets: 3, repsMin: 8, repsMax: 12, increment: 5, startKg: 40, restSec: 150, videoQuery: "leg press tecnica corretta" },
-    { id: "military-manubri", name: "Military press con manubri (kg per manubrio)", sets: 3, repsMin: 8, repsMax: 10, increment: 1, startKg: 8, restSec: 150, videoQuery: "military press manubri tecnica corretta" },
-    { id: "lat-machine", name: "Lat machine (o trazioni)", sets: 3, repsMin: 6, repsMax: 12, increment: 2.5, startKg: 30, restSec: 120, videoQuery: "lat machine tecnica corretta" },
-    { id: "hip-thrust", name: "Hip thrust (o leg curl)", sets: 2, repsMin: 10, repsMax: 12, increment: 5, startKg: 30, restSec: 120, videoQuery: "hip thrust tecnica corretta" },
+  UA: [
+    ex({ id: "panca", name: "Panca piana con bilanciere", sets: 4, repsMin: 5, repsMax: 8, increment: 2.5, startKg: 30, restSec: 150, videoQuery: "panca piana bilanciere tecnica corretta", note: "Il movimento su cui misuri i progressi della parte alta." }),
+    ex({ id: "rematore-bil", name: "Rematore con bilanciere", sets: 4, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 30, restSec: 120, videoQuery: "rematore bilanciere tecnica corretta", note: "Schiena piatta, tira verso l'ombelico." }),
+    ex({ id: "military", name: "Military press in piedi", sets: 3, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 20, restSec: 120, videoQuery: "military press in piedi tecnica corretta", note: "Oppure lento avanti con manubri se la spalla tira." }),
+    ex({ id: "lat-larga", name: "Lat machine presa larga", sets: 3, repsMin: 8, repsMax: 12, increment: 2.5, startKg: 30, restSec: 90, videoQuery: "lat machine presa larga tecnica corretta", note: "Passa alle trazioni assistite appena ci riesci." }),
+    ex({ id: "curl-bil", name: "Curl con bilanciere", sets: 3, repsMin: 8, repsMax: 12, increment: 2.5, startKg: 15, restSec: 75, videoQuery: "curl bilanciere tecnica corretta", note: "Gomiti fermi al fianco." }),
+    ex({ id: "pushdown", name: "Push-down ai cavi", sets: 3, repsMin: 10, repsMax: 12, increment: 2.5, startKg: 15, restSec: 75, videoQuery: "push down cavi tricipiti tecnica", note: "Oppure French press con manubrio." }),
+  ],
+  LA: [
+    ex({ id: "squat", name: "Squat con bilanciere", sets: 4, repsMin: 5, repsMax: 8, increment: 5, startKg: 30, restSec: 180, videoQuery: "squat bilanciere tecnica corretta", note: "Il movimento su cui misuri i progressi della parte bassa." }),
+    ex({ id: "rdl", name: "Stacco rumeno", sets: 3, repsMin: 8, repsMax: 10, increment: 5, startKg: 30, restSec: 120, videoQuery: "stacco rumeno tecnica corretta", note: "Scendi finché senti tirare dietro la coscia, non oltre." }),
+    ex({ id: "affondi", name: "Affondi camminati (kg per manubrio)", sets: 3, repsMin: 10, repsMax: 12, increment: 2, startKg: 6, restSec: 120, videoQuery: "affondi camminati manubri tecnica", note: "Per gamba. Oppure pressa 45° se la palestra è affollata.", skipBeforeMma: true }),
+    ex({ id: "leg-curl", name: "Leg curl", sets: 3, repsMin: 10, repsMax: 12, increment: 2.5, startKg: 20, restSec: 90, videoQuery: "leg curl tecnica corretta", note: "Due secondi in discesa." }),
+    ex({ id: "calf-piedi", name: "Calf raise in piedi", sets: 4, repsMin: 12, repsMax: 15, increment: 2.5, startKg: 30, restSec: 60, videoQuery: "calf raise in piedi tecnica", note: "Pausa di un secondo in alto e in basso." }),
+  ],
+  UB: [
+    ex({ id: "trazioni", name: "Trazioni alla sbarra (0 = corpo libero)", sets: 4, repsMin: 6, repsMax: 10, increment: 2.5, startKg: 0, restSec: 150, videoQuery: "trazioni alla sbarra tecnica corretta", note: "Assistite o lat machine presa inversa se non arrivi a 6: in quel caso scrivi il peso della lat." }),
+    ex({ id: "panca-incl", name: "Panca inclinata con manubri (kg per manubrio)", sets: 4, repsMin: 8, repsMax: 10, increment: 2, startKg: 10, restSec: 120, videoQuery: "panca inclinata manubri tecnica corretta", note: "Inclinazione 30°, non di più." }),
+    ex({ id: "rematore-man", name: "Rematore con manubrio, un braccio", sets: 3, repsMin: 10, repsMax: 12, increment: 2, startKg: 12, restSec: 90, videoQuery: "rematore manubrio un braccio tecnica", note: "Appoggio su panca, tira lungo il fianco." }),
+    ex({ id: "alzate", name: "Alzate laterali (kg per manubrio)", sets: 3, repsMin: 12, repsMax: 15, increment: 1, startKg: 4, restSec: 60, videoQuery: "alzate laterali tecnica corretta", note: "Leggere: qui serve la sensazione, non il carico." }),
+    ex({ id: "dip", name: "Dip alle parallele (0 = corpo libero)", sets: 3, repsMin: 8, repsMax: 12, increment: 2.5, startKg: 0, restSec: 90, videoQuery: "dip parallele tecnica corretta", note: "Oppure panca presa stretta (in quel caso scrivi il peso)." }),
+    ex({ id: "hammer", name: "Curl a martello (kg per manubrio)", sets: 3, repsMin: 10, repsMax: 12, increment: 2, startKg: 8, restSec: 60, videoQuery: "curl a martello tecnica", note: "Presa neutra, lavora anche l'avambraccio." }),
   ],
 };
 
-/** Which programme today's plan has, from the timeline titles ("Pesi 45′ · Scheda B"). */
-export function programFromTitles(titles: string[]): ProgramId | null {
+export const PROGRAM_NAMES: Record<ProgramId, string> = { LB: "Lower B", UA: "Upper A", LA: "Lower A", UB: "Upper B" };
+
+/** Which programme today's plan has, from the timeline titles ("Pesi 75′ · Upper A"). */
+export function programFromTitles(titles: string[]): { program: ProgramId; beforeMma: boolean } | null {
   for (const t of titles) {
-    const m = /pesi.*scheda\s+([AB])\b/i.exec(t);
-    if (m) return m[1].toUpperCase() as ProgramId;
+    const m = /pesi.*(upper|lower)\s+([AB])/i.exec(t);
+    if (m) {
+      return { program: `${m[1][0].toUpperCase()}${m[2].toUpperCase()}` as ProgramId, beforeMma: titles.some((x) => x === "MMA") };
+    }
   }
   return null;
+}
+
+export function isProgramId(v: unknown): v is ProgramId {
+  return v === "LB" || v === "UA" || v === "LA" || v === "UB";
 }
 
 export function lastSessionWith(log: GymSession[], exerciseId: string, beforeDate: string): GymSession | null {
@@ -77,7 +109,7 @@ export function suggestNext(exercise: GymExercise, previous: GymSet[] | undefine
     return {
       kg: exercise.startKg,
       reps: Array(exercise.sets).fill(exercise.repsMin),
-      note: "Prima volta: scegli un peso che ti lascia 2–3 ripetizioni di riserva. Il peso proposto è solo un punto di partenza.",
+      note: "Prima volta: il peso proposto è leggero apposta (prime 3 settimane = imparare il movimento). Se le ultime 2 ripetizioni sono facili, alla serie dopo aggiungi un po\u2019. Correggilo solo se serve.",
     };
   }
   const kg = Math.max(...done.map((s) => s.kg));

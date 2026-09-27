@@ -3,34 +3,36 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useWater } from "../context/WaterContext";
 import { colors, metricColors, radii, spacing } from "../theme";
-import { targetGlasses } from "../water/water";
+import { litersText, sipShare, targetBottles } from "../water/water";
 
 export function WaterCard() {
-  const { settings, todayGlasses, add } = useWater();
-  const target = targetGlasses(settings);
-  const liters = ((todayGlasses * settings.glassMl) / 1000).toFixed(2).replace(/\.?0+$/, "").replace(".", ",");
-  const pct = Math.min(1, todayGlasses / target);
+  const { settings, todayBottles, add } = useWater();
+  const target = targetBottles(settings);
+  const pct = Math.min(1, todayBottles / target);
 
   return (
     <View style={styles.card}>
       <Ionicons name="water" size={22} color={metricColors.water.fg} />
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>
-          Acqua {todayGlasses}/{target} bicchieri · {liters || "0"} L
+          Acqua {todayBottles}/{target} bottigliette · {litersText(todayBottles, settings.bottleMl)} L
         </Text>
         <View style={styles.track}>
-          <View style={[styles.fill, { width: `${pct * 100}%` }]} />
+          {Array.from({ length: target }, (_, i) => (
+            <View key={i} style={[styles.bottle, i < todayBottles && styles.bottleFull]} />
+          ))}
         </View>
         {settings.enabled && (
           <Text style={styles.hint}>
-            Promemoria ogni {settings.intervalMin}′ dalle {settings.start} alle {settings.end}
+            Sorsi ogni {settings.intervalMin}′ (circa {sipShare(settings)} di bottiglietta). Segna solo quando ne finisci una.
           </Text>
         )}
+        {pct >= 1 && <Text style={styles.done}>Obiettivo raggiunto</Text>}
       </View>
-      <TouchableOpacity style={styles.small} onPress={() => add(-1)} accessibilityLabel="Togli un bicchiere">
+      <TouchableOpacity style={styles.small} onPress={() => add(-1)} accessibilityLabel="Togli una bottiglietta">
         <Ionicons name="remove" size={18} color={colors.textMuted} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.big} onPress={() => add(1)} accessibilityLabel="Aggiungi un bicchiere">
+      <TouchableOpacity style={styles.big} onPress={() => add(1)} accessibilityLabel="Bottiglietta finita">
         <Text style={styles.bigText}>+1</Text>
       </TouchableOpacity>
     </View>
@@ -51,8 +53,10 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 14, fontWeight: "800", color: colors.text },
   hint: { fontSize: 11, color: colors.textMuted, marginTop: 4 },
-  track: { height: 6, backgroundColor: colors.cardAlt, borderRadius: 3, marginTop: 6, overflow: "hidden" },
-  fill: { height: 6, backgroundColor: metricColors.water.fg },
+  done: { fontSize: 11, color: colors.success, fontWeight: "700", marginTop: 2 },
+  track: { flexDirection: "row", gap: 3, marginTop: 6 },
+  bottle: { flex: 1, height: 14, borderRadius: 3, borderWidth: 1, borderColor: metricColors.water.fg, opacity: 0.5 },
+  bottleFull: { backgroundColor: metricColors.water.fg, opacity: 1 },
   small: { width: 34, height: 34, borderRadius: radii.sm, borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center" },
   big: { width: 48, height: 40, borderRadius: radii.md, backgroundColor: metricColors.water.fg, alignItems: "center", justifyContent: "center" },
   bigText: { color: colors.background, fontWeight: "900", fontSize: 16 },

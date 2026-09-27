@@ -20,7 +20,12 @@
       "predictiveBackGestureEnabled": false,
       "package": "com.mircko1legends.wellnesstracker",
       "permissions": [
-        "android.permission.VIBRATE"
+        "android.permission.VIBRATE",
+        "android.permission.health.READ_BODY_FAT",
+        "android.permission.health.READ_EXERCISE",
+        "android.permission.health.READ_SLEEP",
+        "android.permission.health.READ_STEPS",
+        "android.permission.health.READ_WEIGHT"
       ]
     },
     "web": {
@@ -30,7 +35,23 @@
       "baseUrl": "/Wellness-tracker"
     },
     "plugins": [
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "sounds": [
+            "./assets/sounds/water.wav",
+            "./assets/sounds/meal.wav",
+            "./assets/sounds/training.wav",
+            "./assets/sounds/study.wav",
+            "./assets/sounds/hygiene.wav",
+            "./assets/sounds/lens.wav",
+            "./assets/sounds/meds.wav",
+            "./assets/sounds/sleep.wav",
+            "./assets/sounds/rest.wav",
+            "./assets/sounds/routine.wav"
+          ]
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -38,7 +59,16 @@
           "photosPermission": "L'accesso alle foto serve per analizzare un pasto già fotografato.",
           "microphonePermission": false
         }
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ],
+      "react-native-health-connect"
     ]
   }
 }

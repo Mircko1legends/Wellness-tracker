@@ -1,3 +1,4 @@
+import { AUTO_MODEL, lastModelUsed } from "../import/gemini";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
@@ -76,30 +77,53 @@ interface DraftMeal {
   items: string;
 }
 
+const MODEL_CHOICES: { value: string; label: string; hint: string }[] = [
+  { value: AUTO_MODEL, label: "Automatico: il più intelligente", hint: "Usa il modello Pro più nuovo che la tua chiave può usare; quando finisce la quota gratuita passa da solo a Flash." },
+  { value: "gemini-2.5-flash", label: "Solo Flash", hint: "Più veloce e con limiti gratuiti più alti, ma ragiona meno." },
+];
+
 function AiSettingsCard() {
   const { ai, updateAi } = useTimeline();
   const [open, setOpen] = useState(false);
   const [key, setKey] = useState(ai.geminiApiKey);
   const [model, setModel] = useState(ai.model);
+  const [saved, setSaved] = useState(false);
   return (
     <View style={styles.card}>
       <TouchableOpacity style={styles.rowBetween} onPress={() => setOpen(!open)}>
-        <Text style={styles.cardTitle}>IA di riserva (Gemini gratuito) {ai.geminiApiKey ? "· attiva" : "· non attiva"}</Text>
+        <Text style={styles.cardTitle}>IA (Google Gemini) {ai.geminiApiKey ? "· attiva" : "· non attiva"}</Text>
         <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} color={colors.textMuted} />
       </TouchableOpacity>
       {open && (
         <>
           <Text style={styles.hint}>
-            Si usa solo se il telefono non riesce a leggere il file (es. una foto). Crea una chiave gratuita, senza carta,
-            su Google AI Studio e incollala qui. Il file letto con l'IA viene inviato a Google.
+            Serve per le foto dei pasti, il consulente di finanza e i file che il telefono non riesce a leggere. Crea una
+            chiave gratuita, senza carta, su Google AI Studio e incollala qui. Quello che l'IA legge viene inviato a Google.
           </Text>
           <TouchableOpacity onPress={() => Linking.openURL("https://aistudio.google.com/apikey")}>
             <Text style={styles.link}>Apri Google AI Studio</Text>
           </TouchableOpacity>
           <TextInput style={styles.input} value={key} onChangeText={setKey} placeholder="Chiave API" placeholderTextColor={colors.textMuted} autoCapitalize="none" secureTextEntry />
-          <TextInput style={styles.input} value={model} onChangeText={setModel} placeholder="Modello" placeholderTextColor={colors.textMuted} autoCapitalize="none" />
-          <PressableScale style={styles.button} onPress={() => updateAi({ geminiApiKey: key.trim(), model: model.trim() || "gemini-2.5-flash" })}>
-            <Text style={styles.buttonText}>Salva</Text>
+          {MODEL_CHOICES.map((c) => (
+            <TouchableOpacity key={c.value} style={[styles.choice, model === c.value && styles.choiceOn]} onPress={() => setModel(c.value)}>
+              <Text style={styles.choiceTitle}>{c.label}</Text>
+              <Text style={styles.hint}>{c.hint}</Text>
+            </TouchableOpacity>
+          ))}
+          <TextInput
+            style={styles.input}
+            value={MODEL_CHOICES.some((c) => c.value === model) ? "" : model}
+            onChangeText={(v) => setModel(v.trim() || AUTO_MODEL)}
+            placeholder="…oppure il nome esatto di un modello (es. gemini-2.5-pro)"
+            placeholderTextColor={colors.textMuted}
+            autoCapitalize="none"
+          />
+          {lastModelUsed ? <Text style={styles.hint}>Ultima risposta data da: {lastModelUsed}</Text> : null}
+          <PressableScale
+            style={styles.button}
+            onPress={() => updateAi({ geminiApiKey: key.trim(), model: model.trim() || AUTO_MODEL }).then(() => setSaved(true))}
+          >
+            <Text style={styles.buttonText}>{saved ? "Salvato ✓" : "Salva"}</Text>
           </PressableScale>
         </>
       )}
@@ -318,6 +342,9 @@ export function ImportScreen({ navigation, route }: Props) {
 }
 
 const styles = StyleSheet.create({
+  choice: { borderWidth: 1, borderColor: colors.border, borderRadius: radii.md, padding: spacing.sm, marginTop: spacing.sm },
+  choiceOn: { borderColor: colors.primary, backgroundColor: colors.cardAlt },
+  choiceTitle: { color: colors.text, fontWeight: "700", fontSize: 13, marginBottom: 2 },
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.md, paddingBottom: spacing.xl },
   card: { backgroundColor: colors.card, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, padding: spacing.md, marginBottom: spacing.md },

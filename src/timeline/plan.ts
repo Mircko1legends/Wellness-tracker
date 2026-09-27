@@ -6,7 +6,17 @@ export interface PlanStep {
   id: string;
   time: string; // "HH:MM"
   label: string;
+  /** Exactly what the action means, shown when it is tapped, so nothing else gets done in its place. */
+  detail?: string;
+  /** First day (YYYY-MM-DD) the step applies, e.g. a skincare product introduced two weeks after another. */
+  from?: string;
+  /** Pasta/rice/potatoes/bread portion that scales with body weight (reference menu is for 70 kg). */
+  carbs?: boolean;
+  /** Optional evening snack: dropped when the menu is scaled down for a lighter body weight. */
+  optional?: boolean;
 }
+
+export type StudySubject = "maturita" | "matematica" | "fisica" | "santanna" | "inglese" | "errori";
 
 export interface PlanActivity {
   id: string;
@@ -20,6 +30,10 @@ export interface PlanActivity {
   group?: string; // shared name for variants (used in notifications), e.g. "Pesi 45'"
   kind: "routine" | "meal";
   steps: PlanStep[];
+  detail?: string;
+  from?: string; // first day the activity exists
+  until?: string; // last day the activity exists
+  subject?: StudySubject; // study blocks: the topic of the month is shown with them
 }
 
 export interface TimelinePlan {
@@ -144,8 +158,12 @@ export function isEssential(activity: PlanActivity): boolean {
  * The day's timeline: routine activities for that weekday, with diet meals merged into the routine's
  * meal slots (the meal's food steps replace the generic ones) and any other meals added on their own.
  */
-export function dayTimeline(plan: TimelinePlan, weekday: number, isoWeek?: number): PlanActivity[] {
-  const routine = plan.routine.filter((a) => isActiveOn(a, weekday, isoWeek));
+export function dayTimeline(plan: TimelinePlan, weekday: number, isoWeek?: number, date?: string): PlanActivity[] {
+  const started = (from?: string) => !from || !date || from <= date;
+  const notEnded = (until?: string) => !until || !date || date <= until;
+  const routine = plan.routine
+    .filter((a) => isActiveOn(a, weekday, isoWeek) && started(a.from) && notEnded(a.until))
+    .map((a) => (a.steps.some((st) => st.from) ? { ...a, steps: a.steps.filter((st) => started(st.from)) } : a));
   const usedMeals = new Set<string>();
   const merged = routine.map((activity) => {
     if (!MEAL_WORDS.test(activity.title)) return activity;

@@ -1,4 +1,4 @@
-import { WellnessEntry, WorkoutLogEntry } from "../../types";
+import { WellnessEntry } from "../../types";
 import { computeWeeklyComparison } from "../comparison";
 import { addDays, toDateKey } from "../date";
 
@@ -7,7 +7,7 @@ function entryFor(date: string, overrides: Partial<WellnessEntry> = {}): Wellnes
     date,
     mood: 0,
     sleepHours: 7,
-    waterGlasses: 6,
+    waterBottles: 6,
     ...overrides,
   };
 }
@@ -16,7 +16,7 @@ describe("computeWeeklyComparison", () => {
   const today = new Date("2026-01-14T12:00:00"); // a Wednesday
 
   it("returns null averages when there is no data", () => {
-    const result = computeWeeklyComparison([], [], today);
+    const result = computeWeeklyComparison([], () => 0, today);
     expect(result.sleepHours.current).toBeNull();
     expect(result.sleepHours.previous).toBeNull();
   });
@@ -28,22 +28,15 @@ describe("computeWeeklyComparison", () => {
       entryFor(toDateKey(addDays(today, -8)), { sleepHours: 4 }),
       entryFor(toDateKey(addDays(today, -9)), { sleepHours: 6 }),
     ];
-    const result = computeWeeklyComparison(entries, [], today);
+    const result = computeWeeklyComparison(entries, () => 0, today);
     expect(result.sleepHours.current).toBeCloseTo(8);
     expect(result.sleepHours.previous).toBeCloseTo(5);
   });
 
-  it("averages sets completed per day across each 7-day window, counting workout-free days as 0", () => {
-    const workoutLogs: WorkoutLogEntry[] = [
-      {
-        date: toDateKey(today),
-        tier: 1,
-        dayId: "t1-a",
-        exerciseSets: [{ exerciseId: "squat", repsPerSet: Array(14).fill(10) }],
-      },
-    ];
-    const result = computeWeeklyComparison([], workoutLogs, today);
-    expect(result.setsCompleted.current).toBeCloseTo(14 / 7);
-    expect(result.setsCompleted.previous).toBe(0);
+  it("sums training hours over each 7-day window", () => {
+    const todayKey = toDateKey(today);
+    const result = computeWeeklyComparison([], (d) => (d === todayKey ? 2.5 : 0), today);
+    expect(result.trainingHours.current).toBe(2.5);
+    expect(result.trainingHours.previous).toBe(0);
   });
 });

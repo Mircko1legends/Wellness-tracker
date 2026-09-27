@@ -95,12 +95,19 @@ export function WeekReportScreen({ navigation }: Props) {
 
         <View style={styles.card}>
           <Text style={styles.line}>
-            Acqua: {report.water.avgGlasses === null ? "non registrata" : `media ${report.water.avgGlasses} bicchieri, obiettivo raggiunto ${report.water.daysOnTarget}/${report.water.days} giorni`}
+            Acqua: {report.water.avgBottles === null ? "non registrata" : `media ${report.water.avgBottles} bottigliette, obiettivo raggiunto ${report.water.daysOnTarget}/${report.water.days} giorni`}
           </Text>
           <Text style={styles.line}>
             Umore: {report.mood.values.length ? `${report.mood.values.map((m) => formatMood(m.mood)).join(" ")} · ${report.mood.stableDays}/${report.mood.values.length} giorni nella zona stabile` : "non registrato"}
           </Text>
-          <Text style={styles.line}>Palestra: {report.gym.sessions} sessioni registrate</Text>
+          <Text style={styles.line}>
+            Studio a casa: {String(report.study.doneHours).replace(".", ",")} h su {String(report.study.plannedHours).replace(".", ",")} h previste
+          </Text>
+          <Text style={styles.line}>
+            Allenamento: {String(report.training.doneHours).replace(".", ",")} h su {String(report.training.plannedHours).replace(".", ",")} h
+            previste
+          </Text>
+          <Text style={styles.line}>Palestra: {report.gym.sessions} sedute registrate</Text>
           <Text style={styles.line}>
             Pasti: {report.meals.days ? `media ${report.meals.avgKcal} kcal · ${report.meals.avgProtein} g proteine (${report.meals.days} giorni registrati)` : "non registrati"}
           </Text>

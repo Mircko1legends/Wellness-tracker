@@ -6,6 +6,7 @@ import { useAppReload } from "../backup/AppReload";
 import { BackupCard } from "../components/BackupCard";
 import { PressableScale } from "../components/PressableScale";
 import { ScreenHeader } from "../components/ScreenHeader";
+import { SoundsCard } from "../components/SoundsCard";
 import { StepperInput } from "../components/StepperInput";
 import { useWellness } from "../context/WellnessContext";
 import { isNotificationsSupported } from "../notifications";
@@ -74,6 +75,7 @@ export function SettingsScreen() {
     <View style={styles.container}>
       <ScreenHeader title="Impostazioni" onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content}>
+        <SoundsCard />
       <BackupCard />
       <View style={styles.card}>
         <View style={styles.rowBetween}>

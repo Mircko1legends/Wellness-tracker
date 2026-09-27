@@ -16,11 +16,12 @@ import { DEFAULT_LENS_SETTINGS, LensDay, LensSettings } from "../utils/lens";
 import { AiSettings, DEFAULT_AI_SETTINGS } from "../import/gemini";
 import { EMPTY_PLAN, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 import { LifeGoal } from "../goals/goals";
-import { DEFAULT_WATER_SETTINGS, WaterDay, WaterSettings } from "../water/water";
+import { migrateWaterLog, migrateWaterSettings, WaterDay, WaterSettings } from "../water/water";
 import { GymSession } from "../gym/gym";
 import { MealEntry } from "../nutrition/meals";
 import { WeightEntry } from "../nutrition/weight";
 import type { ProgressPhoto } from "../progress/photos";
+import type { HealthDaily } from "../health/healthData";
 
 const KEYS = {
   entries: "@wellness/entries",
@@ -42,21 +43,25 @@ const KEYS = {
   waterLog: "@wellness/waterLog",
   dayMode: "@wellness/dayMode",
   defaultPlanApplied: "@wellness/defaultPlanApplied",
+  defaultPlanVersion: "@wellness/defaultPlanVersion",
+  defaultGoalsVersion: "@wellness/defaultGoalsVersion",
   gymLog: "@wellness/gymLog",
   gymVideos: "@wellness/gymVideos",
   mealLog: "@wellness/mealLog",
   mealSettings: "@wellness/mealSettings",
   weightLog: "@wellness/weightLog",
   progressPhotos: "@wellness/progressPhotos",
+  healthDaily: "@wellness/healthDaily",
+  healthSync: "@wellness/healthSync",
 } as const;
 
-export const DEFAULT_BODYWEIGHT_KG = 70;
+export const DEFAULT_BODYWEIGHT_KG = 58.7;
 
 export async function loadEntries(): Promise<WellnessEntry[]> {
   const raw = await AsyncStorage.getItem(KEYS.entries);
   if (!raw) return [];
   try {
-    return (JSON.parse(raw) as WellnessEntry[]).map(migrateEntryMood);
+    return (JSON.parse(raw) as WellnessEntry[]).map(migrateEntryMood).map(migrateEntryWater);
   } catch {
     return [];
   }
@@ -66,6 +71,14 @@ export async function loadEntries(): Promise<WellnessEntry[]> {
 export function migrateEntryMood(entry: WellnessEntry): WellnessEntry {
   if (entry.moodScale === 11) return entry;
   return { ...entry, mood: migrateLegacyMood(entry.mood) as MoodScore, moodScale: 11 };
+}
+
+/** Water used to be logged in 250 ml glasses; now in 0.5 L bottles. */
+export function migrateEntryWater(entry: WellnessEntry): WellnessEntry {
+  const old = entry as WellnessEntry & { waterGlasses?: number };
+  if (typeof old.waterBottles === "number") return entry;
+  const { waterGlasses, ...rest } = old;
+  return { ...rest, waterBottles: Math.round((waterGlasses ?? 0) / 2) };
 }
 
 export async function saveEntries(entries: WellnessEntry[]): Promise<void> {
@@ -91,7 +104,10 @@ export async function loadGoals(): Promise<WellnessGoals> {
   const raw = await AsyncStorage.getItem(KEYS.goals);
   if (!raw) return DEFAULT_GOALS;
   try {
-    return { ...DEFAULT_GOALS, ...JSON.parse(raw) } as WellnessGoals;
+    const parsed = JSON.parse(raw);
+    // Goals saved before bottles and training hours: start from the new defaults (9 h sleep, 10 bottles).
+    if (typeof parsed.waterBottles !== "number") return { ...DEFAULT_GOALS, moodRange: parsed.moodRange ?? DEFAULT_GOALS.moodRange };
+    return { ...DEFAULT_GOALS, ...parsed } as WellnessGoals;
   } catch {
     return DEFAULT_GOALS;
   }
@@ -251,14 +267,18 @@ export const loadTimelineLog = () => loadJson<TimelineDayLog[]>(KEYS.timelineLog
 export const saveTimelineLog = (log: TimelineDayLog[]) => AsyncStorage.setItem(KEYS.timelineLog, JSON.stringify(log));
 export const loadTimelineSettings = () => loadJson<TimelineSettings>(KEYS.timelineSettings, DEFAULT_TIMELINE_SETTINGS);
 export const saveTimelineSettings = (s: TimelineSettings) => AsyncStorage.setItem(KEYS.timelineSettings, JSON.stringify(s));
-export const loadAiSettings = () => loadJson<AiSettings>(KEYS.aiSettings, DEFAULT_AI_SETTINGS);
+/** The old default was always Flash: move it to automatic (best model, Flash only as fallback). */
+export const loadAiSettings = async () => {
+  const s = await loadJson<AiSettings>(KEYS.aiSettings, DEFAULT_AI_SETTINGS);
+  return s.model === "gemini-2.5-flash" ? { ...s, model: DEFAULT_AI_SETTINGS.model } : s;
+};
 export const saveAiSettings = (s: AiSettings) => AsyncStorage.setItem(KEYS.aiSettings, JSON.stringify(s));
 
 export const loadLifeGoals = () => loadJson<LifeGoal[]>(KEYS.lifeGoals, []);
 export const saveLifeGoals = (goals: LifeGoal[]) => AsyncStorage.setItem(KEYS.lifeGoals, JSON.stringify(goals));
-export const loadWaterSettings = () => loadJson<WaterSettings>(KEYS.water, DEFAULT_WATER_SETTINGS);
+export const loadWaterSettings = async () => migrateWaterSettings(await loadJson<any>(KEYS.water, null));
 export const saveWaterSettings = (s: WaterSettings) => AsyncStorage.setItem(KEYS.water, JSON.stringify(s));
-export const loadWaterLog = () => loadJson<WaterDay[]>(KEYS.waterLog, []);
+export const loadWaterLog = async () => migrateWaterLog(await loadJson<any[]>(KEYS.waterLog, []));
 export const saveWaterLog = (log: WaterDay[]) => AsyncStorage.setItem(KEYS.waterLog, JSON.stringify(log));
 
 export const loadGymLog = () => loadJson<GymSession[]>(KEYS.gymLog, []);
@@ -278,6 +298,15 @@ export const loadWeightLog = () => loadJson<WeightEntry[]>(KEYS.weightLog, []);
 export const saveWeightLog = (log: WeightEntry[]) => AsyncStorage.setItem(KEYS.weightLog, JSON.stringify(log));
 export const loadProgressPhotos = () => loadJson<ProgressPhoto[]>(KEYS.progressPhotos, []);
 export const saveProgressPhotos = (p: ProgressPhoto[]) => AsyncStorage.setItem(KEYS.progressPhotos, JSON.stringify(p));
+export const loadHealthDaily = () => loadJson<HealthDaily>(KEYS.healthDaily, {});
+export const saveHealthDaily = (d: HealthDaily) => AsyncStorage.setItem(KEYS.healthDaily, JSON.stringify(d));
+export interface HealthSyncState {
+  connected: boolean;
+  lastSyncAt: number;
+  granted: string[];
+}
+export const loadHealthSync = () => loadJson<HealthSyncState>(KEYS.healthSync, { connected: false, lastSyncAt: 0, granted: [] });
+export const saveHealthSync = (s: HealthSyncState) => AsyncStorage.setItem(KEYS.healthSync, JSON.stringify(s));
 export const saveMealSettings = (s: MealSettings) => AsyncStorage.setItem(KEYS.mealSettings, JSON.stringify(s));
 
 /** The date on which "giornata no" was switched on; it only applies to that day. */
@@ -287,6 +316,11 @@ export const saveMinimalDay = (date: string) => AsyncStorage.setItem(KEYS.dayMod
 /** The built-in plan is applied once; clearing it later must not bring it back on its own. */
 export const isDefaultPlanApplied = async () => (await AsyncStorage.getItem(KEYS.defaultPlanApplied)) === "1";
 export const markDefaultPlanApplied = () => AsyncStorage.setItem(KEYS.defaultPlanApplied, "1");
+/** Which version of the built-in plan / goals is installed: a newer built-in version replaces it automatically. */
+export const loadDefaultPlanVersion = async () => Number((await AsyncStorage.getItem(KEYS.defaultPlanVersion)) ?? 1);
+export const saveDefaultPlanVersion = (v: number) => AsyncStorage.setItem(KEYS.defaultPlanVersion, String(v));
+export const loadDefaultGoalsVersion = async () => Number((await AsyncStorage.getItem(KEYS.defaultGoalsVersion)) ?? 1);
+export const saveDefaultGoalsVersion = (v: number) => AsyncStorage.setItem(KEYS.defaultGoalsVersion, String(v));
 
 export async function clearAllData(): Promise<void> {
   await AsyncStorage.multiRemove([
@@ -309,11 +343,15 @@ export async function clearAllData(): Promise<void> {
     KEYS.waterLog,
     KEYS.dayMode,
     KEYS.defaultPlanApplied,
+    KEYS.defaultPlanVersion,
+    KEYS.defaultGoalsVersion,
     KEYS.gymLog,
     KEYS.gymVideos,
     KEYS.mealLog,
     KEYS.mealSettings,
     KEYS.weightLog,
     KEYS.progressPhotos,
+    KEYS.healthDaily,
+    KEYS.healthSync,
   ]);
 }

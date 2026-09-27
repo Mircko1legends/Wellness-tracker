@@ -5,9 +5,10 @@ export interface WellnessEntry {
   mood: MoodScore; // -5 (molto giù) ... 0 (neutro) ... +5 (molto su)
   moodScale?: 11; // set once migrated from the old 1-5 scale
   sleepHours: number;
-  waterGlasses: number;
+  waterBottles: number;
+  trainingHours?: number; // hours of training (weights + MMA), in half hours; when missing it comes from the Giornata
   notes?: string;
-  bonusMissions?: string[]; // ids of unlocked bonus missions completed this day
+  bonusMissions?: string[]; // bonus missions ticked by hand (most are ticked automatically from the Giornata)
 }
 
 export type MissionDifficulty = 1 | 2 | 3;
@@ -25,10 +26,9 @@ export interface Mission {
 
 export interface WellnessGoals {
   sleepHours: number;
-  waterGlasses: number;
-  setsGoal: number; // target total workout sets completed per day
+  waterBottles: number; // 0.5 L bottles
+  trainingHoursWeek: number; // weights + MMA + technique, in hours and half hours
   moodRange: number; // stable zone: -moodRange ... +moodRange
-  startingWorkoutTier: number; // manual floor for tier progression, for skipping tiers already mastered
 }
 
 export interface ReminderSettings {
@@ -93,11 +93,10 @@ export interface MedicationLogEntry {
 }
 
 export const DEFAULT_GOALS: WellnessGoals = {
-  sleepHours: 8,
-  waterGlasses: 8,
-  setsGoal: 12,
+  sleepHours: 9,
+  waterBottles: 10,
+  trainingHoursWeek: 8,
   moodRange: 2,
-  startingWorkoutTier: 1,
 };
 
 export const DEFAULT_REMINDER_SETTINGS: ReminderSettings = {

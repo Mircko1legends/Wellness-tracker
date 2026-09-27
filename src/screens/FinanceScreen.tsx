@@ -1,3 +1,9 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGoals } from "../context/GoalsContext";
+import { useTimeline } from "../context/TimelineContext";
+import { askFinanceAdviser, FinanceAdvice } from "../finance/adviser";
+import { AiReadError } from "../import/gemini";
+import { useLifeProgress } from "../progress/useLifeProgress";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useMemo, useState } from "react";
@@ -65,6 +71,7 @@ export function FinanceScreen() {
       <ScreenHeader title="Finanza" subtitle="Entrate, spese fisse e una tantum" onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <LeftoverPrompt data={data} currentMonth={currentMonth} onChange={update} />
+        <AdviserCard data={data} currentMonth={currentMonth} />
 
         <View style={styles.monthNav}>
           <TouchableOpacity onPress={() => setMonth(addMonths(month, -1))} hitSlop={10}>
@@ -432,6 +439,17 @@ function Projection({
 }
 
 const styles = StyleSheet.create({
+  adviserCard: { backgroundColor: colors.card, borderRadius: radii.md, borderWidth: 1, borderColor: colors.primary, padding: spacing.md, marginBottom: spacing.md },
+  adviserTitle: { color: colors.text, fontWeight: "800", fontSize: 15, flex: 1 },
+  adviserHint: { color: colors.textMuted, fontSize: 12, lineHeight: 17, marginTop: 6 },
+  adviserInput: { backgroundColor: colors.cardAlt, color: colors.text, borderRadius: radii.sm, padding: spacing.sm, minHeight: 64, marginTop: spacing.sm, textAlignVertical: "top" },
+  adviserButton: { backgroundColor: colors.primary, borderRadius: radii.md, paddingVertical: spacing.sm, alignItems: "center", marginTop: spacing.sm },
+  adviserButtonText: { color: colors.onPrimary, fontWeight: "800" },
+  adviceSummary: { color: colors.text, fontSize: 13, lineHeight: 19 },
+  adviceTitle: { fontWeight: "800", fontSize: 13, color: colors.text, marginBottom: 2 },
+  adviceRow: { marginBottom: 6 },
+  adviceItem: { color: colors.text, fontSize: 13, fontWeight: "600" },
+  adviceWhy: { color: colors.textMuted, fontSize: 12, lineHeight: 17 },
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.md, paddingBottom: spacing.xl },
   card: {
@@ -537,3 +555,112 @@ const styles = StyleSheet.create({
   flowAmount: { fontSize: 14, fontWeight: "800" },
   flowActions: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
 });
+
+const ADVICE_KEY = "@wellness/financeAdvice";
+
+function AdviceList({ title, color, items }: { title: string; color: string; items: { item: string; price: number | null; why: string; when?: string; impact?: string }[] }) {
+  if (!items.length) return null;
+  return (
+    <View style={{ marginTop: spacing.sm }}>
+      <Text style={[styles.adviceTitle, { color }]}>{title}</Text>
+      {items.map((i, n) => (
+        <View key={n} style={styles.adviceRow}>
+          <Text style={styles.adviceItem}>
+            {i.item}
+            {i.price !== null ? ` · ${formatEuro(i.price)}` : ""}
+            {i.impact ? ` · impatto ${i.impact}` : ""}
+            {i.when ? ` · ${i.when}` : ""}
+          </Text>
+          {i.why ? <Text style={styles.adviceWhy}>{i.why}</Text> : null}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/** Free AI adviser: what to buy next month, what to postpone, and what to do with money left over. */
+function AdviserCard({ data, currentMonth }: { data: FinanceData; currentMonth: MonthKey }) {
+  const { ai } = useTimeline();
+  const { goals } = useGoals();
+  const progress = useLifeProgress();
+  const [wishes, setWishes] = useState("");
+  const [advice, setAdvice] = useState<FinanceAdvice | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    AsyncStorage.getItem(ADVICE_KEY)
+      .then((raw) => raw && setAdvice(JSON.parse(raw)))
+      .catch(() => {});
+  }, []);
+
+  const ask = async () => {
+    setBusy(true);
+    setError("");
+    try {
+      const notes = progress
+        ? `Progressi: livello ${progress.level.level}/99, allenamento questa settimana ${progress.week.doneHours}/${progress.data.goals.trainingHoursWeek} h, serie di giorni con gli obiettivi raggiunti ${progress.streak.current}.`
+        : "";
+      const result = await askFinanceAdviser(data, goals, currentMonth, notes, wishes.trim(), ai);
+      setAdvice(result);
+      AsyncStorage.setItem(ADVICE_KEY, JSON.stringify(result)).catch(() => {});
+    } catch (e) {
+      setError(e instanceof AiReadError ? e.message : "Il consulente non ha risposto, riprova.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <View style={styles.adviserCard}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
+        <Ionicons name="sparkles-outline" size={18} color={colors.primary} />
+        <Text style={styles.adviserTitle}>Consulente finanziario (IA gratuita)</Text>
+      </View>
+      <Text style={styles.adviserHint}>
+        Scrivi cosa vorresti pagare o comprare il mese prossimo, con i prezzi se li sai. Ti dice cosa comprare subito, cosa
+        rimandare, come risparmiare e, se avanzano soldi, cosa comprare in ordine di impatto sui tuoi obiettivi. Segue le
+        regole di budget del tuo piano (fondo concorso e imprevisti non si toccano).
+      </Text>
+      <TextInput
+        style={styles.adviserInput}
+        value={wishes}
+        onChangeText={setWishes}
+        multiline
+        placeholder="es. guantini MMA 35 €, libro per il TOLC 20 €, cuffie 60 €"
+        placeholderTextColor={colors.textMuted}
+      />
+      {!ai.geminiApiKey ? (
+        <Text style={styles.adviserHint}>Serve la chiave gratuita di Gemini: aggiungila in Giornata → Importa → IA.</Text>
+      ) : (
+        <PressableScale style={[styles.adviserButton, busy && { opacity: 0.6 }]} onPress={() => !busy && ask()}>
+          <Text style={styles.adviserButtonText}>{busy ? "Sto pensando…" : "Chiedi al consulente"}</Text>
+        </PressableScale>
+      )}
+      {error ? <Text style={[styles.adviserHint, { color: colors.danger }]}>{error}</Text> : null}
+      {advice && (
+        <View style={{ marginTop: spacing.sm }}>
+          <Text style={styles.adviceSummary}>{advice.summary}</Text>
+          {advice.available !== null && <Text style={styles.adviserHint}>Disponibile stimato il mese prossimo: {formatEuro(advice.available)}</Text>}
+          <AdviceList title="Da comprare" color={colors.success} items={advice.mustBuy} />
+          <AdviceList title="Da rimandare" color={colors.primary} items={advice.postpone} />
+          <AdviceList title="Da evitare" color={colors.danger} items={advice.skip} />
+          {advice.tips.length > 0 && (
+            <View style={{ marginTop: spacing.sm }}>
+              <Text style={styles.adviceTitle}>Consigli</Text>
+              {advice.tips.map((t, i) => (
+                <Text key={i} style={styles.adviceWhy}>
+                  • {t}
+                </Text>
+              ))}
+            </View>
+          )}
+          <AdviceList title="Se avanzano soldi: in ordine di impatto" color={colors.text} items={advice.ideas} />
+          <Text style={[styles.adviserHint, { marginTop: spacing.sm }]}>
+            Risposta di {advice.model || "Gemini"}: sono stime, la decisione è tua.
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+}

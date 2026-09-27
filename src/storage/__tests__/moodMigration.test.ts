@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WellnessEntry } from "../../types";
 import { loadEntries, migrateEntryMood, upsertEntry } from "../storage";
 
-const legacy = { date: "2026-09-01", mood: 5, sleepHours: 8, waterGlasses: 8 } as unknown as WellnessEntry;
+const legacy = { date: "2026-09-01", mood: 5, sleepHours: 8, waterBottles: 8 } as unknown as WellnessEntry;
 
 describe("mood migration", () => {
   beforeEach(() => AsyncStorage.clear());
@@ -19,7 +19,7 @@ describe("mood migration", () => {
   });
 
   it("does not re-migrate entries saved with the new scale", async () => {
-    await upsertEntry({ date: "2026-09-02", mood: 1, sleepHours: 8, waterGlasses: 8 });
+    await upsertEntry({ date: "2026-09-02", mood: 1, sleepHours: 8, waterBottles: 8 });
     const entries = await loadEntries();
     expect(entries.find((e) => e.date === "2026-09-02")?.mood).toBe(1);
   });

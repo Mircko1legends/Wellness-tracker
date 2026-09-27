@@ -1,12 +1,14 @@
 import { goalProgress, LifeGoal, nextMilestone } from "../goals/goals";
 import { bestKg, GymSession, PROGRAMS } from "../gym/gym";
 import { MealEntry, reliability, totals } from "../nutrition/meals";
+import { durationMinutes } from "../import/time";
+import { TRAINING_TITLE } from "../progress/lifeProgress";
 import { WeightEntry, weightTrend } from "../nutrition/weight";
 import { dayTimeline, PlanActivity, PlanStep, stepStatus, TimelineDayLog, TimelinePlan } from "../timeline/plan";
 import { WellnessEntry } from "../types";
 import { addDays, parseDateKey, toDateKey } from "../utils/date";
 import { formatMood } from "../utils/mood";
-import { glassesOn, targetGlasses, WaterDay, WaterSettings } from "../water/water";
+import { bottlesOn, targetBottles, WaterDay, WaterSettings } from "../water/water";
 import { isoWeekLabel, isoWeekNumber } from "../utils/weeklyTable";
 
 export type AreaId = "routine" | "dieta" | "allenamento" | "skincare" | "studio";
@@ -19,7 +21,7 @@ export const AREA_LABELS: Record<AreaId, string> = {
   studio: "Studio e inglese",
 };
 
-const SKINCARE = /skincare|detergente|crema|spf|protezione solare|siero|idratante/i;
+const SKINCARE = /skincare|detergente|crema|spf|protezione solare|siero|idratante|hada labo|melano|retinol|cure natural|face wash/i;
 const MEAL = /colazione|pranzo|cena|spuntino|merenda|snack|pasto|cucina|spesa/i;
 const TRAINING = /pesi|muay|palestra|mma|allenamento|boxe/i;
 const STUDY = /studio|inglese|english|compiti|ripasso|maturit|sant'?anna|pomodoro|scuola/i;
@@ -44,10 +46,12 @@ export interface WeekReport {
   to: string; // last day counted (today at most)
   areas: Record<AreaId, AreaStats>;
   mostSkipped: { title: string; skipped: number }[];
-  water: { daysOnTarget: number; days: number; avgGlasses: number | null; target: number };
+  water: { daysOnTarget: number; days: number; avgBottles: number | null; target: number };
   mood: { values: { date: string; mood: number }[]; average: number | null; stableDays: number };
   gym: { sessions: number; best: { name: string; kg: number }[] };
   lastProgressPhoto: string | null;
+  study: { doneHours: number; plannedHours: number };
+  training: { doneHours: number; plannedHours: number };
   weight: { weighIns: number; kgPerWeek: number | null; pctPerWeek: number | null };
   meals: { days: number; avgKcal: number | null; avgProtein: number | null; logged: number; reliable: number };
   goals: { title: string; percent: number; next: string | null }[];
@@ -86,8 +90,25 @@ export function computeWeekReport(input: WeekReportInput, today: string): WeekRe
   const areas: Record<AreaId, AreaStats> = { routine: empty(), dieta: empty(), allenamento: empty(), skincare: empty(), studio: empty() };
   const skippedByTitle = new Map<string, number>();
 
+  let studyDone = 0;
+  let studyPlanned = 0;
+  let trainDone = 0;
+  let trainPlanned = 0;
   for (const date of days) {
-    const timeline = dayTimeline(input.plan, parseDateKey(date).getDay(), isoWeekNumber(date));
+    const timeline = dayTimeline(input.plan, parseDateKey(date).getDay(), isoWeekNumber(date), date);
+    const dayLog = input.timelineLog.find((l) => l.date === date);
+    for (const a of timeline) {
+      const minutes = durationMinutes(a.start, a.end);
+      const share = a.steps.length ? a.steps.filter((st) => dayLog?.doneIds.includes(st.id)).length / a.steps.length : 0;
+      if (a.subject) {
+        studyPlanned += minutes;
+        studyDone += minutes * share;
+      }
+      if (TRAINING_TITLE.test(a.title)) {
+        trainPlanned += minutes;
+        trainDone += minutes * share;
+      }
+    }
     for (const activity of timeline) {
       for (const step of activity.steps) {
         const area = areas[areaOf(activity, step)];
@@ -103,14 +124,14 @@ export function computeWeekReport(input: WeekReportInput, today: string): WeekRe
     }
   }
 
-  const target = targetGlasses(input.waterSettings);
-  const glasses = days.map((d) => glassesOn(input.water, d)).filter((g) => g > 0);
+  const target = targetBottles(input.waterSettings);
+  const glasses = days.map((d) => bottlesOn(input.water, d)).filter((g) => g > 0);
   const moodValues = input.entries
     .filter((e) => days.includes(e.date))
     .map((e) => ({ date: e.date, mood: e.mood }))
     .sort((a, b) => a.date.localeCompare(b.date));
   const weekSessions = input.gymLog.filter((s) => days.includes(s.date));
-  const exercises = [...PROGRAMS.A, ...PROGRAMS.B];
+  const exercises = Object.values(PROGRAMS).flat();
   const weekMeals = (input.mealLog ?? []).filter((m) => days.includes(m.date));
   const mealDays = [...new Set(weekMeals.map((m) => m.date))];
   const perDay = mealDays.map((d) => totals(weekMeals.filter((m) => m.date === d).flatMap((m) => m.items)));
@@ -128,7 +149,7 @@ export function computeWeekReport(input: WeekReportInput, today: string): WeekRe
     water: {
       daysOnTarget: glasses.filter((g) => g >= target).length,
       days: days.length,
-      avgGlasses: glasses.length ? Math.round((glasses.reduce((a, b) => a + b, 0) / glasses.length) * 10) / 10 : null,
+      avgBottles: glasses.length ? Math.round((glasses.reduce((a, b) => a + b, 0) / glasses.length) * 10) / 10 : null,
       target,
     },
     mood: {
@@ -142,6 +163,8 @@ export function computeWeekReport(input: WeekReportInput, today: string): WeekRe
         .map((ex) => ({ name: ex.name.replace(/ \(.*\)$/, ""), kg: bestKg(weekSessions, ex.id) }))
         .filter((x): x is { name: string; kg: number } => x.kg !== null),
     },
+    study: { doneHours: Math.round(studyDone / 6) / 10, plannedHours: Math.round(studyPlanned / 6) / 10 },
+    training: { doneHours: Math.round(trainDone / 30) / 2, plannedHours: Math.round(trainPlanned / 30) / 2 },
     lastProgressPhoto: (input.progressPhotos ?? []).map((p) => p.date).sort().pop() ?? null,
     weight: (() => {
       const t = weightTrend(input.weightLog ?? [], today);
@@ -171,6 +194,9 @@ export function percent(stats: AreaStats): number | null {
 /** Plain text to paste into the Sunday brainstorm chat. */
 export function reportText(r: WeekReport): string {
   const lines = [`Resoconto settimana ${r.week} (${r.from} → ${r.to})`, ""];
+  lines.push(`Studio a casa: ${r.study.doneHours} h su ${r.study.plannedHours} h previste (obiettivo del PDF 18h10, minimo 15h a settimana intera)`);
+  lines.push(`Allenamento: ${r.training.doneHours} h su ${r.training.plannedHours} h previste (pesi + MMA + tecnica)`);
+  lines.push("");
   lines.push("Micro-azioni fatte:");
   for (const id of Object.keys(AREA_LABELS) as AreaId[]) {
     const s = r.areas[id];
@@ -180,9 +206,9 @@ export function reportText(r: WeekReport): string {
   if (r.mostSkipped.length) lines.push(`Più saltate: ${r.mostSkipped.map((m) => `${m.title} (${m.skipped})`).join(", ")}`);
   lines.push("");
   lines.push(
-    r.water.avgGlasses === null
+    r.water.avgBottles === null
       ? "Acqua: non registrata"
-      : `Acqua: media ${r.water.avgGlasses} bicchieri/giorno, obiettivo (${r.water.target}) raggiunto ${r.water.daysOnTarget}/${r.water.days} giorni`
+      : `Acqua: media ${r.water.avgBottles} bottigliette/giorno, obiettivo (${r.water.target}) raggiunto ${r.water.daysOnTarget}/${r.water.days} giorni`
   );
   lines.push(
     r.mood.values.length

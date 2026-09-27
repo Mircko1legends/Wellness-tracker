@@ -18,10 +18,10 @@ describe("week helpers", () => {
 describe("buildWeeklyTableCsv", () => {
   const snapshot = {
     "@wellness/entries": JSON.stringify([
-      { date: "2026-09-21", mood: 4, sleepHours: 7.5, waterGlasses: 8, bonusMissions: ["a", "b"], notes: "ok, bene" },
+      { date: "2026-09-21", mood: 4, sleepHours: 7.5, waterBottles: 8, trainingHours: 1.5, bonusMissions: ["a", "b"], notes: "ok, bene" },
     ]),
-    "@wellness/workoutLogs": JSON.stringify([
-      { date: "2026-09-21", exerciseSets: [{ repsPerSet: [10, 10, 8] }, { repsPerSet: [12] }] },
+    "@wellness/gymLog": JSON.stringify([
+      { date: "2026-09-21", program: "LB", exercises: { stacco: [{}, {}, {}], pressa: [{}] }, savedAt: 1 },
     ]),
     "@wellness/medications": JSON.stringify([
       { id: "litio-m", enabled: true },
@@ -49,16 +49,16 @@ describe("buildWeeklyTableCsv", () => {
   });
 
   it("fills a tracked day and quotes fields with commas", () => {
-    expect(lines[1]).toBe('2026-09-21,lunedì,+4,7.5,8,4,1/2,sì,0,0,2,"ok, bene"');
+    expect(lines[1]).toBe('2026-09-21,lunedì,+4,7.5,8,1.5,4,1/2,sì,0,0,2,"ok, bene"');
   });
 
   it("shows untracked days with zero counts and lens not removed", () => {
-    expect(lines[2]).toBe("2026-09-22,martedì,,,,0,0/2,no,3,1,0,");
+    expect(lines[2]).toBe("2026-09-22,martedì,,,,0,0,0/2,no,3,1,0,");
   });
 
   it("leaves lens column empty when the lens module was never set up", () => {
     const { ["@wellness/lens"]: _omit, ...withoutLens } = snapshot;
-    expect(buildWeeklyTableCsv(withoutLens, "2026-09-21").split("\n")[1].split(",")[7]).toBe("");
+    expect(buildWeeklyTableCsv(withoutLens, "2026-09-21").split("\n")[1].split(",")[8]).toBe("");
   });
 
   it("survives corrupted values", () => {

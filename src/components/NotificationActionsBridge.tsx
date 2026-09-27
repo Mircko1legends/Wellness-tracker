@@ -32,7 +32,7 @@ export function NotificationActionsBridge() {
         await addWater(1);
       } else if ((action === "done" || action === "skip") && isStepAction(data)) {
         const date = todayKey();
-        const activity = dayTimeline(p, new Date().getDay(), isoWeekNumber(date)).find(
+        const activity = dayTimeline(p, new Date().getDay(), isoWeekNumber(date), date).find(
           (a) => a.start === data.time && (a.group ?? a.title) === data.name
         );
         if (activity) await set(date, activity.steps.map((st) => st.id), action === "done" ? "done" : "skipped");

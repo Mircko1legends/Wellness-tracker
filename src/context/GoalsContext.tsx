@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { LifeGoal, mergeGoals, sortGoals, toggleMilestone } from "../goals/goals";
-import { loadLifeGoals, saveLifeGoals } from "../storage/storage";
+import { loadDefaultGoalsVersion, loadLifeGoals, saveDefaultGoalsVersion, saveLifeGoals } from "../storage/storage";
 import { defaultPlanPack } from "../timeline/pack";
 
 interface GoalsContextValue {
@@ -17,11 +17,18 @@ export function GoalsProvider({ children }: { children: React.ReactNode }) {
   const [goals, setGoals] = useState<LifeGoal[]>([]);
 
   useEffect(() => {
-    loadLifeGoals().then(async (g) => {
+    Promise.all([loadLifeGoals(), loadDefaultGoalsVersion()]).then(async ([g, version]) => {
       let list = g;
+      const pack = defaultPlanPack();
       if (list.length === 0) {
-        list = defaultPlanPack().goals;
+        list = pack.goals;
         await saveLifeGoals(list);
+        await saveDefaultGoalsVersion(pack.version);
+      } else if (version < pack.version && list.every((goal) => /^goal\d+$/.test(goal.id))) {
+        // Still the built-in goals: take the new version, keeping every milestone already reached.
+        list = mergeGoals(list, pack.goals);
+        await saveLifeGoals(list);
+        await saveDefaultGoalsVersion(pack.version);
       }
       setGoals(sortGoals(list));
       setLoading(false);

@@ -17,17 +17,18 @@ interface MenuItem {
 
 const ITEMS: MenuItem[] = [
   { route: "WeekReport", icon: "bulb-outline", title: "Resoconto settimana", subtitle: "Routine, dieta, palestra, skincare: da copiare per il brainstorm della domenica" },
+  { route: "Devices", icon: "watch-outline", title: "Bilancia e smartwatch", subtitle: "Peso, sonno e allenamenti in automatico con Health Connect" },
   { route: "ProgressPhotos", icon: "camera-outline", title: "Foto progressi", subtitle: "Viso, pelle e fisico: prima e adesso, una volta al mese" },
   { route: "LifeGoals", icon: "trophy-outline", title: "I miei obiettivi", subtitle: "Maturità, Sant'Anna, Muay Thai, fisico, inglese… tappa per tappa" },
   { route: "Checkin", icon: "chatbubble-ellipses-outline", title: "Check-in settimanale", subtitle: "Sonno, umore e farmaci degli ultimi 7 giorni" },
   { route: "Medications", icon: "medkit-outline", title: "Farmaci", subtitle: "Promemoria e check giornaliero" },
   { route: "Lens", icon: "eye-outline", title: "Lenti a contatto", subtitle: "Igiene, cambio mensile e avviso all'amico" },
   { route: "Finance", icon: "wallet-outline", title: "Finanza", subtitle: "Entrate, spese fisse e una tantum per mese" },
-  { route: "Products", icon: "sparkles-outline", title: "Prodotti", subtitle: "Skincare, hair care e integratori per budget" },
-  { route: "Missions", icon: "trophy-outline", title: "Missioni", subtitle: "Livello, XP e abitudini sbloccate" },
+  { route: "Products", icon: "sparkles-outline", title: "Skincare e integratori", subtitle: "I tuoi 6 prodotti, gli integratori con costi e note per il medico" },
+  { route: "Missions", icon: "star-outline", title: "Livello e missioni", subtitle: "Livello da 0 a 99, XP e le abitudini del primo mese" },
   { route: "Goals", icon: "flag-outline", title: "Traguardi giornalieri", subtitle: "Sonno, acqua, serie e umore minimi" },
   { route: "History", icon: "stats-chart-outline", title: "Storico", subtitle: "Andamento e confronto settimanale" },
-  { route: "Settings", icon: "settings-outline", title: "Impostazioni", subtitle: "Promemoria, esporta dati, reset" },
+  { route: "Settings", icon: "settings-outline", title: "Impostazioni", subtitle: "Suoni delle notifiche, promemoria, backup, reset" },
 ];
 
 export function MoreMenuScreen({ navigation }: Props) {
