@@ -1,0 +1,38 @@
+name: Care Package (GitHub Pages)
+
+on:
+  push:
+    branches: [main, ccr-b6811c91-4usuye]
+    paths: ['care-package/**', '.github/workflows/care-package-pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}care-package/
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build site
+        run: |
+          mkdir -p _site
+          cp -r care-package _site/care-package
+          rm -rf _site/care-package/tools _site/care-package/supabase
+          # Bump the service worker cache so phones pick up every new version.
+          sed -i "s/care-package-v1/care-package-${GITHUB_SHA::7}/" _site/care-package/sw.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
